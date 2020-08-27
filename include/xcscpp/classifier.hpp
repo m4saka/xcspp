@@ -5,6 +5,7 @@
 #include <cstdint> // std::uint64_t
 #include <cstddef> // std::size_t
 #include <cassert>
+#include <cmath>
 
 #include "condition.hpp"
 #include "constants.hpp"
@@ -166,7 +167,7 @@ namespace xcscpp
             }
             else
             {
-                return alpha * pow(epsilon / epsilonZero, -nu);
+                return alpha * std::pow(epsilon / epsilonZero, -nu);
             }
         }
     };
