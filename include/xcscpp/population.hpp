@@ -9,7 +9,7 @@ namespace xcscpp
     {
     protected:
         // DELETION VOTE
-        virtual double deletionVote(const Classifier & cl, double averageFitness) const
+        double deletionVote(const Classifier & cl, double averageFitness) const
         {
             double vote = cl.actionSetSize * cl.numerosity;
 
@@ -30,7 +30,7 @@ namespace xcscpp
         virtual ~Population() = default;
 
         // INSERT IN POPULATION
-        virtual void insertOrIncrementNumerosity(const ClassifierPtr & cl)
+        void insertOrIncrementNumerosity(const ClassifierPtr & cl)
         {
             for (auto & c : m_set)
             {
@@ -44,7 +44,7 @@ namespace xcscpp
         }
 
         // DELETE FROM POPULATION
-        virtual bool deleteExtraClassifiers()
+        bool deleteExtraClassifiers()
         {
             uint64_t numerositySum = 0;
             double fitnessSum = 0.0;
