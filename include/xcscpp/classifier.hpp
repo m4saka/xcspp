@@ -4,7 +4,6 @@
 #include <memory>
 #include <cstdint> // std::uint64_t
 #include <cstddef> // std::size_t
-#include <cassert>
 #include <cmath>
 
 #include "condition.hpp"
