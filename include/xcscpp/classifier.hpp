@@ -176,45 +176,45 @@ namespace xcscpp
     {
     protected:
         // Constants
-        Constants & m_constants;
+        Constants *m_pConstants;
 
     public:
         // Constructor
         StoredClassifier(const StoredClassifier & obj) = default;
 
-        StoredClassifier(const Classifier & obj, Constants & constants)
+        StoredClassifier(const Classifier & obj, Constants *pConstants)
             : Classifier(obj)
-            , m_constants(constants)
+            , m_pConstants(pConstants)
         {
         }
 
-        StoredClassifier(const Condition & condition, int action, std::uint64_t timeStamp, Constants & constants)
-            : Classifier(condition, action, constants.initialPrediction, constants.initialEpsilon, constants.initialFitness, timeStamp)
-            , m_constants(constants)
+        StoredClassifier(const Condition & condition, int action, std::uint64_t timeStamp, Constants *pConstants)
+            : Classifier(condition, action, pConstants->initialPrediction, pConstants->initialEpsilon, pConstants->initialFitness, timeStamp)
+            , m_pConstants(pConstants)
         {
         }
 
-        StoredClassifier(const ConditionActionPair & conditionActionPair, std::uint64_t timeStamp, Constants & constants)
-            : Classifier(conditionActionPair, constants.initialPrediction, constants.initialEpsilon, constants.initialFitness, timeStamp)
-            , m_constants(constants)
+        StoredClassifier(const ConditionActionPair & conditionActionPair, std::uint64_t timeStamp, Constants *pConstants)
+            : Classifier(conditionActionPair, pConstants->initialPrediction, pConstants->initialEpsilon, pConstants->initialFitness, timeStamp)
+            , m_pConstants(pConstants)
         {
         }
 
-        StoredClassifier(ConditionActionPair && conditionActionPair, std::uint64_t timeStamp, Constants & constants)
-            : Classifier(std::move(conditionActionPair), constants.initialPrediction, constants.initialEpsilon, constants.initialFitness, timeStamp)
-            , m_constants(constants)
+        StoredClassifier(ConditionActionPair && conditionActionPair, std::uint64_t timeStamp, Constants *pConstants)
+            : Classifier(std::move(conditionActionPair), pConstants->initialPrediction, pConstants->initialEpsilon, pConstants->initialFitness, timeStamp)
+            , m_pConstants(pConstants)
         {
         }
 
-        StoredClassifier(const std::vector<int> & situation, int action, std::uint64_t timeStamp, Constants & constants)
-            : Classifier(situation, action, constants.initialPrediction, constants.initialEpsilon, constants.initialFitness, timeStamp)
-            , m_constants(constants)
+        StoredClassifier(const std::vector<int> & situation, int action, std::uint64_t timeStamp, Constants *pConstants)
+            : Classifier(situation, action, pConstants->initialPrediction, pConstants->initialEpsilon, pConstants->initialFitness, timeStamp)
+            , m_pConstants(pConstants)
         {
         }
 
-        StoredClassifier(const std::string & condition, int action, std::uint64_t timeStamp, Constants & constants)
-            : Classifier(condition, action, constants.initialPrediction, constants.initialEpsilon, constants.initialFitness, timeStamp)
-            , m_constants(constants)
+        StoredClassifier(const std::string & condition, int action, std::uint64_t timeStamp, Constants *pConstants)
+            : Classifier(condition, action, pConstants->initialPrediction, pConstants->initialEpsilon, pConstants->initialFitness, timeStamp)
+            , m_pConstants(pConstants)
         {
         }
 
@@ -224,7 +224,7 @@ namespace xcscpp
         // COULD SUBSUME
         bool isSubsumer() const noexcept
         {
-            return experience > m_constants.thetaSub && epsilon < m_constants.epsilonZero;
+            return experience > m_pConstants->thetaSub && epsilon < m_pConstants->epsilonZero;
         }
 
         // DOES SUBSUME
@@ -235,7 +235,7 @@ namespace xcscpp
 
         double accuracy() const
         {
-            return Classifier::accuracy(m_constants.epsilonZero, m_constants.alpha, m_constants.nu);
+            return Classifier::accuracy(m_pConstants->epsilonZero, m_pConstants->alpha, m_pConstants->nu);
         }
     };
 
