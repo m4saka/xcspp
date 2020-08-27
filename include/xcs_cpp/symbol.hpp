@@ -34,6 +34,12 @@ namespace xcscpp
             : m_value((c == '#') ? 0 : static_cast<int>(c - '0'))
             , m_isDontCare(c == '#')
         {
+            if (!m_isDontCare && (m_value < 0 || m_value >= 10))
+            {
+                throw std::invalid_argument(
+                    "Symbol::Symbol(char) received an invalid character.\n"
+                    "You need to use an integer ('0'-'9') or Don't Care symbol ('#').");
+            }
         }
 
         // Constructor (copy)
