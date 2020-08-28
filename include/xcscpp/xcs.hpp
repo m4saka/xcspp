@@ -258,7 +258,7 @@ namespace xcscpp
 
         void loadPopulationCSV(const std::string & filename, bool useAsInitialPopulation = true)
         {
-            auto population = CSV::readPopulation<int, Classifier>(filename);
+            auto population = CSV::readPopulation(filename);
             if (useAsInitialPopulation)
             {
                 for (auto & cl : population)
@@ -322,7 +322,7 @@ namespace xcscpp
             }
         }
 
-        std::size_t populationSize() const noexcept
+        std::size_t populationSize() const
         {
             return m_population.size();
         }
@@ -337,7 +337,7 @@ namespace xcscpp
             return sum;
         }
 
-        void switchToCondensationMode() noexcept
+        void switchToCondensationMode()
         {
             m_constants.chi = 0.0;
             m_constants.mu = 0.0;
