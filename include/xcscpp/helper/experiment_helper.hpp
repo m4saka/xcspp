@@ -19,6 +19,7 @@ namespace xcscpp
     {
     private:
         const ExperimentSettings m_settings;
+        const Constants m_constants;
         std::vector<std::unique_ptr<XCS>> m_experiments;
         std::vector<std::unique_ptr<IEnvironment>> m_explorationEnvironments;
         std::vector<std::unique_ptr<IEnvironment>> m_exploitationEnvironments;
@@ -54,24 +55,11 @@ namespace xcscpp
         }
 
     public:
-        explicit ExperimentHelper(
-            const ExperimentSettings & settings,
-            const Constants & constants,
-            std::vector<std::unique_ptr<IEnvironment>> && explorationEnvironments,
-            std::vector<std::unique_ptr<IEnvironment>> && exploitationEnvironments,
-            std::function<void(IEnvironment &)> explorationCallback = [](IEnvironment &){},
-            std::function<void(IEnvironment &)> exploitationCallback = [](IEnvironment &){}
-        )
+        ExperimentHelper(const ExperimentSettings & settings, const Constants & constants)
             : m_settings(settings)
-            , m_experiments(
-                makeExperiments(
-                    settings,
-                    explorationEnvironments.at(0)->availableActions(), // FIXME: the size of explorationEnvironments can be zero, and available actions can be different for different environment instances
-                    constants))
-            , m_explorationEnvironments(std::move(explorationEnvironments))
-            , m_exploitationEnvironments(std::move(exploitationEnvironments))
-            , m_explorationCallback(std::move(explorationCallback))
-            , m_exploitationCallback(std::move(exploitationCallback))
+            , m_constants(constants)
+            , m_explorationCallback(nullptr)
+            , m_exploitationCallback(nullptr)
             , m_summaryLogStream(settings.outputSummaryFilename.empty() ? "" : (settings.outputFilenamePrefix + settings.outputSummaryFilename))
             , m_rewardLogStream(settings.outputRewardFilename.empty() ? "" : (settings.outputFilenamePrefix + settings.outputRewardFilename), settings.smaWidth, false)
             , m_systemErrorLogStream(settings.outputSystemErrorFilename.empty() ? "" : (settings.outputFilenamePrefix + settings.outputSystemErrorFilename), settings.smaWidth, false)
@@ -95,6 +83,29 @@ namespace xcscpp
         }
 
         ~ExperimentHelper() = default;
+
+        template <class Environment, class... Args>
+        void constructEnvironments(Args && ... args)
+        {
+            // Clear environment arrays
+            m_explorationEnvironments.clear();
+            m_exploitationEnvironments.clear();
+
+            if (m_settings.seedCount == 0)
+            {
+                return;
+            }
+
+            // Construct environments
+            for (std::size_t i = 0; i < m_settings.seedCount; ++i)
+            {
+                m_explorationEnvironments.push_back(std::make_unique<Environment>(std::forward<Args>(args)...));
+                m_exploitationEnvironments.push_back(std::make_unique<Environment>(std::forward<Args>(args)...));
+            }
+
+            // Construct experiments
+            m_experiments = makeExperiments(m_settings, m_explorationEnvironments.at(0)->availableActions(), m_constants);
+        }
 
         void runIteration(std::size_t repeat = 1)
         {
@@ -130,7 +141,10 @@ namespace xcscpp
                                 ++totalStepCount;
 
                                 // Run callback if needed
-                                m_exploitationCallback(*m_exploitationEnvironments[j]);
+                                if (m_exploitationCallback != nullptr)
+                                {
+                                    m_exploitationCallback(*m_exploitationEnvironments[j]);
+                                }
                             } while (!m_exploitationEnvironments[j]->isEndOfProblem());
 
                             populationSizeSum += m_experiments[j]->populationSize();
@@ -208,7 +222,10 @@ namespace xcscpp
                             m_experiments[j]->reward(reward, m_explorationEnvironments[j]->isEndOfProblem());
 
                             // Run callback if needed
-                            m_explorationCallback(*m_explorationEnvironments[j]);
+                            if (m_explorationCallback != nullptr)
+                            {
+                                m_explorationCallback(*m_explorationEnvironments[j]);
+                            }
                         } while (!m_explorationEnvironments[j]->isEndOfProblem());
                     }
                 }

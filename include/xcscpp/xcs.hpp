@@ -39,7 +39,7 @@ namespace xcscpp
         ActionSet m_prevActionSet;
 
         // Available action choices
-        std::unordered_set<int> m_availableActions;
+        const std::unordered_set<int> m_availableActions;
 
         std::uint64_t m_timeStamp;
 
@@ -200,8 +200,8 @@ namespace xcscpp
                 {
                     m_isCoveringPerformed = false;
 
-                    PredictionArray predictionArray(matchSet);
-                    const int action = predictionArray.selectAction(m_constants.exploreProbability);
+                    const PredictionArray predictionArray(matchSet);
+                    const int action = predictionArray.selectAction();
                     m_prediction = predictionArray.predictionFor(action);
                     for (const auto & action : m_availableActions)
                     {
@@ -306,20 +306,7 @@ namespace xcscpp
 
         void dumpPopulation(std::ostream & os) const
         {
-            os << "Condition,int,prediction,epsilon,F,exp,ts,as,n,acc\n";
-            for (const auto & cl : m_population)
-            {
-                os  << cl->condition << ","
-                    << cl->action << ","
-                    << cl->prediction << ","
-                    << cl->epsilon << ","
-                    << cl->fitness << ","
-                    << cl->experience << ","
-                    << cl->timeStamp << ","
-                    << cl->actionSetSize << ","
-                    << cl->numerosity << ","
-                    << cl->accuracy() << "\n";
-            }
+            m_population.dump(os);
         }
 
         std::size_t populationSize() const

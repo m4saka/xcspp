@@ -125,6 +125,24 @@ namespace xcscpp
         {
             return m_set.count(std::forward<Args>(args)...);
         }
+
+        void dump(std::ostream & os) const
+        {
+            os << "Condition,int,prediction,epsilon,F,exp,ts,as,n,acc\n";
+            for (const auto & cl : m_set)
+            {
+                os  << cl->condition << ","
+                    << cl->action << ","
+                    << cl->prediction << ","
+                    << cl->epsilon << ","
+                    << cl->fitness << ","
+                    << cl->experience << ","
+                    << cl->timeStamp << ","
+                    << cl->actionSetSize << ","
+                    << cl->numerosity << ","
+                    << cl->accuracy() << "\n";
+            }
+        }
     };
 
 }

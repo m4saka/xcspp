@@ -20,7 +20,7 @@ namespace xcscpp
         // GENERATE COVERING CLASSIFIER
         ClassifierPtr generateCoveringClassifier(const std::vector<int> & situation, const std::unordered_set<int> & unselectedActions, std::uint64_t timeStamp) const
         {
-            auto cl = std::make_shared<StoredClassifier>(situation, Random::chooseFrom(unselectedActions), timeStamp, m_pConstants);
+            const auto cl = std::make_shared<StoredClassifier>(situation, Random::chooseFrom(unselectedActions), timeStamp, m_pConstants);
             cl->condition.setToDontCareAtRandom(m_pConstants->dontCareProbability);
 
             return cl;
@@ -64,7 +64,7 @@ namespace xcscpp
                 // Generate classifiers covering the unselected actions
                 if (m_availableActions.size() - unselectedActions.size() < thetaMna)
                 {
-                    auto coveringClassifier = generateCoveringClassifier(situation, unselectedActions, timeStamp);
+                    const auto coveringClassifier = generateCoveringClassifier(situation, unselectedActions, timeStamp);
                     if (!coveringClassifier->condition.matches(situation))
                     {
                         std::ostringstream oss;

@@ -16,7 +16,7 @@ namespace xcscpp
 
     protected:
         Constants *m_pConstants;
-        const std::unordered_set<int> & m_availableActions;
+        const std::unordered_set<int> m_availableActions;
 
         // SELECT OFFSPRING
         ClassifierPtr selectOffspring(const ClassifierPtrSet & actionSet) const
