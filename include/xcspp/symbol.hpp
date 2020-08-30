@@ -4,7 +4,7 @@
 #include <vector>
 #include <stdexcept>
 
-namespace xcscpp
+namespace xcspp
 {
 
     // The standard symbol for XCS (integer or "#" = "Don't Care")

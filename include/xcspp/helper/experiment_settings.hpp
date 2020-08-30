@@ -2,7 +2,7 @@
 #include <string>
 #include <cstddef> // std::size_t
 
-namespace xcscpp
+namespace xcspp
 {
 
     struct ExperimentSettings

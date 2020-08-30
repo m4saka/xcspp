@@ -6,7 +6,7 @@
 #include "classifier.hpp"
 #include "constants.hpp"
 
-namespace xcscpp
+namespace xcspp
 {
 
     class ClassifierPtrSet

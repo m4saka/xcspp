@@ -9,7 +9,7 @@
 #include "condition.hpp"
 #include "constants.hpp"
 
-namespace xcscpp
+namespace xcspp
 {
 
     struct ConditionActionPair

@@ -4,7 +4,7 @@
 #include <unordered_set>
 #include <cstddef> // std::size_t
 
-namespace xcscpp
+namespace xcspp
 {
 
     // TODO: use namespace instead of class

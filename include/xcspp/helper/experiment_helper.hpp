@@ -7,12 +7,12 @@
 #include <cstdio>
 #include <cstddef>
 #include <cmath>
-#include "xcscpp/xcs.hpp"
-#include "xcscpp/environment/ienvironment.hpp"
+#include "xcspp/xcs.hpp"
+#include "xcspp/environment/ienvironment.hpp"
 #include "experiment_settings.hpp"
 #include "experiment_log_stream.hpp"
 
-namespace xcscpp
+namespace xcspp
 {
 
     class ExperimentHelper

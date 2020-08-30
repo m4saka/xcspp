@@ -6,9 +6,9 @@
 #include <cassert>
 
 #include "ienvironment.hpp"
-#include "xcscpp/random.hpp"
+#include "xcspp/random.hpp"
 
-namespace xcscpp
+namespace xcspp
 {
 
     class MultiplexerEnvironment : public IEnvironment

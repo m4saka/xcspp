@@ -2,7 +2,7 @@
 #include "classifier_ptr_set.hpp"
 #include "random.hpp"
 
-namespace xcscpp
+namespace xcspp
 {
 
     class Population : public ClassifierPtrSet

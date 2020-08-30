@@ -2,7 +2,7 @@
 #include <vector>
 #include <unordered_set>
 
-namespace xcscpp
+namespace xcspp
 {
 
     class IEnvironment

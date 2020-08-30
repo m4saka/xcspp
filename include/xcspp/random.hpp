@@ -7,7 +7,7 @@
 #include <cstddef> // std::size_t
 #include <algorithm>
 
-namespace xcscpp
+namespace xcspp
 {
 
     // Random utility

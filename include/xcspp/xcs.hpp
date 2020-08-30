@@ -15,7 +15,7 @@
 #include "prediction_array.hpp"
 #include "util/csv.hpp"
 
-namespace xcscpp
+namespace xcspp
 {
 
     class XCS

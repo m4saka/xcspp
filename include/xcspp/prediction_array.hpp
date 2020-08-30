@@ -7,7 +7,7 @@
 #include "match_set.hpp"
 #include "random.hpp"
 
-namespace xcscpp
+namespace xcspp
 {
 
     class PredictionArray

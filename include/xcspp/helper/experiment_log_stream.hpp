@@ -5,7 +5,7 @@
 #include <cstddef>
 #include "simple_moving_average.hpp"
 
-namespace xcscpp
+namespace xcspp
 {
 
     class ExperimentLogStream

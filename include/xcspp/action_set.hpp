@@ -11,7 +11,7 @@
 #include "ga.hpp"
 #include "constants.hpp"
 
-namespace xcscpp
+namespace xcspp
 {
 
     class ActionSet : public ClassifierPtrSet

@@ -7,9 +7,9 @@
 #include <cstddef>
 
 #include "dataset.hpp"
-#include "xcscpp/classifier.hpp"
+#include "xcspp/classifier.hpp"
 
-namespace xcscpp
+namespace xcspp
 {
 
     namespace CSV
