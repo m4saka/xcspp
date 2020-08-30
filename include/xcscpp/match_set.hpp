@@ -30,7 +30,7 @@ namespace xcscpp
         // Constructor
         using ClassifierPtrSet::ClassifierPtrSet;
 
-        MatchSet(Population & population, const std::vector<int> & situation, std::uint64_t timeStamp, Constants *pConstants, const std::unordered_set<int> & availableActions)
+        MatchSet(Population & population, const std::vector<int> & situation, std::uint64_t timeStamp, const Constants *pConstants, const std::unordered_set<int> & availableActions)
             : ClassifierPtrSet(pConstants, availableActions)
             , m_isCoveringPerformed(false)
         {

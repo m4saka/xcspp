@@ -71,13 +71,13 @@ namespace xcscpp
 
     public:
         // Constructor
-        ActionSet(Constants *pConstants, const std::unordered_set<int> & availableActions)
+        ActionSet(const Constants *pConstants, const std::unordered_set<int> & availableActions)
             : ClassifierPtrSet(pConstants, availableActions)
             , m_ga(pConstants, availableActions)
         {
         }
 
-        ActionSet(const MatchSet & matchSet, int action, Constants *pConstants, const std::unordered_set<int> & availableActions)
+        ActionSet(const MatchSet & matchSet, int action, const Constants *pConstants, const std::unordered_set<int> & availableActions)
             : ClassifierPtrSet(pConstants, availableActions)
             , m_ga(pConstants, availableActions)
         {

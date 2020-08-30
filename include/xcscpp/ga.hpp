@@ -15,7 +15,7 @@ namespace xcscpp
         using ClassifierPtr = typename Population::ClassifierPtr;
 
     protected:
-        Constants *m_pConstants;
+        const Constants * const m_pConstants;
         const std::unordered_set<int> m_availableActions;
 
         // SELECT OFFSPRING
@@ -223,7 +223,7 @@ namespace xcscpp
 
     public:
         // Constructor
-        GA(Constants *pConstants, const std::unordered_set<int> & availableActions)
+        GA(const Constants *pConstants, const std::unordered_set<int> & availableActions)
             : m_pConstants(pConstants)
             , m_availableActions(availableActions)
         {
