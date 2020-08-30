@@ -13,7 +13,7 @@
 #include "match_set.hpp"
 #include "action_set.hpp"
 #include "prediction_array.hpp"
-#include "helper/csv.hpp"
+#include "util/csv.hpp"
 
 namespace xcscpp
 {
