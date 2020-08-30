@@ -41,7 +41,7 @@ namespace xcscpp
                     m_paActions.push_back(cl->action);
                 }
 
-                // Note: it is okay to skip zero initialization before these addition
+                // Note: it is okay to skip zero initialization before these
                 //       because std::unordered_map::operator[] does zero initialization.
                 m_pa[cl->action] += cl->prediction * cl->fitness;
                 fsa[cl->action] += cl->fitness;
@@ -86,7 +86,7 @@ namespace xcscpp
 
         double predictionFor(int action) const
         {
-            return m_pa.at(action);
+            return m_pa.count(action) ? m_pa.at(action) : 0.0;
         }
 
         // SELECT ACTION
