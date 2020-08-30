@@ -23,7 +23,7 @@ namespace xcscpp
         virtual bool isEndOfProblem() const = 0;
 
         // Returns available actions (e.g. { 0, 1 })
-        virtual const std::unordered_set<int> & availableActions() const = 0;
+        virtual std::unordered_set<int> availableActions() const = 0;
     };
 
 }
