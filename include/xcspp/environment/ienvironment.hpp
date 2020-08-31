@@ -5,6 +5,8 @@
 namespace xcspp
 {
 
+    // Environment interface
+    // (Your own class can implement this interface in order to use it with ExperimentHelper)
     class IEnvironment
     {
     public:
@@ -15,14 +17,14 @@ namespace xcspp
         // Returns current situation
         virtual std::vector<int> situation() const = 0;
 
-        // Executes action (and update situation) and returns reward
+        // Executes action (and updates situation), and returns reward
         virtual double executeAction(int action) = 0;
 
         // Returns true if the problem was solved by the previous action
         // (always true for a single-step problem after the first action execution)
         virtual bool isEndOfProblem() const = 0;
 
-        // Returns available actions (e.g. { 0, 1 })
+        // Returns available action choices (e.g. { 0, 1 })
         virtual std::unordered_set<int> availableActions() const = 0;
     };
 
