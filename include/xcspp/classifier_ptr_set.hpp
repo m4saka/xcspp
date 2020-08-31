@@ -15,9 +15,9 @@ namespace xcspp
         using ClassifierPtr = std::shared_ptr<StoredClassifier>;
 
     protected:
+        std::unordered_set<ClassifierPtr> m_set;
         const Constants * const m_pConstants;
         const std::unordered_set<int> m_availableActions;
-        std::unordered_set<ClassifierPtr> m_set;
 
     private:
         static std::unordered_set<ClassifierPtr> makeSetFromClassifiers(const std::vector<Classifier> & classifiers, const Constants *pConstants)
