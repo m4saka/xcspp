@@ -82,7 +82,7 @@ namespace xcspp
         // Update situation
         m_situation = randomSituation(m_totalLength, m_minorityAcceptanceProbability);
 
-        // Single-step problem
+        // In single-step problem, isEndOfProblem() always returns true after the first execution
         m_isEndOfProblem = true;
 
         return reward;
@@ -93,7 +93,6 @@ namespace xcspp
         return m_isEndOfProblem;
     }
 
-    // Returns answer to situation
     int MultiplexerEnvironment::getAnswer() const
     {
         return getAnswerOfSituation(m_situation);
