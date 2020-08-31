@@ -9,7 +9,7 @@
 #include "condition.hpp"
 #include "constants.hpp"
 
-namespace xcscpp
+namespace xcspp
 {
 
     struct ConditionActionPair
@@ -176,43 +176,43 @@ namespace xcscpp
     {
     protected:
         // Constants
-        Constants *m_pConstants;
+        const Constants * const m_pConstants;
 
     public:
         // Constructor
         StoredClassifier(const StoredClassifier & obj) = default;
 
-        StoredClassifier(const Classifier & obj, Constants *pConstants)
+        StoredClassifier(const Classifier & obj, const Constants *pConstants)
             : Classifier(obj)
             , m_pConstants(pConstants)
         {
         }
 
-        StoredClassifier(const Condition & condition, int action, std::uint64_t timeStamp, Constants *pConstants)
+        StoredClassifier(const Condition & condition, int action, std::uint64_t timeStamp, const Constants *pConstants)
             : Classifier(condition, action, pConstants->initialPrediction, pConstants->initialEpsilon, pConstants->initialFitness, timeStamp)
             , m_pConstants(pConstants)
         {
         }
 
-        StoredClassifier(const ConditionActionPair & conditionActionPair, std::uint64_t timeStamp, Constants *pConstants)
+        StoredClassifier(const ConditionActionPair & conditionActionPair, std::uint64_t timeStamp, const Constants *pConstants)
             : Classifier(conditionActionPair, pConstants->initialPrediction, pConstants->initialEpsilon, pConstants->initialFitness, timeStamp)
             , m_pConstants(pConstants)
         {
         }
 
-        StoredClassifier(ConditionActionPair && conditionActionPair, std::uint64_t timeStamp, Constants *pConstants)
+        StoredClassifier(ConditionActionPair && conditionActionPair, std::uint64_t timeStamp, const Constants *pConstants)
             : Classifier(std::move(conditionActionPair), pConstants->initialPrediction, pConstants->initialEpsilon, pConstants->initialFitness, timeStamp)
             , m_pConstants(pConstants)
         {
         }
 
-        StoredClassifier(const std::vector<int> & situation, int action, std::uint64_t timeStamp, Constants *pConstants)
+        StoredClassifier(const std::vector<int> & situation, int action, std::uint64_t timeStamp, const Constants *pConstants)
             : Classifier(situation, action, pConstants->initialPrediction, pConstants->initialEpsilon, pConstants->initialFitness, timeStamp)
             , m_pConstants(pConstants)
         {
         }
 
-        StoredClassifier(const std::string & condition, int action, std::uint64_t timeStamp, Constants *pConstants)
+        StoredClassifier(const std::string & condition, int action, std::uint64_t timeStamp, const Constants *pConstants)
             : Classifier(condition, action, pConstants->initialPrediction, pConstants->initialEpsilon, pConstants->initialFitness, timeStamp)
             , m_pConstants(pConstants)
         {

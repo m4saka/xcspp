@@ -7,7 +7,7 @@
 #include "symbol.hpp"
 #include "random.hpp"
 
-namespace xcscpp
+namespace xcspp
 {
 
     class Condition

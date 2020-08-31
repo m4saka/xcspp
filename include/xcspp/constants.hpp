@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint> // std::uint64_t
 
-namespace xcscpp
+namespace xcspp
 {
 
     struct Constants
