@@ -1,7 +1,7 @@
 # XCS++: XCS Library for C++17
 ## Usage (with CMake)
 Just use `add_subdirectory` to include the xcspp directory, and link the `xcspp` library to your target.
-```
+```cmake
 add_subdirectory(xcspp) # <= Path to the xcspp directory
 target_link_libraries(your_target xcspp)
 ```
