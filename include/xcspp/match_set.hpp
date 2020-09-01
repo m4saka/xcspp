@@ -6,7 +6,7 @@
 
 #include "classifier_ptr_set.hpp"
 #include "population.hpp"
-#include "constants.hpp"
+#include "xcs_params.hpp"
 #include "random.hpp"
 
 namespace xcspp
@@ -20,8 +20,8 @@ namespace xcspp
         // GENERATE COVERING CLASSIFIER
         ClassifierPtr generateCoveringClassifier(const std::vector<int> & situation, const std::unordered_set<int> & unselectedActions, std::uint64_t timeStamp) const
         {
-            const auto cl = std::make_shared<StoredClassifier>(situation, Random::chooseFrom(unselectedActions), timeStamp, m_pConstants);
-            cl->condition.setToDontCareAtRandom(m_pConstants->dontCareProbability);
+            const auto cl = std::make_shared<StoredClassifier>(situation, Random::chooseFrom(unselectedActions), timeStamp, m_pParams);
+            cl->condition.setToDontCareAtRandom(m_pParams->dontCareProbability);
 
             return cl;
         }
@@ -30,8 +30,8 @@ namespace xcspp
         // Constructor
         using ClassifierPtrSet::ClassifierPtrSet;
 
-        MatchSet(Population & population, const std::vector<int> & situation, std::uint64_t timeStamp, const Constants *pConstants, const std::unordered_set<int> & availableActions)
-            : ClassifierPtrSet(pConstants, availableActions)
+        MatchSet(Population & population, const std::vector<int> & situation, std::uint64_t timeStamp, const XCSParams *pParams, const std::unordered_set<int> & availableActions)
+            : ClassifierPtrSet(pParams, availableActions)
             , m_isCoveringPerformed(false)
         {
             regenerate(population, situation, timeStamp);
@@ -44,7 +44,7 @@ namespace xcspp
         void regenerate(Population & population, const std::vector<int> & situation, std::uint64_t timeStamp)
         {
             // Set theta_mna (the minimal number of actions) to the number of action choices if theta_mna is 0
-            auto thetaMna = (m_pConstants->thetaMna == 0) ? m_availableActions.size() : m_pConstants->thetaMna;
+            auto thetaMna = (m_pParams->thetaMna == 0) ? m_availableActions.size() : m_pParams->thetaMna;
 
             auto unselectedActions = m_availableActions;
 

@@ -9,7 +9,7 @@
 #include "population.hpp"
 #include "match_set.hpp"
 #include "ga.hpp"
-#include "constants.hpp"
+#include "xcs_params.hpp"
 
 namespace xcspp
 {
@@ -30,7 +30,7 @@ namespace xcspp
 
             for (const auto & cl : m_set)
             {
-                cl->fitness += m_pConstants->beta * (cl->accuracy() * cl->numerosity / accuracySum - cl->fitness);
+                cl->fitness += m_pParams->beta * (cl->accuracy() * cl->numerosity / accuracySum - cl->fitness);
             }
         }
 
@@ -71,15 +71,15 @@ namespace xcspp
 
     public:
         // Constructor
-        ActionSet(const Constants *pConstants, const std::unordered_set<int> & availableActions)
-            : ClassifierPtrSet(pConstants, availableActions)
-            , m_ga(pConstants, availableActions)
+        ActionSet(const XCSParams *pParams, const std::unordered_set<int> & availableActions)
+            : ClassifierPtrSet(pParams, availableActions)
+            , m_ga(pParams, availableActions)
         {
         }
 
-        ActionSet(const MatchSet & matchSet, int action, const Constants *pConstants, const std::unordered_set<int> & availableActions)
-            : ClassifierPtrSet(pConstants, availableActions)
-            , m_ga(pConstants, availableActions)
+        ActionSet(const MatchSet & matchSet, int action, const XCSParams *pParams, const std::unordered_set<int> & availableActions)
+            : ClassifierPtrSet(pParams, availableActions)
+            , m_ga(pParams, availableActions)
         {
             regenerate(matchSet, action);
         }
@@ -129,7 +129,7 @@ namespace xcspp
                 throw std::runtime_error("Invalid average timestamp detected in ActionSet::runGA().");
             }
 
-            if (timeStamp - averageTimeStamp >= m_pConstants->thetaGA)
+            if (timeStamp - averageTimeStamp >= m_pParams->thetaGA)
             {
                 for (const auto & cl : m_set)
                 {
@@ -155,31 +155,31 @@ namespace xcspp
                 ++cl->experience;
 
                 // Update prediction, prediction error
-                if (m_pConstants->useMAM && cl->experience < 1.0 / m_pConstants->beta)
+                if (m_pParams->useMAM && cl->experience < 1.0 / m_pParams->beta)
                 {
                     cl->epsilon += (std::abs(p - cl->prediction) - cl->epsilon) / cl->experience;
                     cl->prediction += (p - cl->prediction) / cl->experience;
                 }
                 else
                 {
-                    cl->epsilon += m_pConstants->beta * (std::abs(p - cl->prediction) - cl->epsilon);
-                    cl->prediction += m_pConstants->beta * (p - cl->prediction);
+                    cl->epsilon += m_pParams->beta * (std::abs(p - cl->prediction) - cl->epsilon);
+                    cl->prediction += m_pParams->beta * (p - cl->prediction);
                 }
 
                 // Update action set size estimate
-                if (cl->experience < 1.0 / m_pConstants->beta)
+                if (cl->experience < 1.0 / m_pParams->beta)
                 {
                     cl->actionSetSize += (numerositySum - cl->actionSetSize) / cl->experience;
                 }
                 else
                 {
-                    cl->actionSetSize += m_pConstants->beta * (numerositySum - cl->actionSetSize);
+                    cl->actionSetSize += m_pParams->beta * (numerositySum - cl->actionSetSize);
                 }
             }
 
             updateFitness();
 
-            if (m_pConstants->doActionSetSubsumption)
+            if (m_pParams->doActionSetSubsumption)
             {
                 doSubsumption(population);
             }

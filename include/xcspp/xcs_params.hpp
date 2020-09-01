@@ -4,7 +4,8 @@
 namespace xcspp
 {
 
-    struct Constants
+    // XCS Hyperparameters
+    struct XCSParams
     {
         // N
         //   The maximum size of the population
@@ -135,7 +136,7 @@ namespace xcspp
         //   prediction and the prediction error of classifiers
         bool useMAM = true;
 
-        virtual ~Constants() = default;
+        virtual ~XCSParams() = default;
     };
 
 }

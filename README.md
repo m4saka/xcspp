@@ -17,7 +17,7 @@ Work in progress...
 int main()
 {
     // XCS hyperparameters
-    xcspp::Constants constants;
+    xcspp::XCSParams constants;
     constants.n = 1200; // N (max number of classifiers)
 
     // XCS classifier system
@@ -58,7 +58,7 @@ int main()
     settings.outputSummaryToStdout = true; // This option enables to output summary log to console.
 
     // XCS hyperparameters
-    xcspp::Constants constants;
+    xcspp::XCSParams constants;
     constants.n = 1200; // N (max number of classifiers)
 
     // Initialize experiment and environment

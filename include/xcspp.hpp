@@ -2,7 +2,7 @@
 #include "xcspp/classifier.hpp"
 #include "xcspp/classifier_ptr_set.hpp"
 #include "xcspp/condition.hpp"
-#include "xcspp/constants.hpp"
+#include "xcspp/xcs_params.hpp"
 #include "xcspp/ga.hpp"
 #include "xcspp/match_set.hpp"
 #include "xcspp/population.hpp"

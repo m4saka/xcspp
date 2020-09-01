@@ -15,7 +15,7 @@ namespace xcspp
         using ClassifierPtr = typename Population::ClassifierPtr;
 
     protected:
-        const Constants * const m_pConstants;
+        const XCSParams * const m_pParams;
         const std::unordered_set<int> m_availableActions;
 
         // SELECT OFFSPRING
@@ -28,7 +28,7 @@ namespace xcspp
             }
 
             std::size_t selectedIdx;
-            if (m_pConstants->tau > 0.0 && m_pConstants->tau <= 1.0)
+            if (m_pParams->tau > 0.0 && m_pParams->tau <= 1.0)
             {
                 // Tournament selection
                 std::vector<std::pair<double, std::size_t>> fitnesses;
@@ -37,7 +37,7 @@ namespace xcspp
                 {
                     fitnesses.emplace_back((*target)->fitness, (*target)->numerosity);
                 }
-                selectedIdx = Random::tournamentSelectionMicroClassifier(fitnesses, m_pConstants->tau);
+                selectedIdx = Random::tournamentSelectionMicroClassifier(fitnesses, m_pParams->tau);
             }
             else
             {
@@ -120,15 +120,15 @@ namespace xcspp
         // APPLY CROSSOVER
         bool crossover(Classifier & cl1, Classifier & cl2) const
         {
-            switch (m_pConstants->crossoverMethod)
+            switch (m_pParams->crossoverMethod)
             {
-            case Constants::CrossoverMethod::UNIFORM_CROSSOVER:
+            case XCSParams::CrossoverMethod::UNIFORM_CROSSOVER:
                 return uniformCrossover(cl1, cl2);
 
-            case Constants::CrossoverMethod::ONE_POINT_CROSSOVER:
+            case XCSParams::CrossoverMethod::ONE_POINT_CROSSOVER:
                 return onePointCrossover(cl1, cl2);
 
-            case Constants::CrossoverMethod::TWO_POINT_CROSSOVER:
+            case XCSParams::CrossoverMethod::TWO_POINT_CROSSOVER:
                 return twoPointCrossover(cl1, cl2);
 
             default:
@@ -146,7 +146,7 @@ namespace xcspp
 
             for (std::size_t i = 0; i < cl.condition.size(); ++i)
             {
-                if (Random::nextDouble() < m_pConstants->mu)
+                if (Random::nextDouble() < m_pParams->mu)
                 {
                     if (cl.condition[i].isDontCare())
                     {
@@ -159,7 +159,7 @@ namespace xcspp
                 }
             }
 
-            if (m_pConstants->doActionMutation && (Random::nextDouble() < m_pConstants->mu) && (m_availableActions.size() >= 2))
+            if (m_pParams->doActionMutation && (Random::nextDouble() < m_pParams->mu) && (m_availableActions.size() >= 2))
             {
                 std::unordered_set<int> otherPossibleActions(m_availableActions);
                 otherPossibleActions.erase(cl.action);
@@ -169,15 +169,15 @@ namespace xcspp
 
         void insertDiscoveredClassifiers(const Classifier & child1, const Classifier & child2, const ClassifierPtr & parent1, const ClassifierPtr & parent2, Population & population) const
         {
-            if (m_pConstants->doGASubsumption)
+            if (m_pParams->doGASubsumption)
             {
                 subsumeClassifier(child1, parent1, parent2, population);
                 subsumeClassifier(child2, parent1, parent2, population);
             }
             else
             {
-                population.insertOrIncrementNumerosity(std::make_shared<StoredClassifier>(child1, m_pConstants));
-                population.insertOrIncrementNumerosity(std::make_shared<StoredClassifier>(child2, m_pConstants));
+                population.insertOrIncrementNumerosity(std::make_shared<StoredClassifier>(child1, m_pParams));
+                population.insertOrIncrementNumerosity(std::make_shared<StoredClassifier>(child2, m_pParams));
             }
 
             while (population.deleteExtraClassifiers()) {}
@@ -218,13 +218,13 @@ namespace xcspp
                 return;
             }
 
-            population.insertOrIncrementNumerosity(std::make_shared<StoredClassifier>(child, m_pConstants));
+            population.insertOrIncrementNumerosity(std::make_shared<StoredClassifier>(child, m_pParams));
         }
 
     public:
         // Constructor
-        GA(const Constants *pConstants, const std::unordered_set<int> & availableActions)
-            : m_pConstants(pConstants)
+        GA(const XCSParams *pParams, const std::unordered_set<int> & availableActions)
+            : m_pParams(pParams)
             , m_availableActions(availableActions)
         {
         }
@@ -250,7 +250,7 @@ namespace xcspp
             child1.experience = child2.experience = 0;
 
             bool isChangedByCrossover;
-            if (Random::nextDouble() < m_pConstants->chi)
+            if (Random::nextDouble() < m_pParams->chi)
             {
                 isChangedByCrossover = crossover(child1, child2);
             }

@@ -4,7 +4,7 @@
 #include <memory> // std::shared_ptr
 
 #include "classifier.hpp"
-#include "constants.hpp"
+#include "xcs_params.hpp"
 
 namespace xcspp
 {
@@ -16,38 +16,38 @@ namespace xcspp
 
     protected:
         std::unordered_set<ClassifierPtr> m_set;
-        const Constants * const m_pConstants;
+        const XCSParams * const m_pParams;
         const std::unordered_set<int> m_availableActions;
 
     private:
-        static std::unordered_set<ClassifierPtr> makeSetFromClassifiers(const std::vector<Classifier> & classifiers, const Constants *pConstants)
+        static std::unordered_set<ClassifierPtr> makeSetFromClassifiers(const std::vector<Classifier> & classifiers, const XCSParams *pParams)
         {
             std::unordered_set<ClassifierPtr> set;
             for (const auto & cl : classifiers)
             {
-                set.emplace(std::make_shared<StoredClassifier>(cl, pConstants));
+                set.emplace(std::make_shared<StoredClassifier>(cl, pParams));
             }
             return set;
         }
 
     public:
         // Constructor
-        ClassifierPtrSet(const Constants *pConstants, const std::unordered_set<int> & availableActions)
-            : m_pConstants(pConstants)
+        ClassifierPtrSet(const XCSParams *pParams, const std::unordered_set<int> & availableActions)
+            : m_pParams(pParams)
             , m_availableActions(availableActions)
         {
         }
 
-        ClassifierPtrSet(const std::unordered_set<ClassifierPtr> & set, const Constants *pConstants, const std::unordered_set<int> & availableActions)
+        ClassifierPtrSet(const std::unordered_set<ClassifierPtr> & set, const XCSParams *pParams, const std::unordered_set<int> & availableActions)
             : m_set(set)
-            , m_pConstants(pConstants)
+            , m_pParams(pParams)
             , m_availableActions(availableActions)
         {
         }
 
-        ClassifierPtrSet(const std::vector<Classifier> & initialClassifiers, const Constants *pConstants, const std::unordered_set<int> & availableActions)
-            : m_set(makeSetFromClassifiers(initialClassifiers, pConstants))
-            , m_pConstants(pConstants)
+        ClassifierPtrSet(const std::vector<Classifier> & initialClassifiers, const XCSParams *pParams, const std::unordered_set<int> & availableActions)
+            : m_set(makeSetFromClassifiers(initialClassifiers, pParams))
+            , m_pParams(pParams)
             , m_availableActions(availableActions)
         {
         }

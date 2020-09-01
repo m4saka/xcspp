@@ -8,7 +8,7 @@
 #include <cstddef> // std::size_t
 #include <cmath>
 
-#include "constants.hpp"
+#include "xcs_params.hpp"
 #include "population.hpp"
 #include "match_set.hpp"
 #include "action_set.hpp"
@@ -22,7 +22,7 @@ namespace xcspp
     {
     protected:
         // Hyperparameters
-        Constants m_constants;
+        XCSParams m_constants;
 
         // [P]
         //   The population [P] consists of all classifier that exist in XCS at any time.
@@ -58,7 +58,7 @@ namespace xcspp
 
     public:
         // Constructor
-        XCS(const std::unordered_set<int> & availableActions, const Constants & constants)
+        XCS(const std::unordered_set<int> & availableActions, const XCSParams & constants)
             : m_constants(constants)
             , m_population(&m_constants, availableActions)
             , m_actionSet(&m_constants, availableActions)

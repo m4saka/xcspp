@@ -14,7 +14,7 @@ namespace xcspp
             double vote = cl.actionSetSize * cl.numerosity;
 
             // Consider fitness for deletion vote
-            if ((cl.experience >= m_pConstants->thetaDel) && (cl.fitness / cl.numerosity < m_pConstants->delta * averageFitness))
+            if ((cl.experience >= m_pParams->thetaDel) && (cl.fitness / cl.numerosity < m_pParams->delta * averageFitness))
             {
                 vote *= averageFitness / (cl.fitness / cl.numerosity);
             }
@@ -55,7 +55,7 @@ namespace xcspp
             }
 
             // Return false if the sum of numerosity has not met its maximum limit
-            if (numerositySum <= m_pConstants->n)
+            if (numerositySum <= m_pParams->n)
             {
                 return false;
             }
@@ -88,7 +88,7 @@ namespace xcspp
                 m_set.erase(*targets[selectedIdx]);
             }
 
-            return (numerositySum - 1) > m_pConstants->n;
+            return (numerositySum - 1) > m_pParams->n;
         }
     };
 
