@@ -7,53 +7,56 @@
 namespace xcspp
 {
 
-    // Get address bit length from total length
-    static constexpr std::size_t addressBitLength(std::size_t l, std::size_t c = 0)
+    namespace
     {
-        return (l == 0) ? c - 1 : addressBitLength(l >> 1, c + 1);
-    }
-
-    static int getAnswerOfSituation(const std::vector<int> & situation)
-    {
-        std::size_t address = 0;
-        auto l = addressBitLength(situation.size());
-        for (std::size_t i = 0; i < l; ++i)
+        // Get address bit length from total length
+        constexpr std::size_t addressBitLength(std::size_t l, std::size_t c = 0)
         {
-            if (situation.at(i) == 1)
-            {
-                address += (std::size_t)1 << (l - i - 1);
-            }
+            return (l == 0) ? c - 1 : addressBitLength(l >> 1, c + 1);
         }
 
-        return situation.at(l + address);
-    }
-
-    static std::vector<int> randomSituation(std::size_t totalLength, double minorityAcceptanceProbability = 1.0)
-    {
-        std::vector<int> situation;
-        situation.reserve(totalLength);
-
-        while (true)
+        int getAnswerOfSituation(const std::vector<int> & situation)
         {
-            for (std::size_t i = 0; i < totalLength; ++i)
+            std::size_t address = 0;
+            auto l = addressBitLength(situation.size());
+            for (std::size_t i = 0; i < l; ++i)
             {
-                situation.push_back(Random::nextInt(0, 1));
+                if (situation.at(i) == 1)
+                {
+                    address += (std::size_t)1 << (l - i - 1);
+                }
             }
 
-            if (getAnswerOfSituation(situation) == 1)
-            {
-                break;
-            }
-            else if (Random::nextDouble() < minorityAcceptanceProbability)
-            {
-                break;
-            }
-            else
-            {
-                situation.clear();
-            }
+            return situation.at(l + address);
         }
-        return situation;
+
+        std::vector<int> randomSituation(std::size_t totalLength, double minorityAcceptanceProbability = 1.0)
+        {
+            std::vector<int> situation;
+            situation.reserve(totalLength);
+
+            while (true)
+            {
+                for (std::size_t i = 0; i < totalLength; ++i)
+                {
+                    situation.push_back(Random::nextInt(0, 1));
+                }
+
+                if (getAnswerOfSituation(situation) == 1)
+                {
+                    break;
+                }
+                else if (Random::nextDouble() < minorityAcceptanceProbability)
+                {
+                    break;
+                }
+                else
+                {
+                    situation.clear();
+                }
+            }
+            return situation;
+        }
     }
 
     MultiplexerEnvironment::MultiplexerEnvironment(std::size_t length, unsigned int imbalanceLevel)
