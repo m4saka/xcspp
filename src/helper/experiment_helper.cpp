@@ -2,7 +2,6 @@
 #include <iostream>
 #include <fstream>
 #include <cstdio> // std::printf, std::fflush
-#include <cstddef> // std::size_t
 #include <cmath> // std::abs
 
 namespace xcspp
