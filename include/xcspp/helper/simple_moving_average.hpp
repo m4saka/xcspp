@@ -26,7 +26,7 @@ namespace xcspp
             m_pBuffer = new T[m_order];
         }
 
-        ~UnrecursiveFilter()
+        virtual ~UnrecursiveFilter()
         {
             delete[] m_pBuffer;
         }
