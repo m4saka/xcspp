@@ -1,10 +1,7 @@
 #pragma once
 #include <string>
-#include <unordered_set>
-#include <memory>
+#include <vector>
 #include <cstdint> // std::uint64_t
-#include <cstddef> // std::size_t
-#include <cmath>
 
 #include "condition.hpp"
 #include "xcs_params.hpp"
@@ -28,45 +25,17 @@ namespace xcspp
         // Constructor
         ConditionActionPair(const ConditionActionPair &) = default;
 
-        ConditionActionPair(const Condition & condition, int action) : condition(condition), action(action) {}
+        ConditionActionPair(const Condition & condition, int action);
 
-        ConditionActionPair(Condition && condition, int action) : condition(std::move(condition)), action(action) {}
+        ConditionActionPair(Condition && condition, int action);
 
         // Destructor
         virtual ~ConditionActionPair() = default;
 
         // IS MORE GENERAL
-        bool isMoreGeneral(const ConditionActionPair & cl) const
-        {
-            if (condition.size() != cl.condition.size())
-            {
-                std::invalid_argument("ConditionActionPair::isMoreGeneral() could not process the classifier with a different condition length.");
-            }
+        bool isMoreGeneral(const ConditionActionPair & cl) const;
 
-            bool ret = false;
-
-            for (std::size_t i = 0; i < condition.size(); ++i)
-            {
-                if (condition.at(i) != cl.condition.at(i))
-                {
-                    if (!condition.at(i).isDontCare())
-                    {
-                        return false;
-                    }
-                    else 
-                    {
-                        ret = true;
-                    }
-                }
-            }
-
-            return ret;
-        }
-
-        friend std::ostream & operator<< (std::ostream & os, const ConditionActionPair & obj)
-        {
-            return os << obj.condition << ':' << obj.action;
-        }
+        friend std::ostream & operator<< (std::ostream & os, const ConditionActionPair & obj);
     };
 
     struct Classifier : ConditionActionPair
@@ -109,66 +78,20 @@ namespace xcspp
         // Constructor
         Classifier(const Classifier &) = default;
 
-        Classifier(const Condition & condition, int action, double prediction, double epsilon, double fitness, std::uint64_t timeStamp)
-            : ConditionActionPair(condition, action)
-            , prediction(prediction)
-            , epsilon(epsilon)
-            , fitness(fitness)
-            , experience(0)
-            , timeStamp(timeStamp)
-            , actionSetSize(1)
-            , numerosity(1)
-        {
-        }
+        Classifier(const Condition & condition, int action, double prediction, double epsilon, double fitness, std::uint64_t timeStamp);
 
-        Classifier(const ConditionActionPair & conditionActionPair, double prediction, double epsilon, double fitness, std::uint64_t timeStamp)
-            : ConditionActionPair(conditionActionPair)
-            , prediction(prediction)
-            , epsilon(epsilon)
-            , fitness(fitness)
-            , experience(0)
-            , timeStamp(timeStamp)
-            , actionSetSize(1)
-            , numerosity(1)
-        {
-        }
+        Classifier(const ConditionActionPair & conditionActionPair, double prediction, double epsilon, double fitness, std::uint64_t timeStamp);
 
-        Classifier(ConditionActionPair && conditionActionPair, double prediction, double epsilon, double fitness, std::uint64_t timeStamp)
-            : ConditionActionPair(std::move(conditionActionPair))
-            , prediction(prediction)
-            , epsilon(epsilon)
-            , fitness(fitness)
-            , experience(0)
-            , timeStamp(timeStamp)
-            , actionSetSize(1)
-            , numerosity(1)
-        {
-        }
+        Classifier(ConditionActionPair && conditionActionPair, double prediction, double epsilon, double fitness, std::uint64_t timeStamp);
 
-        Classifier(const std::vector<int> & situation, int action, double prediction, double epsilon, double fitness, std::uint64_t timeStamp)
-            : Classifier(Condition(situation), action, prediction, epsilon, fitness, timeStamp)
-        {
-        }
+        Classifier(const std::vector<int> & situation, int action, double prediction, double epsilon, double fitness, std::uint64_t timeStamp);
 
-        Classifier(const std::string & condition, int action, double prediction, double epsilon, double fitness, std::uint64_t timeStamp)
-            : Classifier(Condition(condition), action, prediction, epsilon, fitness, timeStamp)
-        {
-        }
+        Classifier(const std::string & condition, int action, double prediction, double epsilon, double fitness, std::uint64_t timeStamp);
 
         // Destructor
         virtual ~Classifier() = default;
 
-        double accuracy(double epsilonZero, double alpha, double nu) const
-        {
-            if (epsilon < epsilonZero)
-            {
-                return 1.0;
-            }
-            else
-            {
-                return alpha * std::pow(epsilon / epsilonZero, -nu);
-            }
-        }
+        double accuracy(double epsilonZero, double alpha, double nu) const;
     };
 
     // Classifier in [P] (have a reference to XCSParams)
@@ -182,61 +105,28 @@ namespace xcspp
         // Constructor
         StoredClassifier(const StoredClassifier & obj) = default;
 
-        StoredClassifier(const Classifier & obj, const XCSParams *pParams)
-            : Classifier(obj)
-            , m_pParams(pParams)
-        {
-        }
+        StoredClassifier(const Classifier & obj, const XCSParams *pParams);
 
-        StoredClassifier(const Condition & condition, int action, std::uint64_t timeStamp, const XCSParams *pParams)
-            : Classifier(condition, action, pParams->initialPrediction, pParams->initialEpsilon, pParams->initialFitness, timeStamp)
-            , m_pParams(pParams)
-        {
-        }
+        StoredClassifier(const Condition & condition, int action, std::uint64_t timeStamp, const XCSParams *pParams);
 
-        StoredClassifier(const ConditionActionPair & conditionActionPair, std::uint64_t timeStamp, const XCSParams *pParams)
-            : Classifier(conditionActionPair, pParams->initialPrediction, pParams->initialEpsilon, pParams->initialFitness, timeStamp)
-            , m_pParams(pParams)
-        {
-        }
+        StoredClassifier(const ConditionActionPair & conditionActionPair, std::uint64_t timeStamp, const XCSParams *pParams);
 
-        StoredClassifier(ConditionActionPair && conditionActionPair, std::uint64_t timeStamp, const XCSParams *pParams)
-            : Classifier(std::move(conditionActionPair), pParams->initialPrediction, pParams->initialEpsilon, pParams->initialFitness, timeStamp)
-            , m_pParams(pParams)
-        {
-        }
+        StoredClassifier(ConditionActionPair && conditionActionPair, std::uint64_t timeStamp, const XCSParams *pParams);
 
-        StoredClassifier(const std::vector<int> & situation, int action, std::uint64_t timeStamp, const XCSParams *pParams)
-            : Classifier(situation, action, pParams->initialPrediction, pParams->initialEpsilon, pParams->initialFitness, timeStamp)
-            , m_pParams(pParams)
-        {
-        }
+        StoredClassifier(const std::vector<int> & situation, int action, std::uint64_t timeStamp, const XCSParams *pParams);
 
-        StoredClassifier(const std::string & condition, int action, std::uint64_t timeStamp, const XCSParams *pParams)
-            : Classifier(condition, action, pParams->initialPrediction, pParams->initialEpsilon, pParams->initialFitness, timeStamp)
-            , m_pParams(pParams)
-        {
-        }
+        StoredClassifier(const std::string & condition, int action, std::uint64_t timeStamp, const XCSParams *pParams);
 
         // Destructor
         virtual ~StoredClassifier() = default;
 
         // COULD SUBSUME
-        bool isSubsumer() const noexcept
-        {
-            return experience > m_pParams->thetaSub && epsilon < m_pParams->epsilonZero;
-        }
+        bool isSubsumer() const;
 
         // DOES SUBSUME
-        bool subsumes(const Classifier & cl) const
-        {
-            return action == cl.action && isSubsumer() && isMoreGeneral(cl);
-        }
+        bool subsumes(const Classifier & cl) const;
 
-        double accuracy() const
-        {
-            return Classifier::accuracy(m_pParams->epsilonZero, m_pParams->alpha, m_pParams->nu);
-        }
+        double accuracy() const;
     };
 
 }
