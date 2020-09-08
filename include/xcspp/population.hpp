@@ -44,7 +44,7 @@ namespace xcspp
         }
 
         // DELETE FROM POPULATION
-        bool deleteExtraClassifiers()
+        bool deleteExtraClassifiers(Random & random)
         {
             uint64_t numerositySum = 0;
             double fitnessSum = 0.0;
@@ -76,7 +76,7 @@ namespace xcspp
             {
                 votes.push_back(deletionVote(**target, averageFitness));
             }
-            std::size_t selectedIdx = m_pParams->random.rouletteWheelSelection(votes);
+            std::size_t selectedIdx = random.rouletteWheelSelection(votes);
 
             // Distrust the selected classifier
             if ((*targets[selectedIdx])->numerosity > 1)

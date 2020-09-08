@@ -15,6 +15,9 @@ namespace xcspp
     class XCS
     {
     private:
+        // Random utility instance
+        Random m_random;
+
         // Hyperparameters
         XCSParams m_params;
 

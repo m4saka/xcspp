@@ -15,8 +15,7 @@ namespace xcspp
     class Random
     {
     private:
-        // FIXME: do not use mutable
-        mutable std::mt19937 m_engine;
+        std::mt19937 m_engine;
 
     public:
         Random()
@@ -30,19 +29,19 @@ namespace xcspp
         }
 
         template <typename T = double>
-        T nextDouble(T min = 0.0, T max = 1.0) const
+        T nextDouble(T min = 0.0, T max = 1.0)
         {
             return std::uniform_real_distribution<T>(min, max)(m_engine);
         }
 
         template <typename T = int>
-        T nextInt(T min, T max) const
+        T nextInt(T min, T max)
         {
             return std::uniform_int_distribution<T>(min, max)(m_engine);
         }
 
         template <typename T>
-        const T & chooseFrom(const std::vector<T> & container) const
+        const T & chooseFrom(const std::vector<T> & container)
         {
             if (container.empty())
             {
@@ -53,7 +52,7 @@ namespace xcspp
         }
 
         template <typename T>
-        T chooseFrom(const std::set<T> & container) const
+        T chooseFrom(const std::set<T> & container)
         {
             // Create temporary std::vector from std::set and call the first chooseFrom function
             std::vector<T> vec(container.cbegin(), container.cend());
@@ -61,7 +60,7 @@ namespace xcspp
         }
 
         template <typename T>
-        T chooseFrom(const std::unordered_set<T> & container) const
+        T chooseFrom(const std::unordered_set<T> & container)
         {
             // Create temporary std::vector from std::unordered_set and call the first chooseFrom function
             std::vector<T> vec(container.cbegin(), container.cend());
@@ -69,7 +68,7 @@ namespace xcspp
         }
 
         template <typename T>
-        std::size_t rouletteWheelSelection(const std::vector<T> & container) const
+        std::size_t rouletteWheelSelection(const std::vector<T> & container)
         {
             // Prepare a roulette wheel by the weights
             T sum = 0;
@@ -95,7 +94,7 @@ namespace xcspp
         }
 
         template <typename T>
-        std::size_t greedySelection(const std::vector<T> & container) const
+        std::size_t greedySelection(const std::vector<T> & container)
         {
             T maxValue = *std::max_element(std::begin(container), std::end(container));
             std::vector<std::size_t> maxValueIdxs;
@@ -122,7 +121,7 @@ namespace xcspp
         }
 
         template <typename T>
-        std::size_t epsilonGreedySelection(const std::vector<T> & container, double epsilon) const
+        std::size_t epsilonGreedySelection(const std::vector<T> & container, double epsilon)
         {
             std::size_t selectedIdx;
 
@@ -145,7 +144,7 @@ namespace xcspp
         }
 
         template <typename T>
-        std::size_t tournamentSelection(const std::vector<T> & container, double tau) const
+        std::size_t tournamentSelection(const std::vector<T> & container, double tau)
         {
             std::size_t selectedIdx = container.size() - 1;
             T best = std::numeric_limits<T>::lowest();
@@ -170,7 +169,7 @@ namespace xcspp
         }
 
         template <typename T>
-        std::size_t tournamentSelectionMicroClassifier(const std::vector<std::pair<T, std::uint64_t>> & container, double tau) const
+        std::size_t tournamentSelectionMicroClassifier(const std::vector<std::pair<T, std::uint64_t>> & container, double tau)
         {
             std::size_t selectedIdx = container.size() - 1;
             T best = std::numeric_limits<T>::lowest();

@@ -2,22 +2,25 @@
 #include <memory> // std::make_shared
 #include <sstream> // std::ostringstream
 
-#include "xcspp/random.hpp"
-
 namespace xcspp
 {
 
     namespace
     {
         // GENERATE COVERING CLASSIFIER
-        ClassifierPtr generateCoveringClassifier(const std::vector<int> & situation, const std::unordered_set<int> & unselectedActions, std::uint64_t timeStamp, const XCSParams *pParams)
+        ClassifierPtr generateCoveringClassifier(
+            const std::vector<int> & situation,
+            const std::unordered_set<int> & unselectedActions,
+            std::uint64_t timeStamp,
+            const XCSParams *pParams,
+            Random & random)
         {
-            const auto cl = std::make_shared<StoredClassifier>(situation, pParams->random.chooseFrom(unselectedActions), timeStamp, pParams);
+            const auto cl = std::make_shared<StoredClassifier>(situation, random.chooseFrom(unselectedActions), timeStamp, pParams);
 
             // Set to "#" (don't care) at random
             for (auto & symbol : cl->condition)
             {
-                if (pParams->random.nextDouble() < pParams->dontCareProbability)
+                if (random.nextDouble() < pParams->dontCareProbability)
                 {
                     symbol.setToDontCare();
                 }
@@ -27,15 +30,15 @@ namespace xcspp
         }
     }
 
-    MatchSet::MatchSet(Population & population, const std::vector<int> & situation, std::uint64_t timeStamp, const XCSParams *pParams, const std::unordered_set<int> & availableActions)
+    MatchSet::MatchSet(Population & population, const std::vector<int> & situation, std::uint64_t timeStamp, const XCSParams *pParams, const std::unordered_set<int> & availableActions, Random & random)
         : ClassifierPtrSet(pParams, availableActions)
         , m_isCoveringPerformed(false)
     {
-        generateSet(population, situation, timeStamp);
+        generateSet(population, situation, timeStamp, random);
     }
 
     // GENERATE MATCH SET
-    void MatchSet::generateSet(Population & population, const std::vector<int> & situation, std::uint64_t timeStamp)
+    void MatchSet::generateSet(Population & population, const std::vector<int> & situation, std::uint64_t timeStamp, Random & random)
     {
         // Set theta_mna (the minimal number of actions) to the number of action choices if theta_mna is 0
         auto thetaMna = (m_pParams->thetaMna == 0) ? m_availableActions.size() : m_pParams->thetaMna;
@@ -58,7 +61,7 @@ namespace xcspp
             // Generate classifiers covering the unselected actions
             if (m_availableActions.size() - unselectedActions.size() < thetaMna)
             {
-                const auto coveringClassifier = generateCoveringClassifier(situation, unselectedActions, timeStamp, m_pParams);
+                const auto coveringClassifier = generateCoveringClassifier(situation, unselectedActions, timeStamp, m_pParams, random);
 
                 // Make sure the generated covering classifier covers the given input
                 if (!coveringClassifier->condition.matches(situation))
@@ -76,7 +79,7 @@ namespace xcspp
                 }
 
                 population.insert(coveringClassifier);
-                population.deleteExtraClassifiers();
+                population.deleteExtraClassifiers(random);
                 m_set.clear();
                 m_isCoveringPerformed = true;
             }

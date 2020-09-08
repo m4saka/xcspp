@@ -87,7 +87,7 @@ namespace xcspp
     }
 
     // RUN GA (refer to GA::run() for the latter part)
-    void ActionSet::runGA(const std::vector<int> & situation, Population & population, std::uint64_t timeStamp)
+    void ActionSet::runGA(const std::vector<int> & situation, Population & population, std::uint64_t timeStamp, Random & random)
     {
         double numerositySum = 0.0;
         for (const auto & cl : m_set)
@@ -116,7 +116,7 @@ namespace xcspp
                 cl->timeStamp = timeStamp;
             }
 
-            m_ga.run(*this, situation, population);
+            m_ga.run(*this, situation, population, random);
         }
     }
 

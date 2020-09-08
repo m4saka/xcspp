@@ -11,7 +11,6 @@ namespace xcspp
     class PredictionArray
     {
     private:
-        // The best actions of PA
         const XCSParams * const m_pParams;
 
         // PA (Prediction Array)
@@ -39,7 +38,7 @@ namespace xcspp
 
         // SELECT ACTION
         // (You can use greedy selection by setting epsilon to zero.)
-        int selectAction(double epsilon = 0.0) const;
+        int selectAction(double epsilon, Random & random) const;
     };
 
 }

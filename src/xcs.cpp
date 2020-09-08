@@ -33,12 +33,12 @@ namespace xcspp
         // [M]
         //   The match set [M] is formed out of the current [P].
         //   It includes all classifiers that match the current situation.
-        const MatchSet matchSet(m_population, situation, m_timeStamp, &m_params, m_availableActions);
+        const MatchSet matchSet(m_population, situation, m_timeStamp, &m_params, m_availableActions, m_random);
         m_isCoveringPerformed = matchSet.isCoveringPerformed();
 
         const PredictionArray predictionArray(matchSet, &m_params);
 
-        const int action = predictionArray.selectAction(m_params.exploreProbability);
+        const int action = predictionArray.selectAction(m_params.exploreProbability, m_random);
         m_prediction = predictionArray.predictionFor(action);
         for (const auto & action : m_availableActions)
         {
@@ -54,7 +54,7 @@ namespace xcspp
         {
             double p = m_prevReward + m_params.gamma * predictionArray.max();
             m_prevActionSet.update(p, m_population);
-            m_prevActionSet.runGA(m_prevSituation, m_population, m_timeStamp);
+            m_prevActionSet.runGA(m_prevSituation, m_population, m_timeStamp, m_random);
         }
 
         m_prevSituation = situation;
@@ -74,7 +74,7 @@ namespace xcspp
             m_actionSet.update(value, m_population);
             if (m_isPrevModeExplore) // Do not perform GA operations in exploitation
             {
-                m_actionSet.runGA(m_prevSituation, m_population, m_timeStamp);
+                m_actionSet.runGA(m_prevSituation, m_population, m_timeStamp, m_random);
             }
             m_prevActionSet.clear();
         }
@@ -104,12 +104,12 @@ namespace xcspp
             // [M]
             //   The match set [M] is formed out of the current [P].
             //   It includes all classifiers that match the current situation.
-            const MatchSet matchSet(m_population, situation, m_timeStamp, &m_params, m_availableActions);
+            const MatchSet matchSet(m_population, situation, m_timeStamp, &m_params, m_availableActions, m_random);
             m_isCoveringPerformed = matchSet.isCoveringPerformed();
 
             const PredictionArray predictionArray(matchSet, &m_params);
 
-            const int action = predictionArray.selectAction();
+            const int action = predictionArray.selectAction(0.0, m_random);
 
             m_actionSet.generateSet(matchSet, action);
 
@@ -144,8 +144,8 @@ namespace xcspp
             {
                 m_isCoveringPerformed = false;
 
-                const PredictionArray predictionArray(matchSet, &m_params);
-                const int action = predictionArray.selectAction();
+                PredictionArray predictionArray(matchSet, &m_params);
+                const int action = predictionArray.selectAction(0.0, m_random);
                 m_prediction = predictionArray.predictionFor(action);
                 for (const auto & action : m_availableActions)
                 {
@@ -161,7 +161,7 @@ namespace xcspp
                 {
                     m_predictions[action] = m_params.initialPrediction;
                 }
-                return m_params.random.chooseFrom(m_availableActions);
+                return m_random.chooseFrom(m_availableActions);
             }
         }
     }

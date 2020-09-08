@@ -8,6 +8,7 @@
 #include "match_set.hpp"
 #include "ga.hpp"
 #include "xcs_params.hpp"
+#include "random.hpp"
 
 namespace xcspp
 {
@@ -38,7 +39,7 @@ namespace xcspp
         void copyTo(ActionSet & dest);
 
         // RUN GA (refer to GA::run() for the latter part)
-        void runGA(const std::vector<int> & situation, Population & population, std::uint64_t timeStamp);
+        void runGA(const std::vector<int> & situation, Population & population, std::uint64_t timeStamp, Random & random);
 
         // UPDATE SET
         void update(double p, Population & population);

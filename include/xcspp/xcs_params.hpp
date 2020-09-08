@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <cstdint> // std::uint64_t
 
 #include "random.hpp"
@@ -137,9 +138,6 @@ namespace xcspp
         //   Whether to use the moyenne adaptive modifee (MAM) for updating the
         //   prediction and the prediction error of classifiers
         bool useMAM = true;
-
-        // Random utility instance
-        Random random;
     };
 
 }

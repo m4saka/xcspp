@@ -72,9 +72,9 @@ namespace xcspp
     }
 
     // SELECT ACTION
-    int PredictionArray::selectAction(double epsilon) const
+    int PredictionArray::selectAction(double epsilon, Random & random) const
     {
-        if (epsilon > 0.0 && m_pParams->random.nextDouble() < epsilon)
+        if (epsilon > 0.0 && random.nextDouble() < epsilon)
         {
             if (m_paActions.empty())
             {
@@ -82,7 +82,7 @@ namespace xcspp
             }
 
             // Choose random action
-            return m_pParams->random.chooseFrom(m_paActions);
+            return random.chooseFrom(m_paActions);
         }
         else
         {
@@ -92,7 +92,7 @@ namespace xcspp
             }
 
             // Choose the best action
-            return m_pParams->random.chooseFrom(m_maxPAActions);
+            return random.chooseFrom(m_maxPAActions);
         }
     }
 
