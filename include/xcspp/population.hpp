@@ -7,7 +7,7 @@ namespace xcspp
 
     class Population : public ClassifierPtrSet
     {
-    protected:
+    private:
         // DELETION VOTE
         double deletionVote(const Classifier & cl, double averageFitness) const
         {

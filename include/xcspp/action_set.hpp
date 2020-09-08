@@ -14,7 +14,7 @@ namespace xcspp
 
     class ActionSet : public ClassifierPtrSet
     {
-    protected:
+    private:
         GA m_ga;
 
         // UPDATE FITNESS

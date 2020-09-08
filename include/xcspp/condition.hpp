@@ -11,7 +11,7 @@ namespace xcspp
 
     class Condition
     {
-    protected:
+    private:
         std::vector<Symbol> m_symbols;
 
     public:

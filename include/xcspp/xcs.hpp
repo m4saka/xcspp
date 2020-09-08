@@ -20,7 +20,7 @@ namespace xcspp
 
     class XCS
     {
-    protected:
+    private:
         // Hyperparameters
         XCSParams m_constants;
 

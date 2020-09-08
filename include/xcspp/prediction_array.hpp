@@ -9,7 +9,7 @@ namespace xcspp
 
     class PredictionArray
     {
-    protected:
+    private:
         // PA (Prediction Array)
         std::unordered_map<int, double> m_pa;
 

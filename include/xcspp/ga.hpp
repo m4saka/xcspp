@@ -13,7 +13,7 @@ namespace xcspp
     //       (In legacy xxr, GA was implemented as a class in order to use inheritance for different algorithms)
     class GA
     {
-    protected:
+    private:
         const XCSParams * const m_pParams;
         const std::unordered_set<int> m_availableActions;
 

@@ -97,7 +97,7 @@ namespace xcspp
     // Classifier in [P] (have a reference to XCSParams)
     struct StoredClassifier : Classifier
     {
-    protected:
+    private:
         // XCSParams
         const XCSParams * const m_pParams;
 
