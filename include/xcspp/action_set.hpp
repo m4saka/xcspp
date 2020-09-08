@@ -33,7 +33,7 @@ namespace xcspp
         virtual ~ActionSet() = default;
 
         // GENERATE ACTION SET
-        void regenerate(const MatchSet & matchSet, int action);
+        void generateSet(const MatchSet & matchSet, int action);
 
         void copyTo(ActionSet & dest);
 

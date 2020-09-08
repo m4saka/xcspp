@@ -23,11 +23,11 @@ namespace xcspp
         : ClassifierPtrSet(pParams, availableActions)
         , m_isCoveringPerformed(false)
     {
-        regenerate(population, situation, timeStamp);
+        generateSet(population, situation, timeStamp);
     }
 
     // GENERATE MATCH SET
-    void MatchSet::regenerate(Population & population, const std::vector<int> & situation, std::uint64_t timeStamp)
+    void MatchSet::generateSet(Population & population, const std::vector<int> & situation, std::uint64_t timeStamp)
     {
         // Set theta_mna (the minimal number of actions) to the number of action choices if theta_mna is 0
         auto thetaMna = (m_pParams->thetaMna == 0) ? m_availableActions.size() : m_pParams->thetaMna;

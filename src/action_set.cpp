@@ -64,11 +64,11 @@ namespace xcspp
         : ClassifierPtrSet(pParams, availableActions)
         , m_ga(pParams, availableActions)
     {
-        regenerate(matchSet, action);
+        generateSet(matchSet, action);
     }
 
     // GENERATE ACTION SET
-    void ActionSet::regenerate(const MatchSet & matchSet, int action)
+    void ActionSet::generateSet(const MatchSet & matchSet, int action)
     {
         m_set.clear();
 

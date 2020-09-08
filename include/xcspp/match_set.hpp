@@ -23,10 +23,10 @@ namespace xcspp
         virtual ~MatchSet() = default;
 
         // GENERATE MATCH SET
-        void regenerate(Population & population, const std::vector<int> & situation, std::uint64_t timeStamp);
+        void generateSet(Population & population, const std::vector<int> & situation, std::uint64_t timeStamp);
 
         // Get if covering is performed in the previous match set generation
-        // (Call this function after constructor or regenerate())
+        // (Call this function after constructor or generateSet())
         bool isCoveringPerformed() const;
     };
 

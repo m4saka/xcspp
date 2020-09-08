@@ -99,7 +99,7 @@ namespace xcspp
                 m_predictions[action] = predictionArray.predictionFor(action);
             }
 
-            m_actionSet.regenerate(matchSet, action);
+            m_actionSet.generateSet(matchSet, action);
 
             m_expectsReward = true;
             m_isPrevModeExplore = true;
@@ -167,7 +167,7 @@ namespace xcspp
 
                 const int action = predictionArray.selectAction();
 
-                m_actionSet.regenerate(matchSet, action);
+                m_actionSet.generateSet(matchSet, action);
 
                 m_expectsReward = true;
                 m_isPrevModeExplore = false;
