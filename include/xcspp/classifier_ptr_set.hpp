@@ -9,51 +9,29 @@
 namespace xcspp
 {
 
+    using ClassifierPtr = std::shared_ptr<StoredClassifier>;
+
     class ClassifierPtrSet
     {
-    public:
-        using ClassifierPtr = std::shared_ptr<StoredClassifier>;
-
     protected:
         std::unordered_set<ClassifierPtr> m_set;
         const XCSParams * const m_pParams;
         const std::unordered_set<int> m_availableActions;
 
-    private:
-        static std::unordered_set<ClassifierPtr> makeSetFromClassifiers(const std::vector<Classifier> & classifiers, const XCSParams *pParams)
-        {
-            std::unordered_set<ClassifierPtr> set;
-            for (const auto & cl : classifiers)
-            {
-                set.emplace(std::make_shared<StoredClassifier>(cl, pParams));
-            }
-            return set;
-        }
-
     public:
         // Constructor
-        ClassifierPtrSet(const XCSParams *pParams, const std::unordered_set<int> & availableActions)
-            : m_pParams(pParams)
-            , m_availableActions(availableActions)
-        {
-        }
+        ClassifierPtrSet(const XCSParams *pParams, const std::unordered_set<int> & availableActions);
 
-        ClassifierPtrSet(const std::unordered_set<ClassifierPtr> & set, const XCSParams *pParams, const std::unordered_set<int> & availableActions)
-            : m_set(set)
-            , m_pParams(pParams)
-            , m_availableActions(availableActions)
-        {
-        }
+        ClassifierPtrSet(const std::unordered_set<ClassifierPtr> & set, const XCSParams *pParams, const std::unordered_set<int> & availableActions);
 
-        ClassifierPtrSet(const std::vector<Classifier> & initialClassifiers, const XCSParams *pParams, const std::unordered_set<int> & availableActions)
-            : m_set(makeSetFromClassifiers(initialClassifiers, pParams))
-            , m_pParams(pParams)
-            , m_availableActions(availableActions)
-        {
-        }
+        ClassifierPtrSet(const std::vector<Classifier> & initialClassifiers, const XCSParams *pParams, const std::unordered_set<int> & availableActions);
 
         // Destructor
         virtual ~ClassifierPtrSet() = default;
+
+        void dump(std::ostream & os) const;
+
+        // --- The functions below are just the wrapper for std::unordered_set<ClassifierPtr> ---
 
         auto empty() const noexcept
         {
@@ -124,24 +102,6 @@ namespace xcspp
         auto count(Args && ... args) const
         {
             return m_set.count(std::forward<Args>(args)...);
-        }
-
-        void dump(std::ostream & os) const
-        {
-            os << "Condition,int,prediction,epsilon,F,exp,ts,as,n,acc\n";
-            for (const auto & cl : m_set)
-            {
-                os  << cl->condition << ","
-                    << cl->action << ","
-                    << cl->prediction << ","
-                    << cl->epsilon << ","
-                    << cl->fitness << ","
-                    << cl->experience << ","
-                    << cl->timeStamp << ","
-                    << cl->actionSetSize << ","
-                    << cl->numerosity << ","
-                    << cl->accuracy() << "\n";
-            }
         }
     };
 

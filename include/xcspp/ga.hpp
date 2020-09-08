@@ -4,6 +4,8 @@
 #include <unordered_set>
 #include <cstddef> // std::size_t
 
+#include "classifier_ptr_set.hpp"
+
 namespace xcspp
 {
 
@@ -11,9 +13,6 @@ namespace xcspp
     //       (In legacy xxr, GA was implemented as a class in order to use inheritance for different algorithms)
     class GA
     {
-    public:
-        using ClassifierPtr = typename Population::ClassifierPtr;
-
     protected:
         const XCSParams * const m_pParams;
         const std::unordered_set<int> m_availableActions;
