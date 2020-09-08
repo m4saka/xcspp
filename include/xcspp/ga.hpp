@@ -2,6 +2,7 @@
 #include <memory> // std::shared_ptr, std::make_shared
 #include <vector>
 #include <unordered_set>
+#include <cstdint> // std::uint64_t
 #include <cstddef> // std::size_t
 
 #include "classifier_ptr_set.hpp"
@@ -30,13 +31,13 @@ namespace xcspp
             if (m_pParams->tau > 0.0 && m_pParams->tau <= 1.0)
             {
                 // Tournament selection
-                std::vector<std::pair<double, std::size_t>> fitnesses;
+                std::vector<std::pair<double, std::uint64_t>> fitnesses;
                 fitnesses.reserve(actionSet.size());
                 for (const auto & target : targets)
                 {
                     fitnesses.emplace_back((*target)->fitness, (*target)->numerosity);
                 }
-                selectedIdx = Random::tournamentSelectionMicroClassifier(fitnesses, m_pParams->tau);
+                selectedIdx = m_pParams->random.tournamentSelectionMicroClassifier(fitnesses, m_pParams->tau);
             }
             else
             {
@@ -47,7 +48,7 @@ namespace xcspp
                 {
                     fitnesses.push_back((*target)->fitness);
                 }
-                selectedIdx = Random::rouletteWheelSelection(fitnesses);
+                selectedIdx = m_pParams->random.rouletteWheelSelection(fitnesses);
             }
             return *targets[selectedIdx];
         }
@@ -63,7 +64,7 @@ namespace xcspp
             bool isChanged = false;
             for (std::size_t i = 0; i < cl1.condition.size(); ++i)
             {
-                if (Random::nextDouble() < 0.5)
+                if (m_pParams->random.nextDouble() < 0.5)
                 {
                     std::swap(cl1.condition[i], cl2.condition[i]);
                     isChanged = true;
@@ -80,7 +81,7 @@ namespace xcspp
                 throw std::invalid_argument("The condition lengths do not match in GA::onePointCrossover().");
             }
 
-            std::size_t x = Random::nextInt<std::size_t>(0, cl1.condition.size());
+            std::size_t x = m_pParams->random.nextInt<std::size_t>(0, cl1.condition.size());
 
             bool isChanged = false;
             for (std::size_t i = x + 1; i < cl1.condition.size(); ++i)
@@ -99,8 +100,8 @@ namespace xcspp
                 throw std::invalid_argument("The condition lengths do not match in GA::twoPointCrossover().");
             }
 
-            std::size_t x = Random::nextInt<std::size_t>(0, cl1.condition.size());
-            std::size_t y = Random::nextInt<std::size_t>(0, cl1.condition.size());
+            std::size_t x = m_pParams->random.nextInt<std::size_t>(0, cl1.condition.size());
+            std::size_t y = m_pParams->random.nextInt<std::size_t>(0, cl1.condition.size());
 
             if (x > y)
             {
@@ -145,7 +146,7 @@ namespace xcspp
 
             for (std::size_t i = 0; i < cl.condition.size(); ++i)
             {
-                if (Random::nextDouble() < m_pParams->mu)
+                if (m_pParams->random.nextDouble() < m_pParams->mu)
                 {
                     if (cl.condition[i].isDontCare())
                     {
@@ -158,11 +159,11 @@ namespace xcspp
                 }
             }
 
-            if (m_pParams->doActionMutation && (Random::nextDouble() < m_pParams->mu) && (m_availableActions.size() >= 2))
+            if (m_pParams->doActionMutation && (m_pParams->random.nextDouble() < m_pParams->mu) && (m_availableActions.size() >= 2))
             {
                 std::unordered_set<int> otherPossibleActions(m_availableActions);
                 otherPossibleActions.erase(cl.action);
-                cl.action = Random::chooseFrom(otherPossibleActions);
+                cl.action = m_pParams->random.chooseFrom(otherPossibleActions);
             }
         }
 
@@ -212,7 +213,7 @@ namespace xcspp
 
             if (!choices.empty())
             {
-                std::size_t choice = Random::nextInt<std::size_t>(0, choices.size() - 1);
+                std::size_t choice = m_pParams->random.nextInt<std::size_t>(0, choices.size() - 1);
                 ++choices[choice]->numerosity;
                 return;
             }
@@ -249,7 +250,7 @@ namespace xcspp
             child1.experience = child2.experience = 0;
 
             bool isChangedByCrossover;
-            if (Random::nextDouble() < m_pParams->chi)
+            if (m_pParams->random.nextDouble() < m_pParams->chi)
             {
                 isChangedByCrossover = crossover(child1, child2);
             }

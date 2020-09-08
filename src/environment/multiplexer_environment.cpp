@@ -30,33 +30,34 @@ namespace xcspp
             return situation.at(l + address);
         }
 
-        std::vector<int> randomSituation(std::size_t totalLength, double minorityAcceptanceProbability = 1.0)
+    }
+
+    std::vector<int> MultiplexerEnvironment::randomSituation(std::size_t totalLength, double minorityAcceptanceProbability)
+    {
+        std::vector<int> situation;
+        situation.reserve(totalLength);
+
+        while (true)
         {
-            std::vector<int> situation;
-            situation.reserve(totalLength);
-
-            while (true)
+            for (std::size_t i = 0; i < totalLength; ++i)
             {
-                for (std::size_t i = 0; i < totalLength; ++i)
-                {
-                    situation.push_back(Random::nextInt(0, 1));
-                }
-
-                if (getAnswerOfSituation(situation) == 1)
-                {
-                    break;
-                }
-                else if (Random::nextDouble() < minorityAcceptanceProbability)
-                {
-                    break;
-                }
-                else
-                {
-                    situation.clear();
-                }
+                situation.push_back(m_random.nextInt(0, 1));
             }
-            return situation;
+
+            if (getAnswerOfSituation(situation) == 1)
+            {
+                break;
+            }
+            else if (m_random.nextDouble() < minorityAcceptanceProbability)
+            {
+                break;
+            }
+            else
+            {
+                situation.clear();
+            }
         }
+        return situation;
     }
 
     MultiplexerEnvironment::MultiplexerEnvironment(std::size_t length, unsigned int imbalanceLevel)

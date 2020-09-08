@@ -3,6 +3,7 @@
 #include <cstddef> // std::size_t
 
 #include "ienvironment.hpp"
+#include "xcspp/random.hpp"
 
 namespace xcspp
 {
@@ -15,6 +16,8 @@ namespace xcspp
         const double m_minorityAcceptanceProbability;
         std::vector<int> m_situation;
         bool m_isEndOfProblem;
+        Random m_random;
+        std::vector<int> randomSituation(std::size_t totalLength, double minorityAcceptanceProbability = 1.0);
 
     public:
         // Constructor

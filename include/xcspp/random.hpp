@@ -5,84 +5,77 @@
 #include <unordered_set>
 #include <limits>
 #include <cstddef> // std::size_t
+#include <cstdint> // std::uint32_t, std::uint64_t
 #include <algorithm>
 
 namespace xcspp
 {
 
     // Random utility
-    // (TODO: make this thread-safe by eliminating static variables)
     class Random
     {
     private:
-        static std::random_device m_device;
-
-        static auto & device()
-        {
-            static std::random_device device;
-            return device;
-        }
-
-        static auto & engine()
-        {
-            static std::mt19937 engine(device()());
-            return engine;
-        }
+        // FIXME: do not use mutable
+        mutable std::mt19937 m_engine;
 
     public:
-        template <typename T = double>
-        static T nextDouble(T min = 0.0, T max = 1.0)
+        Random()
+            : m_engine(std::random_device{}())
         {
-            std::uniform_real_distribution<T> dist(min, max);
-            return dist(engine());
+        }
+
+        explicit Random(std::uint32_t seed)
+            : m_engine(seed)
+        {
+        }
+
+        template <typename T = double>
+        T nextDouble(T min = 0.0, T max = 1.0) const
+        {
+            return std::uniform_real_distribution<T>(min, max)(m_engine);
         }
 
         template <typename T = int>
-        static T nextInt(T min, T max)
+        T nextInt(T min, T max) const
         {
-            std::uniform_int_distribution<T> dist(min, max);
-            return dist(engine());
+            return std::uniform_int_distribution<T>(min, max)(m_engine);
         }
 
         template <typename T>
-        static auto chooseFrom(const std::vector<T> & container)
+        const T & chooseFrom(const std::vector<T> & container) const
         {
-            auto size = container.size();
             if (container.empty())
             {
                 throw std::invalid_argument("Random::chooseFrom() received an empty container.");
             }
 
-            std::uniform_int_distribution<decltype(size)> dist(0, size - 1);
-            return *(std::begin(container) + dist(engine()));
+            return *(container.cbegin() + nextInt<std::size_t>(0, container.size() - 1));
         }
 
         template <typename T>
-        static auto chooseFrom(const std::set<T> & container)
+        T chooseFrom(const std::set<T> & container) const
         {
-            std::vector<T> vec;
-            vec.reserve(container.size());
-            vec.insert(vec.end(), container.begin(), container.end());
+            // Create temporary std::vector from std::set and call the first chooseFrom function
+            std::vector<T> vec(container.cbegin(), container.cend());
             return chooseFrom(vec);
         }
 
         template <typename T>
-        static auto chooseFrom(const std::unordered_set<T> & container)
+        T chooseFrom(const std::unordered_set<T> & container) const
         {
-            std::vector<T> vec;
-            vec.reserve(container.size());
-            vec.insert(vec.end(), container.begin(), container.end());
+            // Create temporary std::vector from std::unordered_set and call the first chooseFrom function
+            std::vector<T> vec(container.cbegin(), container.cend());
             return chooseFrom(vec);
         }
 
         template <typename T>
-        static std::size_t rouletteWheelSelection(const std::vector<T> & container)
+        std::size_t rouletteWheelSelection(const std::vector<T> & container) const
         {
             // Prepare a roulette wheel by the weights
             T sum = 0;
             std::vector<T> rouletteWheel;
             rouletteWheel.reserve(container.size());
-            for (auto && value : container)
+            for (const auto & value : container)
             {
                 sum += value;
                 rouletteWheel.push_back(sum);
@@ -94,14 +87,15 @@ namespace xcspp
             }
 
             // Spin the roulette wheel
-            auto it = std::lower_bound(std::begin(rouletteWheel), std::end(rouletteWheel), nextDouble<T>(0, sum));
+            const T randValue = nextDouble<T>(0, sum);
+            const auto it = std::lower_bound(std::cbegin(rouletteWheel), std::cend(rouletteWheel), randValue);
 
             // Returns index of selected item
-            return std::distance(std::begin(rouletteWheel), it);
+            return std::distance(std::cbegin(rouletteWheel), it);
         }
 
         template <typename T>
-        static std::size_t greedySelection(const std::vector<T> & container)
+        std::size_t greedySelection(const std::vector<T> & container) const
         {
             T maxValue = *std::max_element(std::begin(container), std::end(container));
             std::vector<std::size_t> maxValueIdxs;
@@ -128,7 +122,7 @@ namespace xcspp
         }
 
         template <typename T>
-        static std::size_t epsilonGreedySelection(const std::vector<T> & container, double epsilon)
+        std::size_t epsilonGreedySelection(const std::vector<T> & container, double epsilon) const
         {
             std::size_t selectedIdx;
 
@@ -151,7 +145,7 @@ namespace xcspp
         }
 
         template <typename T>
-        static std::size_t tournamentSelection(const std::vector<T> & container, double tau)
+        std::size_t tournamentSelection(const std::vector<T> & container, double tau) const
         {
             std::size_t selectedIdx = container.size() - 1;
             T best = std::numeric_limits<T>::lowest();
@@ -176,20 +170,22 @@ namespace xcspp
         }
 
         template <typename T>
-        static std::size_t tournamentSelectionMicroClassifier(const std::vector<std::pair<T, std::size_t>> & container, double tau)
+        std::size_t tournamentSelectionMicroClassifier(const std::vector<std::pair<T, std::uint64_t>> & container, double tau) const
         {
             std::size_t selectedIdx = container.size() - 1;
             T best = std::numeric_limits<T>::lowest();
 
             for (std::size_t i = 0; i < container.size(); ++i)
             {
-                if (best < container[i].first / container[i].second)
+                const auto & [ weight, numerosity ] = container[i];
+
+                if (best < weight / numerosity)
                 {
-                    for (std::size_t j = 0; j < container[i].second /*numerosity*/; ++j)
+                    for (std::uint64_t j = 0; j < numerosity; ++j)
                     {
                         if (nextDouble() < tau)
                         {
-                            best = container[i].first / container[i].second;
+                            best = weight / numerosity;
                             selectedIdx = i;
                             break;
                         }

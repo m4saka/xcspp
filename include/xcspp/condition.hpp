@@ -32,8 +32,6 @@ namespace xcspp
         // DOES MATCH
         bool matches(const std::vector<int> & situation) const;
 
-        void setToDontCareAtRandom(double dontCareProbability);
-
         std::size_t dontCareCount() const;
 
         friend std::ostream & operator<< (std::ostream & os, const Condition & obj);
@@ -50,14 +48,44 @@ namespace xcspp
             return m_symbols.size();
         }
 
+        auto begin() noexcept
+        {
+            return m_symbols.begin();
+        }
+
         auto begin() const noexcept
         {
             return m_symbols.begin();
         }
 
+        auto end() noexcept
+        {
+            return m_symbols.end();
+        }
+
         auto end() const noexcept
         {
             return m_symbols.end();
+        }
+
+        auto rbegin() noexcept
+        {
+            return m_symbols.rbegin();
+        }
+
+        auto rbegin() const noexcept
+        {
+            return m_symbols.rbegin();
+        }
+
+        auto rend() noexcept
+        {
+            return m_symbols.rend();
+        }
+
+        auto rend() const noexcept
+        {
+            return m_symbols.rend();
         }
 
         auto cbegin() const noexcept
@@ -68,6 +96,16 @@ namespace xcspp
         auto cend() const noexcept
         {
             return m_symbols.cend();
+        }
+
+        auto crbegin() const noexcept
+        {
+            return m_symbols.crbegin();
+        }
+
+        auto crend() const noexcept
+        {
+            return m_symbols.crend();
         }
 
         Symbol & operator[] (std::size_t idx)

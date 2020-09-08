@@ -16,7 +16,7 @@ namespace xcspp
     {
     private:
         // Hyperparameters
-        XCSParams m_constants;
+        XCSParams m_params;
 
         // [P]
         //   The population [P] consists of all classifier that exist in XCS at any time.
@@ -52,7 +52,7 @@ namespace xcspp
 
     public:
         // Constructor
-        XCS(const std::unordered_set<int> & availableActions, const XCSParams & constants);
+        XCS(const std::unordered_set<int> & availableActions, const XCSParams & params);
 
         // Destructor
         ~XCS() = default;

@@ -14,7 +14,8 @@ namespace xcspp
     }
 
     // GENERATE PREDICTION ARRAY
-    PredictionArray::PredictionArray(const MatchSet & matchSet)
+    PredictionArray::PredictionArray(const MatchSet & matchSet, const XCSParams *pParams)
+        : m_pParams(pParams)
     {
         // FSA (Fitness Sum Array)
         std::unordered_map<int, double> fsa;
@@ -73,13 +74,15 @@ namespace xcspp
     // SELECT ACTION
     int PredictionArray::selectAction(double epsilon) const
     {
-        if (epsilon > 0.0 && Random::nextDouble() < epsilon)
+        if (epsilon > 0.0 && m_pParams->random.nextDouble() < epsilon)
         {
             if (m_paActions.empty())
             {
                 throw std::runtime_error("PredictionArray::m_paActions is empty in PredictionArray::selectAction().");
             }
-            return Random::chooseFrom(m_paActions); // Choose random action
+
+            // Choose random action
+            return m_pParams->random.chooseFrom(m_paActions);
         }
         else
         {
@@ -87,7 +90,9 @@ namespace xcspp
             {
                 throw std::runtime_error("PredictionArray::m_maxPAActions is empty in PredictionArray::selectAction().");
             }
-            return Random::chooseFrom(m_maxPAActions); // Choose best action
+
+            // Choose the best action
+            return m_pParams->random.chooseFrom(m_maxPAActions);
         }
     }
 

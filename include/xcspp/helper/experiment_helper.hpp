@@ -17,7 +17,7 @@ namespace xcspp
     {
     private:
         const ExperimentSettings m_settings;
-        const XCSParams m_constants;
+        const XCSParams m_params;
         std::vector<std::unique_ptr<XCS>> m_experiments;
         std::vector<std::unique_ptr<IEnvironment>> m_explorationEnvironments;
         std::vector<std::unique_ptr<IEnvironment>> m_exploitationEnvironments;
@@ -40,10 +40,10 @@ namespace xcspp
         static std::vector<std::unique_ptr<XCS>> makeExperiments(
             const ExperimentSettings & settings,
             const std::unordered_set<int> & availableActions,
-            const XCSParams & constants);
+            const XCSParams & params);
 
     public:
-        ExperimentHelper(const ExperimentSettings & settings, const XCSParams & constants);
+        ExperimentHelper(const ExperimentSettings & settings, const XCSParams & params);
 
         ~ExperimentHelper() = default;
 
@@ -91,7 +91,7 @@ namespace xcspp
         }
 
         // Construct experiments
-        m_experiments = makeExperiments(m_settings, m_explorationEnvironments.at(0)->availableActions(), m_constants);
+        m_experiments = makeExperiments(m_settings, m_explorationEnvironments.at(0)->availableActions(), m_params);
     }
 
 }

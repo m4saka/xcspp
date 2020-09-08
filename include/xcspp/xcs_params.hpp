@@ -1,6 +1,8 @@
 #pragma once
 #include <cstdint> // std::uint64_t
 
+#include "random.hpp"
+
 namespace xcspp
 {
 
@@ -136,7 +138,8 @@ namespace xcspp
         //   prediction and the prediction error of classifiers
         bool useMAM = true;
 
-        virtual ~XCSParams() = default;
+        // Random utility instance
+        Random random;
     };
 
 }

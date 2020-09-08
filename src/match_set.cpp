@@ -12,8 +12,16 @@ namespace xcspp
         // GENERATE COVERING CLASSIFIER
         ClassifierPtr generateCoveringClassifier(const std::vector<int> & situation, const std::unordered_set<int> & unselectedActions, std::uint64_t timeStamp, const XCSParams *pParams)
         {
-            const auto cl = std::make_shared<StoredClassifier>(situation, Random::chooseFrom(unselectedActions), timeStamp, pParams);
-            cl->condition.setToDontCareAtRandom(pParams->dontCareProbability);
+            const auto cl = std::make_shared<StoredClassifier>(situation, pParams->random.chooseFrom(unselectedActions), timeStamp, pParams);
+
+            // Set to "#" (don't care) at random
+            for (auto & symbol : cl->condition)
+            {
+                if (pParams->random.nextDouble() < pParams->dontCareProbability)
+                {
+                    symbol.setToDontCare();
+                }
+            }
 
             return cl;
         }

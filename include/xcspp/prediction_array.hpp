@@ -3,6 +3,7 @@
 #include <unordered_map>
 
 #include "match_set.hpp"
+#include "xcs_params.hpp"
 
 namespace xcspp
 {
@@ -10,6 +11,9 @@ namespace xcspp
     class PredictionArray
     {
     private:
+        // The best actions of PA
+        const XCSParams * const m_pParams;
+
         // PA (Prediction Array)
         std::unordered_map<int, double> m_pa;
 
@@ -24,7 +28,7 @@ namespace xcspp
 
     public:
         // GENERATE PREDICTION ARRAY
-        explicit PredictionArray(const MatchSet & matchSet);
+        PredictionArray(const MatchSet & matchSet, const XCSParams *pParams);
 
         // Destructor
         ~PredictionArray() = default;

@@ -53,17 +53,6 @@ namespace xcspp
         return true;
     }
 
-    void Condition::setToDontCareAtRandom(double dontCareProbability)
-    {
-        for (auto & symbol : m_symbols)
-        {
-            if (Random::nextDouble() < dontCareProbability)
-            {
-                symbol.setToDontCare();
-            }
-        }
-    }
-
     std::size_t Condition::dontCareCount() const
     {
         std::size_t count = 0;

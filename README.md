@@ -17,11 +17,11 @@ Work in progress...
 int main()
 {
     // XCS hyperparameters
-    xcspp::XCSParams constants;
-    constants.n = 1200; // N (max number of classifiers)
+    xcspp::XCSParams params;
+    params.n = 1200; // N (max number of classifiers)
 
     // XCS classifier system
-    xcspp::XCS xcs({ 0, 1 } /* Available actions */, constants);
+    xcspp::XCS xcs({ 0, 1 } /* Available actions */, params);
 
     // Learning iterations
     for (int i = 0; i < 50000; ++i)
@@ -58,11 +58,11 @@ int main()
     settings.outputSummaryToStdout = true; // This option enables to output summary log to console.
 
     // XCS hyperparameters
-    xcspp::XCSParams constants;
-    constants.n = 1200; // N (max number of classifiers)
+    xcspp::XCSParams params;
+    params.n = 1200; // N (max number of classifiers)
 
     // Initialize experiment and environment
-    ExperimentHelper helper(settings, constants);
+    ExperimentHelper helper(settings, params);
     helper.constructEnvironments<xcspp::MultiplexerEnvironment>(6); // This calls xcspp::MultiplexerEnvironment constructor.
 
     // Run experiment

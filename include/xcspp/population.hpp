@@ -76,7 +76,7 @@ namespace xcspp
             {
                 votes.push_back(deletionVote(**target, averageFitness));
             }
-            std::size_t selectedIdx = Random::rouletteWheelSelection(votes);
+            std::size_t selectedIdx = m_pParams->random.rouletteWheelSelection(votes);
 
             // Distrust the selected classifier
             if ((*targets[selectedIdx])->numerosity > 1)

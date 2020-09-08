@@ -10,21 +10,21 @@ namespace xcspp
     std::vector<std::unique_ptr<XCS>> ExperimentHelper::makeExperiments(
         const ExperimentSettings & settings,
         const std::unordered_set<int> & availableActions,
-        const XCSParams & constants)
+        const XCSParams & params)
     {
         std::vector<std::unique_ptr<XCS>> experiments;
         for (std::size_t i = 0; i < settings.seedCount; ++i)
         {
             experiments.push_back(
-                std::make_unique<XCS>(availableActions, constants)
+                std::make_unique<XCS>(availableActions, params)
             );
         }
         return experiments;
     }
 
-    ExperimentHelper::ExperimentHelper(const ExperimentSettings & settings, const XCSParams & constants)
+    ExperimentHelper::ExperimentHelper(const ExperimentSettings & settings, const XCSParams & params)
         : m_settings(settings)
-        , m_constants(constants)
+        , m_params(params)
         , m_explorationCallback(nullptr)
         , m_exploitationCallback(nullptr)
         , m_summaryLogStream(settings.outputSummaryFilename.empty() ? "" : (settings.outputFilenamePrefix + settings.outputSummaryFilename))

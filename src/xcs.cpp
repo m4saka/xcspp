@@ -8,11 +8,11 @@
 namespace xcspp
 {
 
-    XCS::XCS(const std::unordered_set<int> & availableActions, const XCSParams & constants)
-        : m_constants(constants)
-        , m_population(&m_constants, availableActions)
-        , m_actionSet(&m_constants, availableActions)
-        , m_prevActionSet(&m_constants, availableActions)
+    XCS::XCS(const std::unordered_set<int> & availableActions, const XCSParams & params)
+        : m_params(params)
+        , m_population(&m_params, availableActions)
+        , m_actionSet(&m_params, availableActions)
+        , m_prevActionSet(&m_params, availableActions)
         , m_availableActions(availableActions)
         , m_timeStamp(0)
         , m_expectsReward(false)
@@ -33,12 +33,12 @@ namespace xcspp
         // [M]
         //   The match set [M] is formed out of the current [P].
         //   It includes all classifiers that match the current situation.
-        const MatchSet matchSet(m_population, situation, m_timeStamp, &m_constants, m_availableActions);
+        const MatchSet matchSet(m_population, situation, m_timeStamp, &m_params, m_availableActions);
         m_isCoveringPerformed = matchSet.isCoveringPerformed();
 
-        const PredictionArray predictionArray(matchSet);
+        const PredictionArray predictionArray(matchSet, &m_params);
 
-        const int action = predictionArray.selectAction(m_constants.exploreProbability);
+        const int action = predictionArray.selectAction(m_params.exploreProbability);
         m_prediction = predictionArray.predictionFor(action);
         for (const auto & action : m_availableActions)
         {
@@ -52,7 +52,7 @@ namespace xcspp
 
         if (!m_prevActionSet.empty())
         {
-            double p = m_prevReward + m_constants.gamma * predictionArray.max();
+            double p = m_prevReward + m_params.gamma * predictionArray.max();
             m_prevActionSet.update(p, m_population);
             m_prevActionSet.runGA(m_prevSituation, m_population, m_timeStamp);
         }
@@ -104,10 +104,10 @@ namespace xcspp
             // [M]
             //   The match set [M] is formed out of the current [P].
             //   It includes all classifiers that match the current situation.
-            const MatchSet matchSet(m_population, situation, m_timeStamp, &m_constants, m_availableActions);
+            const MatchSet matchSet(m_population, situation, m_timeStamp, &m_params, m_availableActions);
             m_isCoveringPerformed = matchSet.isCoveringPerformed();
 
-            const PredictionArray predictionArray(matchSet);
+            const PredictionArray predictionArray(matchSet, &m_params);
 
             const int action = predictionArray.selectAction();
 
@@ -118,7 +118,7 @@ namespace xcspp
 
             if (!m_prevActionSet.empty())
             {
-                double p = m_prevReward + m_constants.gamma * predictionArray.max();
+                double p = m_prevReward + m_params.gamma * predictionArray.max();
                 m_prevActionSet.update(p, m_population);
 
                 // Do not perform GA operations in exploitation
@@ -131,7 +131,7 @@ namespace xcspp
         else
         {
             // Create new match set as sandbox
-            MatchSet matchSet(&m_constants, m_availableActions);
+            MatchSet matchSet(&m_params, m_availableActions);
             for (const auto & cl : m_population)
             {
                 if (cl->condition.matches(situation))
@@ -144,7 +144,7 @@ namespace xcspp
             {
                 m_isCoveringPerformed = false;
 
-                const PredictionArray predictionArray(matchSet);
+                const PredictionArray predictionArray(matchSet, &m_params);
                 const int action = predictionArray.selectAction();
                 m_prediction = predictionArray.predictionFor(action);
                 for (const auto & action : m_availableActions)
@@ -156,12 +156,12 @@ namespace xcspp
             else
             {
                 m_isCoveringPerformed = true;
-                m_prediction = m_constants.initialPrediction;
+                m_prediction = m_params.initialPrediction;
                 for (const auto & action : m_availableActions)
                 {
-                    m_predictions[action] = m_constants.initialPrediction;
+                    m_predictions[action] = m_params.initialPrediction;
                 }
-                return Random::chooseFrom(m_availableActions);
+                return m_params.random.chooseFrom(m_availableActions);
             }
         }
     }
@@ -201,9 +201,9 @@ namespace xcspp
         {
             for (auto & cl : population)
             {
-                cl.prediction = m_constants.initialPrediction;
-                cl.epsilon = m_constants.initialEpsilon;
-                cl.fitness = m_constants.initialFitness;
+                cl.prediction = m_params.initialPrediction;
+                cl.epsilon = m_params.initialEpsilon;
+                cl.fitness = m_params.initialFitness;
                 cl.experience = 0;
                 cl.timeStamp = 0;
                 cl.actionSetSize = 1;
@@ -219,7 +219,7 @@ namespace xcspp
         m_population.clear();
         for (const auto & cl : classifiers)
         {
-            m_population.emplace(std::make_shared<StoredClassifier>(cl, &m_constants));
+            m_population.emplace(std::make_shared<StoredClassifier>(cl, &m_params));
         }
 
         // Clear action set and reset status
@@ -264,8 +264,8 @@ namespace xcspp
 
     void XCS::switchToCondensationMode()
     {
-        m_constants.chi = 0.0;
-        m_constants.mu = 0.0;
+        m_params.chi = 0.0;
+        m_params.mu = 0.0;
     }
 
 }
