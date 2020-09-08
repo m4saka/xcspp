@@ -5,7 +5,6 @@
 #include <cstddef> // std::size_t
 
 #include "symbol.hpp"
-#include "random.hpp"
 
 namespace xcspp
 {
@@ -19,91 +18,27 @@ namespace xcspp
         // Constructor
         Condition() = default;
 
-        Condition(const std::vector<Symbol> & symbols) : m_symbols(symbols) {}
+        Condition(const std::vector<Symbol> & symbols);
 
-        Condition(const std::vector<int> & symbols) : m_symbols(symbols.begin(), symbols.end()) {}
+        Condition(const std::vector<int> & symbols);
 
-        explicit Condition(const std::string & symbols)
-        {
-            for (const char symbol : symbols)
-            {
-                m_symbols.emplace_back(symbol);
-            }
-        }
+        explicit Condition(const std::string & symbols);
 
         // Destructor
         ~Condition() = default;
 
-        std::string toString() const
-        {
-            std::string str;
-            for (const auto & symbol : m_symbols)
-            {
-                str += symbol.toString();
-            }
-
-            // Erase last whitespace
-            if (!str.empty() && str.back() == ' ')
-            {
-                str.pop_back();
-            }
-
-            return str;
-        }
-
-        Symbol & operator[] (std::size_t idx)
-        {
-            return m_symbols[idx];
-        }
-
-        const Symbol & operator[] (std::size_t idx) const
-        {
-            return m_symbols[idx];
-        }
-
-        Symbol & at(std::size_t idx)
-        {
-            return m_symbols.at(idx);
-        }
-
-        const Symbol & at(std::size_t idx) const
-        {
-            return m_symbols.at(idx);
-        }
-
-        friend std::ostream & operator<< (std::ostream & os, const Condition & obj)
-        {
-            return os << obj.toString();
-        }
-
-        friend bool operator== (const Condition & lhs, const Condition & rhs)
-        {
-            return lhs.m_symbols == rhs.m_symbols;
-        }
-
-        friend bool operator!= (const Condition & lhs, const Condition & rhs)
-        {
-            return lhs.m_symbols != rhs.m_symbols;
-        }
+        std::string toString() const;
 
         // DOES MATCH
-        bool matches(const std::vector<int> & situation) const
-        {
-            if (m_symbols.size() != situation.size())
-            {
-                std::invalid_argument("Condition::matches() could not process the situation with a different length.");
-            }
+        bool matches(const std::vector<int> & situation) const;
 
-            for (std::size_t i = 0; i < m_symbols.size(); ++i)
-            {
-                if (!m_symbols[i].matches(situation[i]))
-                {
-                    return false;
-                }
-            }
+        void setToDontCareAtRandom(double dontCareProbability);
 
-            return true;
-        }
+        std::size_t dontCareCount() const;
+
+        friend std::ostream & operator<< (std::ostream & os, const Condition & obj);
+
+        // --- The functions below are just the wrapper for std::vector<Symbol> ---
 
         auto empty() const noexcept
         {
@@ -135,29 +70,34 @@ namespace xcspp
             return m_symbols.cend();
         }
 
-        void setToDontCareAtRandom(double dontCareProbability)
+        Symbol & operator[] (std::size_t idx)
         {
-            for (auto & symbol : m_symbols)
-            {
-                if (Random::nextDouble() < dontCareProbability)
-                {
-                    symbol.setToDontCare();
-                }
-            }
+            return m_symbols[idx];
         }
 
-        std::size_t dontCareCount() const
+        const Symbol & operator[] (std::size_t idx) const
         {
-            std::size_t count = 0;
-            for (const auto & symbol : m_symbols)
-            {
-                if (symbol.isDontCare())
-                {
-                    count++;
-                }
-            }
+            return m_symbols[idx];
+        }
 
-            return count;
+        Symbol & at(std::size_t idx)
+        {
+            return m_symbols.at(idx);
+        }
+
+        const Symbol & at(std::size_t idx) const
+        {
+            return m_symbols.at(idx);
+        }
+
+        friend bool operator== (const Condition & lhs, const Condition & rhs)
+        {
+            return lhs.m_symbols == rhs.m_symbols;
+        }
+
+        friend bool operator!= (const Condition & lhs, const Condition & rhs)
+        {
+            return lhs.m_symbols != rhs.m_symbols;
         }
     };
 
