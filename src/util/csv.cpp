@@ -26,19 +26,12 @@ namespace xcspp
                 // Split comma-separated string
                 std::istringstream iss(line);
                 std::string field;
-                double fieldValue;
+                double fieldValue = 0.0;
                 std::vector<int> situation;
-                bool empty = true;
                 while (std::getline(iss, field, ','))
                 {
                     fieldValue = std::stof(field);
                     situation.push_back(static_cast<int>(rounds ? std::round(fieldValue) : fieldValue));
-                    empty = false;
-                }
-
-                if (empty)
-                {
-                    break; // this gets rid of maybe-uninitialized warning
                 }
 
                 // Last field is action
