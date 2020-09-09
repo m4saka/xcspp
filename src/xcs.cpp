@@ -40,9 +40,9 @@ namespace xcspp
 
         const int action = predictionArray.selectAction(m_params.exploreProbability, m_random);
         m_prediction = predictionArray.predictionFor(action);
-        for (const auto & action : m_availableActions)
+        for (const auto & a : m_availableActions)
         {
-            m_predictions[action] = predictionArray.predictionFor(action);
+            m_predictions[a] = predictionArray.predictionFor(a);
         }
 
         m_actionSet.generateSet(matchSet, action);
@@ -147,9 +147,9 @@ namespace xcspp
                 PredictionArray predictionArray(matchSet, &m_params);
                 const int action = predictionArray.selectAction(0.0, m_random);
                 m_prediction = predictionArray.predictionFor(action);
-                for (const auto & action : m_availableActions)
+                for (const auto & a : m_availableActions)
                 {
-                    m_predictions[action] = predictionArray.predictionFor(action);
+                    m_predictions[a] = predictionArray.predictionFor(a);
                 }
                 return action;
             }
