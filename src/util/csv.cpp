@@ -34,6 +34,12 @@ namespace xcspp
                     situation.push_back(static_cast<int>(rounds ? std::round(fieldValue) : fieldValue));
                 }
 
+                // Skip line with no values
+                if (situation.empty())
+                {
+                    continue;
+                }
+
                 // Last field is action
                 actions.push_back(static_cast<int>(fieldValue));
                 situation.pop_back();
