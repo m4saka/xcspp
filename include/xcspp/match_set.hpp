@@ -9,7 +9,6 @@
 namespace xcspp
 {
 
-    // TODO: Use ClassifierPtrSet and non-member functions
     class MatchSet : public ClassifierPtrSet
     {
     protected:
