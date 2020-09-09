@@ -75,7 +75,6 @@ namespace xcspp
                 std::istringstream iss(line);
                 std::string field;
                 std::vector<int> situation;
-                bool empty = true;
 
                 // For XCSR population CSV, we need an option whether to skip the first graphic notation column
                 if (skipFirstColumn)
@@ -84,14 +83,14 @@ namespace xcspp
                 }
 
                 Condition condition;
-                int action;
-                double prediction;
-                double epsilon;
-                double fitness;
-                std::size_t experience;
-                std::size_t timeStamp;
-                double actionSetSize;
-                std::size_t numerosity;
+                int action = 0;
+                double prediction = 0.0;
+                double epsilon = 0.0;
+                double fitness = 0.0;
+                std::size_t experience = 0;
+                std::size_t timeStamp = 0;
+                double actionSetSize = 0.0;
+                std::size_t numerosity = 1;
 
                 int columnIdx = 0;
                 while (std::getline(iss, field, ','))
@@ -132,12 +131,6 @@ namespace xcspp
                         }
                     }
                     ++columnIdx;
-                    empty = false;
-                }
-
-                if (empty)
-                {
-                    break; // this gets rid of maybe-uninitialized warning
                 }
 
                 // Add classifier to list
