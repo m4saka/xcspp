@@ -56,13 +56,11 @@ namespace xcspp
 
     ActionSet::ActionSet(const XCSParams *pParams, const std::unordered_set<int> & availableActions)
         : ClassifierPtrSet(pParams, availableActions)
-        , m_ga(pParams, availableActions)
     {
     }
 
     ActionSet::ActionSet(const MatchSet & matchSet, int action, const XCSParams *pParams, const std::unordered_set<int> & availableActions)
         : ClassifierPtrSet(pParams, availableActions)
-        , m_ga(pParams, availableActions)
     {
         generateSet(matchSet, action);
     }
@@ -83,7 +81,7 @@ namespace xcspp
 
     void ActionSet::copyTo(ActionSet & dest)
     {
-        dest.m_set = m_set; // do not copy m_ga since it contains const parameters
+        dest.m_set = m_set;
     }
 
     // RUN GA (refer to GA::run() for the latter part)
@@ -116,7 +114,7 @@ namespace xcspp
                 cl->timeStamp = timeStamp;
             }
 
-            m_ga.run(*this, situation, population, random);
+            GA::run(*this, situation, population, m_availableActions, m_pParams, random);
         }
     }
 
