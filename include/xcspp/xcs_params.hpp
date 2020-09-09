@@ -14,7 +14,7 @@ namespace xcspp
         //   The maximum size of the population
         //   (the sum of the classifier numerosities in micro-classifiers)
         //   Recommended: large enough
-        std::uint64_t n = 400;
+        std::uint64_t n = 1000;
 
         // beta
         //   The learning rate for updating fitness, prediction, prediction error, and
@@ -86,7 +86,7 @@ namespace xcspp
         // tau
         //   The tournament size for selection [Butz et al., 2003]
         //   (set "0" to use the roulette-wheel selection)
-        double tau = 0.0;
+        double tau = 0.4;
 
         // P_sharp
         //   The probability of using a don't care symbol in an allele when covering
