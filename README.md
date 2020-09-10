@@ -62,7 +62,7 @@ int main()
     params.n = 1200; // N (max number of classifiers)
 
     // Initialize experiment and environment
-    XCSExperimentHelper helper(settings, params);
+    xcspp::XCSExperimentHelper helper(settings, params);
     helper.constructEnvironments<xcspp::MultiplexerEnvironment>(6); // This calls xcspp::MultiplexerEnvironment constructor.
 
     // Run experiment
