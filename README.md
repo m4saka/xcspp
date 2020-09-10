@@ -43,12 +43,12 @@ int main()
 }
 ```
 
-## Example: `ExperimentHelper` class
-For research purposes, you can use `ExperimentHelper` class to evaluate XCS performance and output log files with a simple code.
+## Example: `XCSExperimentHelper` class
+For research purposes, you can use `XCSExperimentHelper` class to evaluate XCS performance and output log files with a simple code.
 
 ### Sample code:
 ```cpp
-#include "xcspp/helper/experiment_helper.hpp"
+#include "xcspp/helper/xcs_experiment_helper.hpp"
 #include "xcspp/environment/multiplexer_environment.hpp"
 
 int main()
@@ -62,7 +62,7 @@ int main()
     params.n = 1200; // N (max number of classifiers)
 
     // Initialize experiment and environment
-    ExperimentHelper helper(settings, params);
+    XCSExperimentHelper helper(settings, params);
     helper.constructEnvironments<xcspp::MultiplexerEnvironment>(6); // This calls xcspp::MultiplexerEnvironment constructor.
 
     // Run experiment

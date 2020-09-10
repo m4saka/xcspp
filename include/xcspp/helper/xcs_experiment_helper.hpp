@@ -13,7 +13,7 @@
 namespace xcspp
 {
 
-    class ExperimentHelper
+    class XCSExperimentHelper
     {
     private:
         const ExperimentSettings m_settings;
@@ -49,9 +49,9 @@ namespace xcspp
         void runExplorationIteration();
 
     public:
-        ExperimentHelper(const ExperimentSettings & settings, const XCSParams & params);
+        XCSExperimentHelper(const ExperimentSettings & settings, const XCSParams & params);
 
-        ~ExperimentHelper() = default;
+        ~XCSExperimentHelper() = default;
 
         template <class Environment, class... Args>
         void constructEnvironments(Args && ... args);
@@ -78,7 +78,7 @@ namespace xcspp
     };
 
     template <class Environment, class... Args>
-    void ExperimentHelper::constructEnvironments(Args && ... args)
+    void XCSExperimentHelper::constructEnvironments(Args && ... args)
     {
         // Clear environment arrays
         m_explorationEnvironments.clear();

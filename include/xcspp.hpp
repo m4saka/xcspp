@@ -14,7 +14,7 @@
 #include "xcspp/environment/ienvironment.hpp"
 #include "xcspp/environment/multiplexer_environment.hpp"
 
-#include "xcspp/helper/experiment_helper.hpp"
+#include "xcspp/helper/xcs_experiment_helper.hpp"
 #include "xcspp/helper/experiment_log_stream.hpp"
 #include "xcspp/helper/experiment_settings.hpp"
 #include "xcspp/helper/simple_moving_average.hpp"

@@ -1,4 +1,4 @@
-#include "xcspp/helper/experiment_helper.hpp"
+#include "xcspp/helper/xcs_experiment_helper.hpp"
 #include <iostream>
 #include <fstream>
 #include <cstdio> // std::printf, std::fflush
@@ -7,7 +7,7 @@
 namespace xcspp
 {
 
-    std::vector<std::unique_ptr<XCS>> ExperimentHelper::makeExperiments(
+    std::vector<std::unique_ptr<XCS>> XCSExperimentHelper::makeExperiments(
         const ExperimentSettings & settings,
         const std::unordered_set<int> & availableActions,
         const XCSParams & params)
@@ -22,7 +22,7 @@ namespace xcspp
         return experiments;
     }
 
-    void ExperimentHelper::outputSummaryLogLine()
+    void XCSExperimentHelper::outputSummaryLogLine()
     {
         if (!m_alreadyOutputSummaryHeader)
         {
@@ -69,7 +69,7 @@ namespace xcspp
         m_summaryStepCountSum = 0.0;
     }
 
-    void ExperimentHelper::runExploitationIteration()
+    void XCSExperimentHelper::runExploitationIteration()
     {
         if (m_settings.exploitationCount > 0)
         {
@@ -125,7 +125,7 @@ namespace xcspp
         }
     }
 
-    void ExperimentHelper::runExplorationIteration()
+    void XCSExperimentHelper::runExplorationIteration()
     {
         for (std::size_t j = 0; j < m_settings.seedCount; ++j)
         {
@@ -150,7 +150,7 @@ namespace xcspp
         }
     }
 
-    ExperimentHelper::ExperimentHelper(const ExperimentSettings & settings, const XCSParams & params)
+    XCSExperimentHelper::XCSExperimentHelper(const ExperimentSettings & settings, const XCSParams & params)
         : m_settings(settings)
         , m_params(params)
         , m_explorationCallback(nullptr)
@@ -177,7 +177,7 @@ namespace xcspp
         }
     }
 
-    void ExperimentHelper::runIteration(std::size_t repeat)
+    void XCSExperimentHelper::runIteration(std::size_t repeat)
     {
         for (std::size_t i = 0; i < repeat; ++i)
         {
@@ -187,7 +187,7 @@ namespace xcspp
         }
     }
 
-    void ExperimentHelper::switchToCondensationMode()
+    void XCSExperimentHelper::switchToCondensationMode()
     {
         for (const auto & experiment : m_experiments)
         {
@@ -195,42 +195,42 @@ namespace xcspp
         }
     }
 
-    std::size_t ExperimentHelper::seedCount() const
+    std::size_t XCSExperimentHelper::seedCount() const
     {
         return m_settings.seedCount;
     }
 
-    XCS & ExperimentHelper::experimentAt(std::size_t seedIdx)
+    XCS & XCSExperimentHelper::experimentAt(std::size_t seedIdx)
     {
         return *m_experiments.at(seedIdx);
     }
 
-    const XCS & ExperimentHelper::experimentAt(std::size_t seedIdx) const
+    const XCS & XCSExperimentHelper::experimentAt(std::size_t seedIdx) const
     {
         return *m_experiments.at(seedIdx);
     }
 
-    IEnvironment & ExperimentHelper::explorationEnvironmentAt(std::size_t seedIdx)
+    IEnvironment & XCSExperimentHelper::explorationEnvironmentAt(std::size_t seedIdx)
     {
         return *m_explorationEnvironments.at(seedIdx);
     }
 
-    const IEnvironment & ExperimentHelper::explorationEnvironmentAt(std::size_t seedIdx) const
+    const IEnvironment & XCSExperimentHelper::explorationEnvironmentAt(std::size_t seedIdx) const
     {
         return *m_explorationEnvironments.at(seedIdx);
     }
 
-    IEnvironment & ExperimentHelper::exploitationEnvironmentAt(std::size_t seedIdx)
+    IEnvironment & XCSExperimentHelper::exploitationEnvironmentAt(std::size_t seedIdx)
     {
         return *m_exploitationEnvironments.at(seedIdx);
     }
 
-    const IEnvironment & ExperimentHelper::exploitationEnvironmentAt(std::size_t seedIdx) const
+    const IEnvironment & XCSExperimentHelper::exploitationEnvironmentAt(std::size_t seedIdx) const
     {
         return *m_exploitationEnvironments.at(seedIdx);
     }
 
-    void ExperimentHelper::dumpPopulation(std::size_t seedIdx, std::ostream & os) const
+    void XCSExperimentHelper::dumpPopulation(std::size_t seedIdx, std::ostream & os) const
     {
         m_experiments.at(seedIdx)->dumpPopulation(os);
     }
