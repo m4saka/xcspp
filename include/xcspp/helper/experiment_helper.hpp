@@ -42,6 +42,12 @@ namespace xcspp
             const std::unordered_set<int> & availableActions,
             const XCSParams & params);
 
+        void outputSummaryLogLine();
+
+        void runExploitationIteration();
+
+        void runExplorationIteration();
+
     public:
         ExperimentHelper(const ExperimentSettings & settings, const XCSParams & params);
 
