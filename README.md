@@ -1,15 +1,11 @@
 # xcspp: XCS Library for C++17
-## Usage (with CMake)
-Just use `add_subdirectory` to include the xcspp directory, and link the `xcspp` library to your target.
-```cmake
-add_subdirectory(xcspp) # <= Path to the xcspp directory
-target_link_libraries(your_target xcspp)
-```
+eXtended Learning Classifier System (XCS) implementation written in C++17.
 
-## Usage (without CMake)
-Work in progress...
+## `XCS` class
+`XCS` class is suitable for general use of the XCS classifier system.  
+You can embed XCS in your program with this.
 
-## Example: `XCS` class
+### Sample code:
 ```cpp
 #include <iostream>
 #include <xcspp/xcs.hpp>
@@ -42,9 +38,11 @@ int main()
     return 0;
 }
 ```
+- Note: In the LCS community, `explore`/`exploit` has the same meaning as "train"/"test" used in ordinary machine learning.
 
-## Example: `XCSExperimentHelper` class
-For research purposes, you can use `XCSExperimentHelper` class to evaluate XCS performance and output log files with a simple code.
+## `XCSExperimentHelper` class
+With `XCSExperimentHelper` class, you can evaluate the performance of XCS with a simple code.  
+This is useful especially for research purposes.
 
 ### Sample code:
 ```cpp
@@ -88,3 +86,13 @@ Iteration      Reward      SysErr     PopSize  CovOccRate   TotalStep
     50000    1000.000       8.952      71.377  0.00000000       1.000
 ```
 In default, this summary log is saved as `summary.csv`, and the acquired population is saved as `classifier.csv`.
+
+## Library Linking (with CMake)
+Just use `add_subdirectory` to include the xcspp directory, and link the `xcspp` library to your target.
+```cmake
+add_subdirectory(xcspp) # <= Path to the xcspp directory
+target_link_libraries(your_target xcspp)
+```
+
+## Library Linking (without CMake)
+Work in progress...
