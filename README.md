@@ -8,7 +8,7 @@ You can embed XCS in your program with this.
 ### Sample code:
 ```cpp
 #include <iostream>
-#include <xcspp/xcs.hpp>
+#include <xcspp.hpp>
 
 int main()
 {
@@ -46,8 +46,7 @@ This is useful especially for research purposes.
 
 ### Sample code (20-bit multiplexer problem):
 ```cpp
-#include "xcspp/helper/xcs_experiment_helper.hpp"
-#include "xcspp/environment/multiplexer_environment.hpp"
+#include <xcspp.hpp>
 
 int main()
 {
