@@ -2,6 +2,7 @@
 #include <vector>
 #include <unordered_set>
 #include <fstream>
+#include <stdexcept>
 #include <cstddef> // std::size_t
 
 #include "ienvironment.hpp"
@@ -100,7 +101,7 @@ namespace xcspp
             }
         }
 
-        void setRandomEmptyPosition()
+        void setToRandomEmptyPosition()
         {
             auto randomPosition = Random::chooseFrom(m_emptyPositions);
             m_currentX = randomPosition.first;
@@ -108,7 +109,10 @@ namespace xcspp
             m_initialX = m_currentX;
             m_initialY = m_currentY;
 
-            assert(isEmpty(m_currentX, m_currentY));
+            if (!isEmpty(m_currentX, m_currentY))
+            {
+                throw std::domain_error("Failed to set to empty position in BlockWorldEnvironment::setToRandomEmptyPosition()");
+            }
         }
 
     public:
@@ -132,11 +136,16 @@ namespace xcspp
             {
                 if (m_worldWidth == 0)
                 {
+                    // If the world width is not yet discovered, set it to the string length
                     m_worldWidth = line.length();
                 }
                 else
                 {
-                    assert(m_worldWidth == line.length());
+                    // Make sure all lines in the text file have the same length
+                    if (m_worldWidth != line.length())
+                    {
+                        throw std::runtime_error("In BlockWorldEnvironment, all lines in the text file must have the same length.");
+                    }
                 }
 
                 m_worldMap.push_back(line);
@@ -155,7 +164,7 @@ namespace xcspp
                 }
             }
 
-            setRandomEmptyPosition();
+            setToRandomEmptyPosition();
             m_lastX = m_currentX;
             m_lastY = m_currentY;
             m_lastInitialX = m_initialX;
@@ -292,7 +301,10 @@ namespace xcspp
 
         virtual double executeAction(int action) override
         {
-            assert(action >= 0 && action < 8);
+            if (action < 0 || 8 <= action)
+            {
+                throw std::invalid_argument("BlockWorldEnvironment::executeAction() received an invalid action out of the range 0-7.");
+            }
 
             m_lastInitialX = m_initialX;
             m_lastInitialY = m_initialY;
@@ -306,7 +318,7 @@ namespace xcspp
             {
                 m_lastX = x;
                 m_lastY = y;
-                setRandomEmptyPosition();
+                setToRandomEmptyPosition();
                 m_isEndOfProblem = true;
                 m_lastStep = m_currentStep + 1;
                 m_currentStep = 0;
@@ -334,7 +346,7 @@ namespace xcspp
                 m_lastStep = ++m_currentStep;
                 if (m_currentStep >= m_maxStep)
                 {
-                    setRandomEmptyPosition();
+                    setToRandomEmptyPosition();
                     m_isEndOfProblem = true;
                     m_currentStep = 0;
                 }
