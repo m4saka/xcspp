@@ -14,8 +14,8 @@ namespace xcspp
     class BlockWorldEnvironment : public IEnvironment
     {
     private:
-        std::size_t m_worldWidth;
-        std::size_t m_worldHeight;
+        int m_worldWidth;
+        int m_worldHeight;
         std::vector<std::string> m_worldMap;
         std::vector<std::pair<int, int>> m_emptyPositions;
 
@@ -39,10 +39,10 @@ namespace xcspp
         std::size_t m_lastStep;
         std::size_t m_currentStep;
 
+        bool m_isEndOfProblem;
+
         const bool m_allowsDiagonalAction;
         const bool m_threeBitMode;
-
-        bool m_isEndOfProblem;
 
         static constexpr int xDiff(int idx)
         {
@@ -69,7 +69,7 @@ namespace xcspp
             kDirectionValueCount,
         };
 
-        std::vector<bool> charToBits(unsigned char block) const
+        std::vector<int> charToBits(unsigned char block) const
         {
             if (m_threeBitMode)
             {
@@ -127,9 +127,9 @@ namespace xcspp
             , m_maxStep(maxStep)
             , m_lastStep(0)
             , m_currentStep(0)
+            , m_isEndOfProblem(false)
             , m_allowsDiagonalAction(allowsDiagonalAction)
             , m_threeBitMode(threeBitMode)
-            , m_isEndOfProblem(false)
         {
             std::ifstream ifs(mapFilename);
             std::string line;
@@ -138,12 +138,12 @@ namespace xcspp
                 if (m_worldWidth == 0)
                 {
                     // If the world width is not yet discovered, set it to the string length
-                    m_worldWidth = line.length();
+                    m_worldWidth = static_cast<int>(line.length());
                 }
                 else
                 {
                     // Make sure all lines in the text file have the same length
-                    if (m_worldWidth != line.length())
+                    if (m_worldWidth != static_cast<int>(line.length()))
                     {
                         throw std::runtime_error("In BlockWorldEnvironment, all lines in the text file must have the same length.");
                     }
@@ -154,9 +154,9 @@ namespace xcspp
             }
 
             // Store empty positions for random initialization
-            for (std::size_t y = 0; y < m_worldHeight; ++y)
+            for (int y = 0; y < m_worldHeight; ++y)
             {
-                for (std::size_t x = 0; x < m_worldWidth; ++x)
+                for (int x = 0; x < m_worldWidth; ++x)
                 {
                     if (isEmpty(x, y))
                     {
@@ -174,12 +174,12 @@ namespace xcspp
 
         virtual ~BlockWorldEnvironment() = default;
 
-        std::size_t worldWidth() const
+        int worldWidth() const
         {
             return m_worldWidth;
         }
 
-        std::size_t worldHeight() const
+        int worldHeight() const
         {
             return m_worldHeight;
         }
@@ -236,14 +236,14 @@ namespace xcspp
 
         unsigned char getBlock(int x, int y) const
         {
-            x = (x + m_worldWidth) % static_cast<int>(m_worldWidth);
-            y = (y + m_worldHeight) % static_cast<int>(m_worldHeight);
+            x = (x + m_worldWidth) % m_worldWidth;
+            y = (y + m_worldHeight) % m_worldHeight;
             return m_worldMap[y][x];
         }
 
         bool isEmpty(int x, int y) const
         {
-            switch(getBlock(x, y))
+            switch (getBlock(x, y))
             {
             case 'T':
             case 'O':
@@ -258,7 +258,7 @@ namespace xcspp
 
         bool isFood(int x, int y) const
         {
-            switch(getBlock(x, y))
+            switch (getBlock(x, y))
             {
             case 'F':
             case 'G':
@@ -270,7 +270,7 @@ namespace xcspp
 
         bool isObstacle(int x, int y) const
         {
-            switch(getBlock(x, y))
+            switch (getBlock(x, y))
             {
             case 'T':
             case 'O':
@@ -281,9 +281,9 @@ namespace xcspp
             }
         }
 
-        std::vector<bool> situation(int x, int y) const
+        std::vector<int> situation(int x, int y) const
         {
-            std::vector<bool> situation;
+            std::vector<int> situation;
             for (int i = 0; i < kDirectionValueCount; ++i)
             {
                 const auto block = getBlock(x + xDiff(i), y + yDiff(i));
@@ -295,14 +295,14 @@ namespace xcspp
             return situation;
         }
 
-        virtual std::vector<bool> situation() const override
+        virtual std::vector<int> situation() const override
         {
             return situation(m_currentX, m_currentY);
         }
 
         virtual double executeAction(int action) override
         {
-            if (action < 0 || 8 <= action)
+            if (action < 0 || kDirectionValueCount <= action)
             {
                 throw std::invalid_argument("BlockWorldEnvironment::executeAction() received an invalid action out of the range 0-7.");
             }
@@ -311,8 +311,8 @@ namespace xcspp
             m_lastInitialY = m_initialY;
 
             // The coordinates after performing the action
-            const int x = (m_currentX + xDiff(action) + m_worldWidth) % static_cast<int>(m_worldWidth);
-            const int y = (m_currentY + yDiff(action) + m_worldHeight) % static_cast<int>(m_worldHeight);
+            const int x = (m_currentX + xDiff(action) + m_worldWidth) % m_worldWidth;
+            const int y = (m_currentY + yDiff(action) + m_worldHeight) % m_worldHeight;
 
             // Determine the reward and move the position
             double reward;
@@ -378,11 +378,11 @@ namespace xcspp
         std::string toString() const
         {
             std::string str;
-            for (std::size_t y = 0; y < m_worldHeight; ++y)
+            for (int y = 0; y < m_worldHeight; ++y)
             {
-                for (std::size_t x = 0; x < m_worldWidth; ++x)
+                for (int x = 0; x < m_worldWidth; ++x)
                 {
-                    str += (static_cast<int>(x) == m_currentX && static_cast<int>(y) == m_currentY) ? '*' : getBlock(x, y);
+                    str += (x == m_currentX && y == m_currentY) ? '*' : getBlock(x, y);
                 }
                 str += '\n';
             }
