@@ -35,34 +35,38 @@ namespace xcspp
         int m_lastInitialX;
         int m_lastInitialY;
 
-        std::size_t m_maxStep;
+        const std::size_t m_maxStep;
         std::size_t m_lastStep;
         std::size_t m_currentStep;
-        bool m_threeBitMode;
+
+        const bool m_allowsDiagonalAction;
+        const bool m_threeBitMode;
+
         bool m_isEndOfProblem;
 
-        static constexpr int xDiff(std::size_t idx)
+        static constexpr int xDiff(int idx)
         {
             constexpr int xDiffs[] = { 0, +1, +1, +1,  0, -1, -1, -1 };
             return xDiffs[idx];
         }
 
-        static constexpr int yDiff(std::size_t idx)
+        static constexpr int yDiff(int idx)
         {
             constexpr int yDiffs[] = { -1, -1,  0, +1, +1, +1,  0, -1 };
             return yDiffs[idx];
         }
 
-        enum Direction
+        enum Direction : int
         {
-            UP = 0,
-            UP_RIGHT,
-            RIGHT,
-            DOWN_RIGHT,
-            DOWN,
-            DOWN_LEFT,
-            LEFT,
-            UP_LEFT
+            kUp = 0,
+            kUpRight,
+            kRight,
+            kDownRight,
+            kDown,
+            kDownLeft,
+            kLeft,
+            kUpLeft,
+            kDirectionValueCount,
         };
 
         std::vector<bool> charToBits(unsigned char block) const
@@ -117,16 +121,13 @@ namespace xcspp
 
     public:
         // Constructor
-        BlockWorldEnvironment(const std::string & mapFilename, std::size_t maxStep, bool threeBitMode, bool allowDiagonalAction)
-            : AbstractEnvironment<bool, int>(
-                allowDiagonalAction
-                    ? std::unordered_set<int>{ UP, UP_RIGHT, RIGHT, DOWN_RIGHT, DOWN, DOWN_LEFT, LEFT, UP_LEFT }
-                    : std::unordered_set<int>{ UP, RIGHT, DOWN, LEFT })
-            , m_worldWidth(0)
+        BlockWorldEnvironment(const std::string & mapFilename, std::size_t maxStep, bool threeBitMode, bool allowsDiagonalAction)
+            : m_worldWidth(0)
             , m_worldHeight(0)
             , m_maxStep(maxStep)
             , m_lastStep(0)
             , m_currentStep(0)
+            , m_allowsDiagonalAction(allowsDiagonalAction)
             , m_threeBitMode(threeBitMode)
             , m_isEndOfProblem(false)
         {
@@ -283,10 +284,10 @@ namespace xcspp
         std::vector<bool> situation(int x, int y) const
         {
             std::vector<bool> situation;
-            for (std::size_t i = 0; i < 8ULL; ++i)
+            for (int i = 0; i < kDirectionValueCount; ++i)
             {
-                auto block = getBlock(x + xDiff(i), y + yDiff(i));
-                for (auto && bit : charToBits(block))
+                const auto block = getBlock(x + xDiff(i), y + yDiff(i));
+                for (const auto & bit : charToBits(block))
                 {
                     situation.push_back(bit);
                 }
@@ -310,9 +311,10 @@ namespace xcspp
             m_lastInitialY = m_initialY;
 
             // The coordinates after performing the action
-            int x = (m_currentX + xDiff(action) + m_worldWidth) % static_cast<int>(m_worldWidth);
-            int y = (m_currentY + yDiff(action) + m_worldHeight) % static_cast<int>(m_worldHeight);
+            const int x = (m_currentX + xDiff(action) + m_worldWidth) % static_cast<int>(m_worldWidth);
+            const int y = (m_currentY + yDiff(action) + m_worldHeight) % static_cast<int>(m_worldHeight);
 
+            // Determine the reward and move the position
             double reward;
             if (isFood(x, y))
             {
@@ -346,6 +348,7 @@ namespace xcspp
                 m_lastStep = ++m_currentStep;
                 if (m_currentStep >= m_maxStep)
                 {
+                    // Teletransport when the step count reaches the maximum step size
                     setToRandomEmptyPosition();
                     m_isEndOfProblem = true;
                     m_currentStep = 0;
@@ -358,6 +361,18 @@ namespace xcspp
         virtual bool isEndOfProblem() const override
         {
             return m_isEndOfProblem;
+        }
+
+        virtual std::unordered_set<int> availableActions() const override
+        {
+            if (m_allowsDiagonalAction)
+            {
+                return { kUp, kUpRight, kRight, kDownRight, kDown, kDownLeft, kLeft, kUpLeft };
+            }
+            else
+            {
+                return { kUp, kRight, kDown, kLeft };
+            }
         }
 
         std::string toString() const
