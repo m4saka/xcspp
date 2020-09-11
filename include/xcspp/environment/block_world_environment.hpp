@@ -107,7 +107,7 @@ namespace xcspp
 
         void setToRandomEmptyPosition()
         {
-            auto randomPosition = Random::chooseFrom(m_emptyPositions);
+            auto randomPosition = m_random.chooseFrom(m_emptyPositions);
             m_currentX = randomPosition.first;
             m_currentY = randomPosition.second;
             m_initialX = m_currentX;
