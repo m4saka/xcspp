@@ -41,6 +41,8 @@ namespace xcspp
 
         bool m_isEndOfProblem;
 
+        Random m_random;
+
         const bool m_allowsDiagonalAction;
         const bool m_threeBitMode;
 
@@ -107,7 +109,7 @@ namespace xcspp
 
         void setToRandomEmptyPosition()
         {
-            auto randomPosition = m_random.chooseFrom(m_emptyPositions);
+            const auto randomPosition = m_random.chooseFrom(m_emptyPositions);
             m_currentX = randomPosition.first;
             m_currentY = randomPosition.second;
             m_initialX = m_currentX;
