@@ -56,3 +56,35 @@ TEST(ConditionTest, Comparison)
     EXPECT_NE(cond1_2, cond2_1);
     EXPECT_NE(cond1_2, cond2_2);
 }
+
+TEST(ConditionTest, IsMoreGeneral)
+{
+    const xcspp::Condition cond1("01##");
+    const xcspp::Condition cond2("01#1");
+    const xcspp::Condition cond3("11##");
+
+    EXPECT_FALSE(cond1.isMoreGeneral(cond1));
+    EXPECT_FALSE(cond2.isMoreGeneral(cond2));
+    EXPECT_FALSE(cond3.isMoreGeneral(cond3));
+
+    // "01##" vs. "01#1"
+    EXPECT_TRUE(cond1.isMoreGeneral(cond2));
+    EXPECT_FALSE(cond2.isMoreGeneral(cond1));
+
+    // "01##" vs. "11##"
+    EXPECT_FALSE(cond1.isMoreGeneral(cond3));
+    EXPECT_FALSE(cond3.isMoreGeneral(cond1));
+
+    // "01#1" vs. "11##"
+    EXPECT_FALSE(cond2.isMoreGeneral(cond3));
+    EXPECT_FALSE(cond3.isMoreGeneral(cond2));
+
+    // vs. "####"
+    const xcspp::Condition allDontCare("####");
+    EXPECT_TRUE(allDontCare.isMoreGeneral(cond1));
+    EXPECT_TRUE(allDontCare.isMoreGeneral(cond2));
+    EXPECT_TRUE(allDontCare.isMoreGeneral(cond3));
+    EXPECT_FALSE(cond1.isMoreGeneral(allDontCare));
+    EXPECT_FALSE(cond2.isMoreGeneral(allDontCare));
+    EXPECT_FALSE(cond3.isMoreGeneral(allDontCare));
+}
