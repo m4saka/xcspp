@@ -23,13 +23,13 @@ namespace xcspp
         std::size_t summaryInterval = 5000;
 
         // The prefix of filename
-        std::string outputFilenamePrefix;
+        std::string outputFilenamePrefix = "";
 
         // Whether to output summary log to stdout
         bool outputSummaryToStdout = false;
 
         // The filename of summary log csv output
-        std::string outputSummaryFilename = "summary.csv";
+        std::string outputSummaryFilename = "";
 
         // The filename of reward log csv output
         std::string outputRewardFilename = "";
@@ -41,10 +41,10 @@ namespace xcspp
         std::string outputSystemErrorFilename = "";
 
         // The filename of number-of-step log csv output in the multi-step problem
-        std::string outputStepCountFilename;
+        std::string outputStepCountFilename = "";
 
         // The classifier csv filename for initial population
-        std::string inputClassifierFilename;
+        std::string inputClassifierFilename = "";
 
         // Whether to use initial classifiers (--cinput) to resume previous experiment
         //   "false": initialize p/epsilon/F/exp/ts/as to defaults
