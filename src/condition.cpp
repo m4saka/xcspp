@@ -53,6 +53,33 @@ namespace xcspp
         return true;
     }
 
+    bool Condition::isMoreGeneral(const Condition & cond) const
+    {
+        if (m_symbols.size() != cond.size())
+        {
+            throw std::invalid_argument("In Condition::isMoreGeneral(), both conditions must have the same length.");
+        }
+
+        bool ret = false;
+
+        for (std::size_t i = 0; i < m_symbols.size(); ++i)
+        {
+            if (m_symbols[i] != cond[i])
+            {
+                if (m_symbols[i].isDontCare())
+                {
+                    ret = true;
+                }
+                else 
+                {
+                    return false;
+                }
+            }
+        }
+
+        return ret;
+    }
+
     std::size_t Condition::dontCareCount() const
     {
         std::size_t count = 0;
