@@ -9,3 +9,8 @@ add_executable(SymbolTest symbol_test.cpp)
 target_compile_features(SymbolTest PRIVATE cxx_std_17)
 target_link_libraries(SymbolTest gtest gtest_main xcspp)
 gtest_discover_tests(SymbolTest)
+
+add_executable(ConditionTest condition_test.cpp)
+target_compile_features(ConditionTest PRIVATE cxx_std_17)
+target_link_libraries(ConditionTest gtest gtest_main xcspp)
+gtest_discover_tests(ConditionTest)
