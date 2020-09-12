@@ -1,6 +1,10 @@
 # xcspp: XCS Library for C++17
 eXtended Learning Classifier System (XCS) library written in C++17.
 
+![Ubuntu build](https://github.com/m4saka/xcspp/workflows/Ubuntu%20build/badge.svg)
+![Windows build](https://github.com/m4saka/xcspp/workflows/Windows%20build/badge.svg)
+![macOS build](https://github.com/m4saka/xcspp/workflows/macOS%20build/badge.svg)
+
 ## `XCS` class
 `XCS` class is suitable for general use of the XCS classifier system.  
 You can embed XCS in your program with this.
