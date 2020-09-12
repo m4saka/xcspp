@@ -18,34 +18,6 @@ namespace xcspp
     {
     }
 
-    // IS MORE GENERAL
-    bool ConditionActionPair::isMoreGeneral(const ConditionActionPair & cl) const
-    {
-        if (condition.size() != cl.condition.size())
-        {
-            std::invalid_argument("ConditionActionPair::isMoreGeneral() could not process the classifier with a different condition length.");
-        }
-
-        bool ret = false;
-
-        for (std::size_t i = 0; i < condition.size(); ++i)
-        {
-            if (condition.at(i) != cl.condition.at(i))
-            {
-                if (!condition.at(i).isDontCare())
-                {
-                    return false;
-                }
-                else 
-                {
-                    ret = true;
-                }
-            }
-        }
-
-        return ret;
-    }
-
     std::ostream & operator<< (std::ostream & os, const ConditionActionPair & obj)
     {
         return os << obj.condition << ':' << obj.action;
@@ -154,7 +126,7 @@ namespace xcspp
     // DOES SUBSUME
     bool StoredClassifier::subsumes(const Classifier & cl) const
     {
-        return action == cl.action && isSubsumer() && isMoreGeneral(cl);
+        return action == cl.action && isSubsumer() && condition.isMoreGeneral(cl.condition);
     }
 
     double StoredClassifier::accuracy() const

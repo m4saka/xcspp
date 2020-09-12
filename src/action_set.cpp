@@ -27,7 +27,7 @@ namespace xcspp
         {
             if (c->isSubsumer())
             {
-                if ((cl.get() == nullptr) || c->isMoreGeneral(*cl))
+                if ((cl.get() == nullptr) || c->condition.isMoreGeneral(cl->condition))
                 {
                     cl = c;
                 }
@@ -39,7 +39,8 @@ namespace xcspp
             std::vector<ClassifierPtr> removedClassifiers;
             for (const auto & c : m_set)
             {
-                if (cl->isMoreGeneral(*c))
+                // Since all classifiers in [A] should have the same action, "cl->action == c->action" check is skipped
+                if (cl->condition.isMoreGeneral(c->condition))
                 {
                     cl->numerosity += c->numerosity;
                     removedClassifiers.push_back(c);

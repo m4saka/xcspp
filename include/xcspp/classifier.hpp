@@ -32,9 +32,6 @@ namespace xcspp
         // Destructor
         virtual ~ConditionActionPair() = default;
 
-        // IS MORE GENERAL
-        bool isMoreGeneral(const ConditionActionPair & cl) const;
-
         friend std::ostream & operator<< (std::ostream & os, const ConditionActionPair & obj);
     };
 

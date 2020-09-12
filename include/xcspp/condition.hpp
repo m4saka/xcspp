@@ -32,6 +32,9 @@ namespace xcspp
         // DOES MATCH
         bool matches(const std::vector<int> & situation) const;
 
+        // IS MORE GENERAL
+        bool isMoreGeneral(const Condition & cl) const;
+
         std::size_t dontCareCount() const;
 
         friend std::ostream & operator<< (std::ostream & os, const Condition & obj);
