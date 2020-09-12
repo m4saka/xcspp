@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <xcspp.hpp>
+#include <xcspp/xcspp.hpp>
 
 TEST(SymbolTest, ConstructWithNumberChar)
 {
