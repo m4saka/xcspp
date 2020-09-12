@@ -1,3 +1,5 @@
+#pragma once
+
 #include "action_set.hpp"
 #include "classifier.hpp"
 #include "classifier_ptr_set.hpp"
