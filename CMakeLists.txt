@@ -11,3 +11,7 @@ else()
     target_compile_options(xcspp PRIVATE -O2 -Wall)
 endif()
 target_include_directories(xcspp PUBLIC ${PROJECT_SOURCE_DIR}/include)
+
+add_subdirectory(test)
+
+export(TARGETS xcspp FILE ${CMAKE_CURRENT_BINARY_DIR}/xcsppConfig.cmake)
