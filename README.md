@@ -6,7 +6,8 @@ eXtended Learning Classifier System (XCS) library written in C++17.
 ![macOS build](https://github.com/m4saka/xcspp/workflows/macOS%20build/badge.svg)
 
 ## What is XCS?
-XCS is a rule-based machine learning method proposed by Wilson [1].  
+XCS is a rule-based machine learning method proposed by Wilson [1].
+
 It generates if-then rules (i.e., classifiers) by Genetic Algorithm, and updates them by Q-learning-like reinforcement learning mechanisms.  
 Also, it has an operation called subsumption, which integrates rules that are in an inclusion relationship with each other, generating the smallest set of rules needed for classification.
 
@@ -18,7 +19,7 @@ Since the method employs human-readable knowledge representation, it could be ap
 
 ## `XCS` class
 `XCS` class is suitable for general use of the XCS classifier system.  
-You can embed XCS in your program with this.
+You can use it to embed XCS in your program.
 
 ### Sample code:
 ```cpp
@@ -56,7 +57,7 @@ int main()
 - Note: In the LCS community, `explore`/`exploit` has a similar meaning to "train"/"test" used in ordinary machine learning.
 
 ## `XCSExperimentHelper` class
-With `XCSExperimentHelper` class, you can evaluate the performance of XCS with a simple code.  
+The `XCSExperimentHelper` class allows you to evaluate the performance of XCS with a simple code. 
 This is useful especially for research purposes.
 
 ### Sample code (20-bit multiplexer problem):
@@ -83,7 +84,7 @@ int main()
     return 0;
 }
 ```
-- Note: If you would like to use your own benchmark problem class with `XCSExperimentHelper`, your environment class should implement `IEnvironment` interface (abstract class) declared in `include/xcspp/environment/ienvironment.hpp`.
+- Note: If you want to use your own benchmark problem class with `XCSExperimentHelper`, it is required that your environment class implements `IEnvironment` interface declared in `include/xcspp/environment/ienvironment.hpp`.
 
 ### Output example ("Reward" is the classification accuracy):
 ```
@@ -113,7 +114,7 @@ int main()
 In default, this summary log is saved as `summary.csv`, and the acquired population is saved as `classifier.csv`.
 
 ## Library Linking (with CMake)
-Just use `add_subdirectory` to include the xcspp directory, and link the `xcspp` library to your target.
+Just include the xcspp directory using `add_subdirectory` and link the `xcspp` library to the target.
 ```cmake
 add_subdirectory(xcspp) # <= Path to the xcspp directory
 target_link_libraries(your_target xcspp)
