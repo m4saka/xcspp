@@ -10,7 +10,7 @@ XCS is a rule-based machine learning method proposed by Wilson [1].
 
 It generates if-then rules (i.e., classifiers) by Genetic Algorithm, and updates them by Q-learning-like reinforcement learning mechanisms.
 
-The method employs human-readable knowledge representation, it could be applied for data mining tasks and machine learning tasks which require interpretability.
+Since the method employs human-readable knowledge representation, it could be applied to tasks that require interpretability, such as data mining.
 
 <sub>[1] S. W. Wilson, "Classifier Fitness Based on Accuracy," Evolutionary Computation, Vol.3, No.2, pp.149-175, June 1995. https://doi.org/10.1162/evco.1995.3.2.149</sub>
 
