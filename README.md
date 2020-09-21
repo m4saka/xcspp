@@ -8,8 +8,8 @@ eXtended Learning Classifier System (XCS) library written in C++17.
 ## What is XCS?
 XCS is a rule-based machine learning method proposed by Wilson [1].
 
-It generates if-then rules (i.e., classifiers) by Genetic Algorithm, and updates them by Q-learning-like reinforcement learning mechanisms.  
-Also, it has an operation called subsumption, which integrates rules that are in an inclusion relationship with each other, generating the smallest set of rules needed for classification.
+It generates if-then rules (i.e., classifiers) by Genetic Algorithm, and updates them by a Q-learning-like reinforcement learning mechanism.  
+Also, the method has an operation called subsumption, which integrates rules that are in an inclusion relationship with each other, and the smallest set of rules needed for classification is generated.
 
 Technically, XCS is a variant of Michigan-style Learning Classifier Systems (LCS) that updates the fitness based on the accuracy of reward prediction.
 
