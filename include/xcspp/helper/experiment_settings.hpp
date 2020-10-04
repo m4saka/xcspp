@@ -40,7 +40,7 @@ namespace xcspp
         // The filename of system error log csv output
         std::string outputSystemErrorFilename = "";
 
-        // The filename of number-of-step log csv output in the multi-step problem
+        // The filename of number-of-step log csv output in multi-step problems
         std::string outputStepCountFilename = "";
 
         // The classifier csv filename for initial population
