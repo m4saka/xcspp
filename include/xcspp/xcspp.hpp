@@ -16,6 +16,7 @@
 #include "environment/ienvironment.hpp"
 #include "environment/multiplexer_environment.hpp"
 #include "environment/block_world_environment.hpp"
+#include "environment/dataset_environment.hpp"
 
 #include "helper/xcs_experiment_helper.hpp"
 #include "helper/experiment_log_stream.hpp"
