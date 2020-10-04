@@ -15,7 +15,7 @@ namespace xcspp
     namespace GA
     {
         // RUN GA (refer to ActionSet::runGA() for the former part)
-        void run(
+        void Run(
             ClassifierPtrSet & actionSet,
             const std::vector<int> & situation,
             Population & population,

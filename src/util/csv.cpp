@@ -14,7 +14,7 @@ namespace xcspp
 
     namespace CSV
     {
-        Dataset readDataset(std::istream & is, bool rounds)
+        Dataset ReadDataset(std::istream & is, bool rounds)
         {
             std::vector<std::vector<int>> situations;
             std::vector<int> actions;
@@ -50,13 +50,13 @@ namespace xcspp
             return { situations, actions };
         }
 
-        Dataset readDataset(const std::string & filename, bool rounds)
+        Dataset ReadDataset(const std::string & filename, bool rounds)
         {
             std::ifstream ifs(filename);
-            return readDataset(ifs, rounds);
+            return ReadDataset(ifs, rounds);
         }
 
-        std::vector<Classifier> readClassifiers(std::istream & is, bool skipFirstLine, bool skipFirstColumn)
+        std::vector<Classifier> ReadClassifiers(std::istream & is, bool skipFirstLine, bool skipFirstColumn)
         {
             std::vector<Classifier> classifiers;
 
@@ -143,10 +143,10 @@ namespace xcspp
             return classifiers;
         }
 
-        std::vector<Classifier> readClassifiers(const std::string & filename, bool skipFirstLine, bool skipFirstColumn)
+        std::vector<Classifier> ReadClassifiers(const std::string & filename, bool skipFirstLine, bool skipFirstColumn)
         {
             std::ifstream ifs(filename);
-            return readClassifiers(ifs, skipFirstLine, skipFirstColumn);
+            return ReadClassifiers(ifs, skipFirstLine, skipFirstColumn);
         }
     }
 

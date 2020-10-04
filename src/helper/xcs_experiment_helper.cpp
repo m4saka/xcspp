@@ -7,7 +7,7 @@
 namespace xcspp
 {
 
-    std::vector<std::unique_ptr<XCS>> XCSExperimentHelper::makeExperiments(
+    std::vector<std::unique_ptr<XCS>> XCSExperimentHelper::MakeExperiments(
         const ExperimentSettings & settings,
         const std::unordered_set<int> & availableActions,
         const XCSParams & params)

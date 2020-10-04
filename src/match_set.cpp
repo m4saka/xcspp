@@ -8,7 +8,7 @@ namespace xcspp
     namespace
     {
         // GENERATE COVERING CLASSIFIER
-        ClassifierPtr generateCoveringClassifier(
+        ClassifierPtr GenerateCoveringClassifier(
             const std::vector<int> & situation,
             const std::unordered_set<int> & unselectedActions,
             std::uint64_t timeStamp,
@@ -61,7 +61,7 @@ namespace xcspp
             // Generate classifiers covering the unselected actions
             if (m_availableActions.size() - unselectedActions.size() < thetaMna)
             {
-                const auto coveringClassifier = generateCoveringClassifier(situation, unselectedActions, timeStamp, m_pParams, random);
+                const auto coveringClassifier = GenerateCoveringClassifier(situation, unselectedActions, timeStamp, m_pParams, random);
 
                 // Make sure the generated covering classifier covers the given input
                 if (!coveringClassifier->condition.matches(situation))

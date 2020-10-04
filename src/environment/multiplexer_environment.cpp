@@ -10,15 +10,15 @@ namespace xcspp
     namespace
     {
         // Get address bit length from total length
-        constexpr std::size_t addressBitLength(std::size_t l, std::size_t c = 0)
+        constexpr std::size_t AddressBitLength(std::size_t l, std::size_t c = 0)
         {
-            return (l == 0) ? c - 1 : addressBitLength(l >> 1, c + 1);
+            return (l == 0) ? c - 1 : AddressBitLength(l >> 1, c + 1);
         }
 
-        int getAnswerOfSituation(const std::vector<int> & situation)
+        int GetAnswerOfSituation(const std::vector<int> & situation)
         {
             std::size_t address = 0;
-            auto l = addressBitLength(situation.size());
+            auto l = AddressBitLength(situation.size());
             for (std::size_t i = 0; i < l; ++i)
             {
                 if (situation.at(i) == 1)
@@ -44,7 +44,7 @@ namespace xcspp
                 situation.push_back(m_random.nextInt(0, 1));
             }
 
-            if (getAnswerOfSituation(situation) == 1)
+            if (GetAnswerOfSituation(situation) == 1)
             {
                 break;
             }
@@ -62,7 +62,7 @@ namespace xcspp
 
     MultiplexerEnvironment::MultiplexerEnvironment(std::size_t length, unsigned int imbalanceLevel)
         : m_totalLength(length)
-        , m_addressBitLength(addressBitLength(length, 0))
+        , m_addressBitLength(AddressBitLength(length, 0))
         , m_minorityAcceptanceProbability(1.0 / std::pow(2, imbalanceLevel))
         , m_situation(randomSituation(length, m_minorityAcceptanceProbability))
         , m_isEndOfProblem(false)
@@ -99,7 +99,7 @@ namespace xcspp
 
     int MultiplexerEnvironment::getAnswer() const
     {
-        return getAnswerOfSituation(m_situation);
+        return GetAnswerOfSituation(m_situation);
     }
 
 }

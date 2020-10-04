@@ -6,7 +6,7 @@ namespace xcspp
 
     namespace
     {
-        std::unordered_set<ClassifierPtr> makeSetFromClassifiers(const std::vector<Classifier> & classifiers, const XCSParams *pParams)
+        std::unordered_set<ClassifierPtr> MakeSetFromClassifiers(const std::vector<Classifier> & classifiers, const XCSParams *pParams)
         {
             std::unordered_set<ClassifierPtr> set;
             for (const auto & cl : classifiers)
@@ -31,7 +31,7 @@ namespace xcspp
     }
 
     ClassifierPtrSet::ClassifierPtrSet(const std::vector<Classifier> & initialClassifiers, const XCSParams *pParams, const std::unordered_set<int> & availableActions)
-        : m_set(makeSetFromClassifiers(initialClassifiers, pParams))
+        : m_set(MakeSetFromClassifiers(initialClassifiers, pParams))
         , m_pParams(pParams)
         , m_availableActions(availableActions)
     {
@@ -50,7 +50,7 @@ namespace xcspp
 
     void ClassifierPtrSet::inputCSV(std::istream & is, bool initClassifierVariables)
     {
-        auto classifiers = CSV::readClassifiers(is);
+        auto classifiers = CSV::ReadClassifiers(is);
         if (initClassifierVariables)
         {
             for (auto & cl : classifiers)

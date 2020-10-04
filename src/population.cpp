@@ -10,7 +10,7 @@ namespace xcspp
     namespace
     {
         // DELETION VOTE
-        double deletionVote(const Classifier & cl, double averageFitness, std::uint64_t thetaDel, double delta)
+        double DeletionVote(const Classifier & cl, double averageFitness, std::uint64_t thetaDel, double delta)
         {
             double vote = cl.actionSetSize * cl.numerosity;
 
@@ -69,7 +69,7 @@ namespace xcspp
         votes.reserve(targets.size());
         for (const auto & target : targets)
         {
-            votes.push_back(deletionVote(**target, averageFitness, m_pParams->thetaDel, m_pParams->delta));
+            votes.push_back(DeletionVote(**target, averageFitness, m_pParams->thetaDel, m_pParams->delta));
         }
         std::size_t selectedIdx = random.rouletteWheelSelection(votes);
 

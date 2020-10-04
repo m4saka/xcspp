@@ -14,13 +14,13 @@ namespace xcspp
 
     namespace CSV
     {
-        Dataset readDataset(std::istream & is, bool rounds = false);
+        Dataset ReadDataset(std::istream & is, bool rounds = false);
 
-        Dataset readDataset(const std::string & filename, bool rounds = false);
+        Dataset ReadDataset(const std::string & filename, bool rounds = false);
 
-        std::vector<Classifier> readClassifiers(std::istream & is, bool skipFirstLine = true, bool skipFirstColumn = false);
+        std::vector<Classifier> ReadClassifiers(std::istream & is, bool skipFirstLine = true, bool skipFirstColumn = false);
 
-        std::vector<Classifier> readClassifiers(const std::string & filename, bool skipFirstLine = true, bool skipFirstColumn = false);
+        std::vector<Classifier> ReadClassifiers(const std::string & filename, bool skipFirstLine = true, bool skipFirstColumn = false);
     }
 
 }

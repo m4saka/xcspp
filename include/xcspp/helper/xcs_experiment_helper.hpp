@@ -37,7 +37,7 @@ namespace xcspp
         double m_summaryStepCountSum;
         std::size_t m_iterationCount;
 
-        static std::vector<std::unique_ptr<XCS>> makeExperiments(
+        static std::vector<std::unique_ptr<XCS>> MakeExperiments(
             const ExperimentSettings & settings,
             const std::unordered_set<int> & availableActions,
             const XCSParams & params);
@@ -100,7 +100,7 @@ namespace xcspp
         }
 
         // Construct experiments
-        m_experiments = makeExperiments(m_settings, m_explorationEnvironments.at(0)->availableActions(), m_params);
+        m_experiments = MakeExperiments(m_settings, m_explorationEnvironments.at(0)->availableActions(), m_params);
     }
 
 }

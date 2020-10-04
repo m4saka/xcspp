@@ -6,19 +6,19 @@ namespace xcspp
 {
     namespace
     {
-        constexpr int xDiff(int idx)
+        constexpr int XDiff(int idx)
         {
             constexpr int xDiffs[] = { 0, +1, +1, +1,  0, -1, -1, -1 };
             return xDiffs[idx];
         }
 
-        constexpr int yDiff(int idx)
+        constexpr int YDiff(int idx)
         {
             constexpr int yDiffs[] = { -1, -1,  0, +1, +1, +1,  0, -1 };
             return yDiffs[idx];
         }
 
-        std::vector<int> charToBits(char block, bool threeBitMode)
+        std::vector<int> CharToBits(char block, bool threeBitMode)
         {
             if (threeBitMode)
             {
@@ -172,8 +172,8 @@ namespace xcspp
         std::vector<int> situation;
         for (int i = 0; i < kDirectionValueCount; ++i)
         {
-            const auto block = getBlockChar(x + xDiff(i), y + yDiff(i));
-            for (const auto & bit : charToBits(block, m_threeBitMode))
+            const auto block = getBlockChar(x + XDiff(i), y + YDiff(i));
+            for (const auto & bit : CharToBits(block, m_threeBitMode))
             {
                 situation.push_back(bit);
             }
@@ -192,8 +192,8 @@ namespace xcspp
         m_lastInitialY = m_initialY;
 
         // The coordinates after performing the action
-        const int x = (m_currentX + xDiff(action) + m_worldWidth) % m_worldWidth;
-        const int y = (m_currentY + yDiff(action) + m_worldHeight) % m_worldHeight;
+        const int x = (m_currentX + XDiff(action) + m_worldWidth) % m_worldWidth;
+        const int y = (m_currentY + YDiff(action) + m_worldHeight) % m_worldHeight;
 
         // Determine the reward and move the position
         double reward;

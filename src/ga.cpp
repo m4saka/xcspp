@@ -11,7 +11,7 @@ namespace xcspp
     namespace
     {
         // SELECT OFFSPRING
-        ClassifierPtr selectOffspring(const ClassifierPtrSet & actionSet, double tau, Random & random)
+        ClassifierPtr SelectOffspring(const ClassifierPtrSet & actionSet, double tau, Random & random)
         {
             std::vector<const ClassifierPtr *> targets;
             for (const auto & cl : actionSet)
@@ -46,11 +46,11 @@ namespace xcspp
         }
 
         // APPLY CROSSOVER (uniform crossover)
-        bool uniformCrossover(Classifier & cl1, Classifier & cl2, Random & random)
+        bool UniformCrossover(Classifier & cl1, Classifier & cl2, Random & random)
         {
             if (cl1.condition.size() != cl2.condition.size())
             {
-                throw std::invalid_argument("The condition lengths do not match in GA::uniformCrossover().");
+                throw std::invalid_argument("The condition lengths do not match in GA::UniformCrossover().");
             }
 
             bool isChanged = false;
@@ -66,11 +66,11 @@ namespace xcspp
         }
 
         // APPLY CROSSOVER (one point crossover)
-        bool onePointCrossover(Classifier & cl1, Classifier & cl2, Random & random)
+        bool OnePointCrossover(Classifier & cl1, Classifier & cl2, Random & random)
         {
             if (cl1.condition.size() != cl2.condition.size())
             {
-                throw std::invalid_argument("The condition lengths do not match in GA::onePointCrossover().");
+                throw std::invalid_argument("The condition lengths do not match in GA::OnePointCrossover().");
             }
 
             std::size_t x = random.nextInt<std::size_t>(0, cl1.condition.size());
@@ -85,11 +85,11 @@ namespace xcspp
         }
 
         // APPLY CROSSOVER (two point crossover)
-        bool twoPointCrossover(Classifier & cl1, Classifier & cl2, Random & random)
+        bool TwoPointCrossover(Classifier & cl1, Classifier & cl2, Random & random)
         {
             if (cl1.condition.size() != cl2.condition.size())
             {
-                throw std::invalid_argument("The condition lengths do not match in GA::twoPointCrossover().");
+                throw std::invalid_argument("The condition lengths do not match in GA::TwoPointCrossover().");
             }
 
             std::size_t x = random.nextInt<std::size_t>(0, cl1.condition.size());
@@ -110,18 +110,18 @@ namespace xcspp
         }
 
         // APPLY CROSSOVER
-        bool crossover(Classifier & cl1, Classifier & cl2, XCSParams::CrossoverMethod crossoverMethod, Random & random)
+        bool Crossover(Classifier & cl1, Classifier & cl2, XCSParams::CrossoverMethod crossoverMethod, Random & random)
         {
             switch (crossoverMethod)
             {
             case XCSParams::CrossoverMethod::UNIFORM_CROSSOVER:
-                return uniformCrossover(cl1, cl2, random);
+                return UniformCrossover(cl1, cl2, random);
 
             case XCSParams::CrossoverMethod::ONE_POINT_CROSSOVER:
-                return onePointCrossover(cl1, cl2, random);
+                return OnePointCrossover(cl1, cl2, random);
 
             case XCSParams::CrossoverMethod::TWO_POINT_CROSSOVER:
-                return twoPointCrossover(cl1, cl2, random);
+                return TwoPointCrossover(cl1, cl2, random);
 
             default:
                 return false;
@@ -219,11 +219,11 @@ namespace xcspp
         // RUN GA (refer to ActionSet::runGA() for the former part)
         void run(ClassifierPtrSet & actionSet, const std::vector<int> & situation, Population & population, const std::unordered_set<int> & availableActions, const XCSParams *pParams, Random & random)
         {
-            const ClassifierPtr parent1 = selectOffspring(actionSet, pParams->tau, random);
-            const ClassifierPtr parent2 = selectOffspring(actionSet, pParams->tau, random);
+            const ClassifierPtr parent1 = SelectOffspring(actionSet, pParams->tau, random);
+            const ClassifierPtr parent2 = SelectOffspring(actionSet, pParams->tau, random);
             if (parent1->condition.size() != parent2->condition.size())
             {
-                std::domain_error("The condition lengths of selected parents do not match in GA::run().");
+                std::domain_error("The condition lengths of selected parents do not match in GA::Run().");
             }
 
             Classifier child1(*parent1);
@@ -236,7 +236,7 @@ namespace xcspp
             bool isChangedByCrossover;
             if (random.nextDouble() < pParams->chi)
             {
-                isChangedByCrossover = crossover(child1, child2, pParams->crossoverMethod, random);
+                isChangedByCrossover = Crossover(child1, child2, pParams->crossoverMethod, random);
             }
             else
             {
