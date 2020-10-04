@@ -18,9 +18,9 @@ namespace xcspp
 
         Dataset readDataset(const std::string & filename, bool rounds = false);
 
-        std::vector<Classifier> readPopulation(std::istream & is, bool skipFirstLine = true, bool skipFirstColumn = false);
+        std::vector<Classifier> readClassifiers(std::istream & is, bool skipFirstLine = true, bool skipFirstColumn = false);
 
-        std::vector<Classifier> readPopulation(const std::string & filename, bool skipFirstLine = true, bool skipFirstColumn = false);
+        std::vector<Classifier> readClassifiers(const std::string & filename, bool skipFirstLine = true, bool skipFirstColumn = false);
     }
 
 }

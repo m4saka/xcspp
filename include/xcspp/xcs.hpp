@@ -53,6 +53,9 @@ namespace xcspp
         // Covering occurrence of the previous action decision (just for logging)
         bool m_isCoveringPerformed;
 
+        // Set system timestamp to the same as the latest classifier in [P]
+        void syncTimeStampWithPopulation();
+
     public:
         // Constructor
         XCS(const std::unordered_set<int> & availableActions, const XCSParams & params);
@@ -85,13 +88,16 @@ namespace xcspp
 
         const Population & population() const;
 
-        Population & population();
+        void setPopulationClassifiers(const std::vector<Classifier> & classifiers, bool syncTimeStamp = true);
 
-        void setPopulation(const std::vector<Classifier> & classifiers, bool initTimeStamp = true);
-
+        [[deprecated("use XCS::outputPopulationCSV() instead")]]
         void dumpPopulation(std::ostream & os) const;
 
-        void loadPopulationCSV(const std::string & filename, bool useAsInitialPopulation = true);
+        void outputPopulationCSV(std::ostream & os) const;
+
+        bool loadPopulationCSVFile(const std::string & filename, bool useAsInitialPopulation = true, bool syncTimeStamp = true);
+
+        bool savePopulationCSVFile(const std::string & filename);
 
         std::size_t populationSize() const;
 

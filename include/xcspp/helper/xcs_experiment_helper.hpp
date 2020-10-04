@@ -74,7 +74,10 @@ namespace xcspp
 
         const IEnvironment & exploitationEnvironmentAt(std::size_t seedIdx) const;
 
+        [[deprecated("use XCSExperimentHelper::outputPopulationCSV() instead")]]
         void dumpPopulation(std::size_t seedIdx, std::ostream & os) const;
+
+        void outputPopulationCSV(std::size_t seedIdx, std::ostream & os) const;
     };
 
     template <class Environment, class... Args>

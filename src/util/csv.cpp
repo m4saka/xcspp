@@ -56,7 +56,7 @@ namespace xcspp
             return readDataset(ifs, rounds);
         }
 
-        std::vector<Classifier> readPopulation(std::istream & is, bool skipFirstLine, bool skipFirstColumn)
+        std::vector<Classifier> readClassifiers(std::istream & is, bool skipFirstLine, bool skipFirstColumn)
         {
             std::vector<Classifier> classifiers;
 
@@ -143,10 +143,10 @@ namespace xcspp
             return classifiers;
         }
 
-        std::vector<Classifier> readPopulation(const std::string & filename, bool skipFirstLine, bool skipFirstColumn)
+        std::vector<Classifier> readClassifiers(const std::string & filename, bool skipFirstLine, bool skipFirstColumn)
         {
             std::ifstream ifs(filename);
-            return readPopulation(ifs, skipFirstLine, skipFirstColumn);
+            return readClassifiers(ifs, skipFirstLine, skipFirstColumn);
         }
     }
 

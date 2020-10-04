@@ -172,7 +172,7 @@ namespace xcspp
         {
             for (const auto & experiment : m_experiments)
             {
-                experiment->loadPopulationCSV(settings.inputClassifierFilename, !settings.useInputClassifierToResume);
+                experiment->loadPopulationCSVFile(settings.inputClassifierFilename, !settings.useInputClassifierToResume);
             }
         }
     }
@@ -230,8 +230,14 @@ namespace xcspp
         return *m_exploitationEnvironments.at(seedIdx);
     }
 
+    // deprecated
     void XCSExperimentHelper::dumpPopulation(std::size_t seedIdx, std::ostream & os) const
     {
-        m_experiments.at(seedIdx)->dumpPopulation(os);
+        m_experiments.at(seedIdx)->outputPopulationCSV(os);
+    }
+
+    void XCSExperimentHelper::outputPopulationCSV(std::size_t seedIdx, std::ostream & os) const
+    {
+        m_experiments.at(seedIdx)->outputPopulationCSV(os);
     }
 }

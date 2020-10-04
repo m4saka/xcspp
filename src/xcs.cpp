@@ -8,6 +8,18 @@
 namespace xcspp
 {
 
+    void XCS::syncTimeStampWithPopulation()
+    {
+        m_timeStamp = 0;
+        for (const auto & cl : m_population)
+        {
+            if (m_timeStamp < cl->timeStamp)
+            {
+                m_timeStamp = cl->timeStamp;
+            }
+        }
+    }
+
     XCS::XCS(const std::unordered_set<int> & availableActions, const XCSParams & params)
         : m_params(params)
         , m_population(&m_params, availableActions)
@@ -199,18 +211,42 @@ namespace xcspp
         return m_population;
     }
 
-    Population & XCS::population()
+    void XCS::setPopulationClassifiers(const std::vector<Classifier> & classifiers, bool syncTimeStamp)
     {
-        return m_population;
+        m_population.setClassifiers(classifiers);
+
+        // Set system timestamp to the same as latest classifier
+        if (syncTimeStamp)
+        {
+            syncTimeStampWithPopulation();
+        }
+
+        // Clear action set and reset status
+        m_actionSet.clear();
+        m_prevActionSet.clear();
+        m_expectsReward = false;
+        m_isPrevModeExplore = false;
     }
 
-    void XCS::setPopulation(const std::vector<Classifier> & classifiers, bool initTimeStamp)
+    // deprecated
+    void XCS::dumpPopulation(std::ostream & os) const
     {
-        // Replace population
-        m_population.clear();
-        for (const auto & cl : classifiers)
+        m_population.outputCSV(os);
+    }
+
+    void XCS::outputPopulationCSV(std::ostream & os) const
+    {
+        m_population.outputCSV(os);
+    }
+
+    bool XCS::loadPopulationCSVFile(const std::string & filename, bool initClassifierVariables, bool syncTimeStamp)
+    {
+        bool ret = m_population.loadCSVFile(filename, initClassifierVariables);
+
+        // Set system timestamp to the same as latest classifier
+        if (syncTimeStamp)
         {
-            m_population.emplace(std::make_shared<StoredClassifier>(cl, &m_params));
+            syncTimeStampWithPopulation();
         }
 
         // Clear action set and reset status
@@ -219,42 +255,12 @@ namespace xcspp
         m_expectsReward = false;
         m_isPrevModeExplore = false;
 
-        // Set system timestamp to the same as latest classifier
-        if (initTimeStamp)
-        {
-            m_timeStamp = 0;
-            for (const auto & cl : classifiers)
-            {
-                if (m_timeStamp < cl.timeStamp)
-                {
-                    m_timeStamp = cl.timeStamp;
-                }
-            }
-        }
+        return ret;
     }
 
-    void XCS::dumpPopulation(std::ostream & os) const
+    bool XCS::savePopulationCSVFile(const std::string & filename)
     {
-        m_population.dump(os);
-    }
-
-    void XCS::loadPopulationCSV(const std::string & filename, bool useAsInitialPopulation)
-    {
-        auto population = CSV::readPopulation(filename);
-        if (useAsInitialPopulation)
-        {
-            for (auto & cl : population)
-            {
-                cl.prediction = m_params.initialPrediction;
-                cl.epsilon = m_params.initialEpsilon;
-                cl.fitness = m_params.initialFitness;
-                cl.experience = 0;
-                cl.timeStamp = 0;
-                cl.actionSetSize = 1;
-                //cl.numerosity = 1; // commented out to keep macroclassifier as is
-            }
-        }
-        setPopulation(population, !useAsInitialPopulation);
+        return m_population.saveCSVFile(filename);
     }
 
     std::size_t XCS::populationSize() const

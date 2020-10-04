@@ -30,7 +30,15 @@ namespace xcspp
         // Destructor
         virtual ~ClassifierPtrSet() = default;
 
-        void dump(std::ostream & os) const;
+        void setClassifiers(const std::vector<Classifier> & classifiers);
+
+        void inputCSV(std::istream & is, bool initClassifierVariables = false);
+
+        void outputCSV(std::ostream & os) const;
+
+        bool loadCSVFile(const std::string & filename, bool initClassifierVariables = false);
+
+        bool saveCSVFile(const std::string & filename) const;
 
         // --- The functions below are just the wrapper for std::unordered_set<ClassifierPtr> ---
 
