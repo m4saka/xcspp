@@ -11,11 +11,11 @@ A minimal working example is available here: https://github.com/m4saka/xcspp-sam
 XCS is a rule-based machine learning method proposed by Wilson [1].
 
 It generates if-then rules (i.e., classifiers) by Genetic Algorithm, and updates them by a Q-learning-like reinforcement learning mechanism.  
-Also, the method has an operation called subsumption, which integrates rules that are in an inclusion relationship with each other, and the smallest set of rules needed for classification is generated.
+Also, the method has an operation called subsumption, which integrates rules that are in an inclusion relationship with each other, and the smallest ruleset needed for classification is generated.
 
 Technically, XCS is a variant of Michigan-style Learning Classifier Systems (LCS) that updates the fitness based on the accuracy of reward prediction.
 
-Since the method employs human-readable knowledge representation, it could be applied to tasks that require interpretability, such as data mining.
+Since the method employs a human-readable knowledge representation, it could be applied to tasks that require interpretability, such as data mining.
 
 <sub>[1] S. W. Wilson, "Classifier Fitness Based on Accuracy," Evolutionary Computation, Vol.3, No.2, pp.149-175, June 1995. https://doi.org/10.1162/evco.1995.3.2.149</sub>
 
