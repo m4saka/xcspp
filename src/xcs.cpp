@@ -194,23 +194,14 @@ namespace xcspp
         return classifiers;
     }
 
-    void XCS::loadPopulationCSV(const std::string & filename, bool useAsInitialPopulation)
+    const Population & XCS::population() const
     {
-        auto population = CSV::readPopulation(filename);
-        if (useAsInitialPopulation)
-        {
-            for (auto & cl : population)
-            {
-                cl.prediction = m_params.initialPrediction;
-                cl.epsilon = m_params.initialEpsilon;
-                cl.fitness = m_params.initialFitness;
-                cl.experience = 0;
-                cl.timeStamp = 0;
-                cl.actionSetSize = 1;
-                //cl.numerosity = 1; // commented out to keep macroclassifier as is
-            }
-        }
-        setPopulation(population, !useAsInitialPopulation);
+        return m_population;
+    }
+
+    Population & XCS::population()
+    {
+        return m_population;
     }
 
     void XCS::setPopulation(const std::vector<Classifier> & classifiers, bool initTimeStamp)
@@ -245,6 +236,25 @@ namespace xcspp
     void XCS::dumpPopulation(std::ostream & os) const
     {
         m_population.dump(os);
+    }
+
+    void XCS::loadPopulationCSV(const std::string & filename, bool useAsInitialPopulation)
+    {
+        auto population = CSV::readPopulation(filename);
+        if (useAsInitialPopulation)
+        {
+            for (auto & cl : population)
+            {
+                cl.prediction = m_params.initialPrediction;
+                cl.epsilon = m_params.initialEpsilon;
+                cl.fitness = m_params.initialFitness;
+                cl.experience = 0;
+                cl.timeStamp = 0;
+                cl.actionSetSize = 1;
+                //cl.numerosity = 1; // commented out to keep macroclassifier as is
+            }
+        }
+        setPopulation(population, !useAsInitialPopulation);
     }
 
     std::size_t XCS::populationSize() const

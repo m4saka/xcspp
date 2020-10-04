@@ -83,11 +83,15 @@ namespace xcspp
 
         std::vector<Classifier> getMatchingClassifiers(const std::vector<int> & situation) const;
 
-        void loadPopulationCSV(const std::string & filename, bool useAsInitialPopulation = true);
+        const Population & population() const;
+
+        Population & population();
 
         void setPopulation(const std::vector<Classifier> & classifiers, bool initTimeStamp = true);
 
         void dumpPopulation(std::ostream & os) const;
+
+        void loadPopulationCSV(const std::string & filename, bool useAsInitialPopulation = true);
 
         std::size_t populationSize() const;
 
