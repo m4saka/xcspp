@@ -48,7 +48,7 @@ int main()
     }
 
     // Show acquired rules
-    xcs.dumpPopulation(std::cout);
+    xcs.outputPopulationCSV(std::cout);
 
     // Use "xcs.exploit(input)" to get the most desirable action
     // chosen by using acquired rules
