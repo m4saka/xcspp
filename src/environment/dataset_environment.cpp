@@ -1,5 +1,5 @@
 #include "xcspp/environment/dataset_environment.hpp"
-#include <cassert>
+#include <stdexcept>
 
 namespace xcspp
 {
@@ -33,9 +33,15 @@ namespace xcspp
         , m_chooseRandom(chooseRandom)
         , m_isEndOfProblem(false)
     {
-        assert(!m_dataset.situations.empty());
-        assert(!m_dataset.actions.empty());
-        assert(m_dataset.situations.size() == m_dataset.actions.size());
+        if (m_dataset.situations.size() != m_dataset.actions.size())
+        {
+            throw std::domain_error("The dataset size is invalid in DatasetEnvironment constructor (situations/actions size does not match).");
+        }
+
+        if (m_dataset.situations.empty() || m_dataset.actions.empty())
+        {
+            throw std::runtime_error("DatasetEnvironment constructor received an empty dataset.");
+        }
 
         loadNext();
     }
