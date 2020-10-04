@@ -44,7 +44,7 @@ int main()
 
         // ... (Evaluate the action here!)
 
-        xcs.reward(/* Reward (int) */);
+        xcs.reward(/* Reward (double) */);
     }
 
     // Show acquired rules
