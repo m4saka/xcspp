@@ -217,7 +217,7 @@ namespace xcspp
     namespace GA
     {
         // RUN GA (refer to ActionSet::runGA() for the former part)
-        void run(ClassifierPtrSet & actionSet, const std::vector<int> & situation, Population & population, const std::unordered_set<int> & availableActions, const XCSParams *pParams, Random & random)
+        void Run(ClassifierPtrSet & actionSet, const std::vector<int> & situation, Population & population, const std::unordered_set<int> & availableActions, const XCSParams *pParams, Random & random)
         {
             const ClassifierPtr parent1 = SelectOffspring(actionSet, pParams->tau, random);
             const ClassifierPtr parent2 = SelectOffspring(actionSet, pParams->tau, random);
