@@ -107,7 +107,7 @@ namespace xcspp
             {
                 throw std::runtime_error("CSV::SaveCSVFile: Failed to open the file '" + filename + "'.");
             }
-            return SaveCSVFile(ofs, data);
+            return SaveCSV(ofs, data);
         }
     }
 
