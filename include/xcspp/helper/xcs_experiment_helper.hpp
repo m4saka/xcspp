@@ -62,22 +62,17 @@ namespace xcspp
 
         std::size_t seedCount() const;
 
-        XCS & experimentAt(std::size_t seedIdx);
+        XCS & experiment(std::size_t seedIdx = 0);
 
-        const XCS & experimentAt(std::size_t seedIdx) const;
+        const XCS & experiment(std::size_t seedIdx = 0) const;
 
-        IEnvironment & explorationEnvironmentAt(std::size_t seedIdx);
+        IEnvironment & explorationEnvironment(std::size_t seedIdx = 0);
 
-        const IEnvironment & explorationEnvironmentAt(std::size_t seedIdx) const;
+        const IEnvironment & explorationEnvironment(std::size_t seedIdx = 0) const;
 
-        IEnvironment & exploitationEnvironmentAt(std::size_t seedIdx);
+        IEnvironment & exploitationEnvironment(std::size_t seedIdx = 0);
 
-        const IEnvironment & exploitationEnvironmentAt(std::size_t seedIdx) const;
-
-        [[deprecated("use XCSExperimentHelper::outputPopulationCSV() instead")]]
-        void dumpPopulation(std::size_t seedIdx, std::ostream & os) const;
-
-        void outputPopulationCSV(std::size_t seedIdx, std::ostream & os) const;
+        const IEnvironment & exploitationEnvironment(std::size_t seedIdx = 0) const;
     };
 
     template <class Environment, class... Args>

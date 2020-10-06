@@ -200,44 +200,33 @@ namespace xcspp
         return m_settings.seedCount;
     }
 
-    XCS & XCSExperimentHelper::experimentAt(std::size_t seedIdx)
+    XCS & XCSExperimentHelper::experiment(std::size_t seedIdx)
     {
         return *m_experiments.at(seedIdx);
     }
 
-    const XCS & XCSExperimentHelper::experimentAt(std::size_t seedIdx) const
+    const XCS & XCSExperimentHelper::experiment(std::size_t seedIdx) const
     {
         return *m_experiments.at(seedIdx);
     }
 
-    IEnvironment & XCSExperimentHelper::explorationEnvironmentAt(std::size_t seedIdx)
+    IEnvironment & XCSExperimentHelper::explorationEnvironment(std::size_t seedIdx)
     {
         return *m_explorationEnvironments.at(seedIdx);
     }
 
-    const IEnvironment & XCSExperimentHelper::explorationEnvironmentAt(std::size_t seedIdx) const
+    const IEnvironment & XCSExperimentHelper::explorationEnvironment(std::size_t seedIdx) const
     {
         return *m_explorationEnvironments.at(seedIdx);
     }
 
-    IEnvironment & XCSExperimentHelper::exploitationEnvironmentAt(std::size_t seedIdx)
+    IEnvironment & XCSExperimentHelper::exploitationEnvironment(std::size_t seedIdx)
     {
         return *m_exploitationEnvironments.at(seedIdx);
     }
 
-    const IEnvironment & XCSExperimentHelper::exploitationEnvironmentAt(std::size_t seedIdx) const
+    const IEnvironment & XCSExperimentHelper::exploitationEnvironment(std::size_t seedIdx) const
     {
         return *m_exploitationEnvironments.at(seedIdx);
-    }
-
-    // deprecated
-    void XCSExperimentHelper::dumpPopulation(std::size_t seedIdx, std::ostream & os) const
-    {
-        m_experiments.at(seedIdx)->outputPopulationCSV(os);
-    }
-
-    void XCSExperimentHelper::outputPopulationCSV(std::size_t seedIdx, std::ostream & os) const
-    {
-        m_experiments.at(seedIdx)->outputPopulationCSV(os);
     }
 }
