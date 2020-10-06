@@ -123,4 +123,18 @@ target_link_libraries(your_target xcspp)
 ```
 
 ## Library Linking (without CMake)
-Work in progress...
+You can compile xcspp library as the command below.
+```bash
+$ mkdir build
+$ cd build
+$ cmake ..
+$ cmake --build . --config Release -j7
+```
+
+You will get `libxcspp.a` (Linux & macOS & Windows with MinGW/Cygwin) or `Release/xcspp.lib` (Windows with Visual Studio).
+Link it to your project.
+
+- Example (GCC):
+    ```
+    $ g++ your_project.cpp -Ixcspp/include -Lxcspp/build -lxcspp
+    ```
