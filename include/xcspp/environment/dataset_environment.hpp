@@ -25,7 +25,7 @@ namespace xcspp
         std::size_t loadNext();
 
     public:
-        DatasetEnvironment(const Dataset & dataset, const std::unordered_set<int> & availableActions, bool chooseRandom = true);
+        DatasetEnvironment(const Dataset & dataset, bool chooseRandom = true);
 
         virtual ~DatasetEnvironment() = default;
 
