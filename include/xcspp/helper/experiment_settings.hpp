@@ -8,7 +8,7 @@ namespace xcspp
     struct ExperimentSettings
     {
         // The number of different random seeds for averaging the reward and the macro-classifier count
-        std::size_t seedCount = 1;
+        std::size_t seedSize = 1;
 
         // The number of exploration performed in each iteration
         std::size_t explorationCount = 1;

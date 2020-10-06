@@ -13,7 +13,7 @@ namespace xcspp
         const XCSParams & params)
     {
         std::vector<std::unique_ptr<XCS>> experiments;
-        for (std::size_t i = 0; i < settings.seedCount; ++i)
+        for (std::size_t i = 0; i < settings.seedSize; ++i)
         {
             experiments.push_back(
                 std::make_unique<XCS>(availableActions, params)
@@ -77,7 +77,7 @@ namespace xcspp
             double rewardSum = 0.0;
             double systemErrorSum = 0.0;
             double populationSizeSum = 0.0;
-            for (std::size_t j = 0; j < m_settings.seedCount; ++j)
+            for (std::size_t j = 0; j < m_settings.seedSize; ++j)
             {
                 for (std::size_t k = 0; k < m_settings.exploitationCount; ++k)
                 {
@@ -88,9 +88,9 @@ namespace xcspp
 
                         // Get reward
                         double reward = m_exploitationEnvironments[j]->executeAction(action);
-                        m_summaryRewardSum += reward / m_settings.exploitationCount / m_settings.seedCount;
-                        m_summarySystemErrorSum += std::abs(reward - m_experiments[j]->prediction()) / m_settings.exploitationCount / m_settings.seedCount;
-                        m_summaryCoveringOccurrenceRateSum += static_cast<double>(m_experiments[j]->isCoveringPerformed()) / m_settings.exploitationCount / m_settings.seedCount;
+                        m_summaryRewardSum += reward / m_settings.exploitationCount / m_settings.seedSize;
+                        m_summarySystemErrorSum += std::abs(reward - m_experiments[j]->prediction()) / m_settings.exploitationCount / m_settings.seedSize;
+                        m_summaryCoveringOccurrenceRateSum += static_cast<double>(m_experiments[j]->isCoveringPerformed()) / m_settings.exploitationCount / m_settings.seedSize;
                         if (m_settings.updateInExploitation)
                         {
                             m_experiments[j]->reward(reward, m_exploitationEnvironments[j]->isEndOfProblem());
@@ -108,26 +108,26 @@ namespace xcspp
 
                     populationSizeSum += m_experiments[j]->populationSize();
                 }
-                m_summaryPopulationSizeSum += static_cast<double>(m_experiments[j]->populationSize()) / m_settings.seedCount;
+                m_summaryPopulationSizeSum += static_cast<double>(m_experiments[j]->populationSize()) / m_settings.seedSize;
             }
 
-            m_summaryStepCountSum += static_cast<double>(totalStepCount) / m_settings.exploitationCount / m_settings.seedCount;
+            m_summaryStepCountSum += static_cast<double>(totalStepCount) / m_settings.exploitationCount / m_settings.seedSize;
 
             if (m_settings.summaryInterval > 0 && (m_iterationCount + 1) % m_settings.summaryInterval == 0)
             {
                 outputSummaryLogLine();
             }
 
-            m_rewardLogStream.writeLine(rewardSum / m_settings.exploitationCount / m_settings.seedCount);
-            m_systemErrorLogStream.writeLine(systemErrorSum / m_settings.exploitationCount / m_settings.seedCount);
-            m_populationSizeLogStream.writeLine(populationSizeSum / m_settings.exploitationCount / m_settings.seedCount);
-            m_stepCountLogStream.writeLine(static_cast<double>(totalStepCount) / m_settings.exploitationCount / m_settings.seedCount);
+            m_rewardLogStream.writeLine(rewardSum / m_settings.exploitationCount / m_settings.seedSize);
+            m_systemErrorLogStream.writeLine(systemErrorSum / m_settings.exploitationCount / m_settings.seedSize);
+            m_populationSizeLogStream.writeLine(populationSizeSum / m_settings.exploitationCount / m_settings.seedSize);
+            m_stepCountLogStream.writeLine(static_cast<double>(totalStepCount) / m_settings.exploitationCount / m_settings.seedSize);
         }
     }
 
     void XCSExperimentHelper::runExplorationIteration()
     {
-        for (std::size_t j = 0; j < m_settings.seedCount; ++j)
+        for (std::size_t j = 0; j < m_settings.seedSize; ++j)
         {
             for (std::size_t k = 0; k < m_settings.explorationCount; ++k)
             {
@@ -195,9 +195,9 @@ namespace xcspp
         }
     }
 
-    std::size_t XCSExperimentHelper::seedCount() const
+    std::size_t XCSExperimentHelper::seedSize() const
     {
-        return m_settings.seedCount;
+        return m_settings.seedSize;
     }
 
     XCS & XCSExperimentHelper::experiment(std::size_t seedIdx)

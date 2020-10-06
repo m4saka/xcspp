@@ -60,7 +60,7 @@ namespace xcspp
 
         void switchToCondensationMode();
 
-        std::size_t seedCount() const;
+        std::size_t seedSize() const;
 
         XCS & experiment(std::size_t seedIdx = 0);
 
@@ -82,13 +82,13 @@ namespace xcspp
         m_explorationEnvironments.clear();
         m_exploitationEnvironments.clear();
 
-        if (m_settings.seedCount == 0)
+        if (m_settings.seedSize == 0)
         {
             return;
         }
 
         // Construct environments
-        for (std::size_t i = 0; i < m_settings.seedCount; ++i)
+        for (std::size_t i = 0; i < m_settings.seedSize; ++i)
         {
             m_explorationEnvironments.push_back(std::make_unique<Environment>(std::forward<Args>(args)...));
             m_exploitationEnvironments.push_back(std::make_unique<Environment>(std::forward<Args>(args)...));
