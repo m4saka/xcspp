@@ -71,7 +71,7 @@ namespace xcspp
 
     void XCSExperimentHelper::runExploitationIteration()
     {
-        if (m_settings.exploitationCount > 0)
+        if (m_settings.exploitationRepeat > 0)
         {
             std::size_t totalStepCount = 0;
             double rewardSum = 0.0;
@@ -79,7 +79,7 @@ namespace xcspp
             double populationSizeSum = 0.0;
             for (std::size_t j = 0; j < m_settings.seedSize; ++j)
             {
-                for (std::size_t k = 0; k < m_settings.exploitationCount; ++k)
+                for (std::size_t k = 0; k < m_settings.exploitationRepeat; ++k)
                 {
                     do
                     {
@@ -88,9 +88,9 @@ namespace xcspp
 
                         // Get reward
                         double reward = m_exploitationEnvironments[j]->executeAction(action);
-                        m_summaryRewardSum += reward / m_settings.exploitationCount / m_settings.seedSize;
-                        m_summarySystemErrorSum += std::abs(reward - m_experiments[j]->prediction()) / m_settings.exploitationCount / m_settings.seedSize;
-                        m_summaryCoveringOccurrenceRateSum += static_cast<double>(m_experiments[j]->isCoveringPerformed()) / m_settings.exploitationCount / m_settings.seedSize;
+                        m_summaryRewardSum += reward / m_settings.exploitationRepeat / m_settings.seedSize;
+                        m_summarySystemErrorSum += std::abs(reward - m_experiments[j]->prediction()) / m_settings.exploitationRepeat / m_settings.seedSize;
+                        m_summaryCoveringOccurrenceRateSum += static_cast<double>(m_experiments[j]->isCoveringPerformed()) / m_settings.exploitationRepeat / m_settings.seedSize;
                         if (m_settings.updateInExploitation)
                         {
                             m_experiments[j]->reward(reward, m_exploitationEnvironments[j]->isEndOfProblem());
@@ -111,17 +111,17 @@ namespace xcspp
                 m_summaryPopulationSizeSum += static_cast<double>(m_experiments[j]->populationSize()) / m_settings.seedSize;
             }
 
-            m_summaryStepCountSum += static_cast<double>(totalStepCount) / m_settings.exploitationCount / m_settings.seedSize;
+            m_summaryStepCountSum += static_cast<double>(totalStepCount) / m_settings.exploitationRepeat / m_settings.seedSize;
 
             if (m_settings.summaryInterval > 0 && (m_iterationCount + 1) % m_settings.summaryInterval == 0)
             {
                 outputSummaryLogLine();
             }
 
-            m_rewardLogStream.writeLine(rewardSum / m_settings.exploitationCount / m_settings.seedSize);
-            m_systemErrorLogStream.writeLine(systemErrorSum / m_settings.exploitationCount / m_settings.seedSize);
-            m_populationSizeLogStream.writeLine(populationSizeSum / m_settings.exploitationCount / m_settings.seedSize);
-            m_stepCountLogStream.writeLine(static_cast<double>(totalStepCount) / m_settings.exploitationCount / m_settings.seedSize);
+            m_rewardLogStream.writeLine(rewardSum / m_settings.exploitationRepeat / m_settings.seedSize);
+            m_systemErrorLogStream.writeLine(systemErrorSum / m_settings.exploitationRepeat / m_settings.seedSize);
+            m_populationSizeLogStream.writeLine(populationSizeSum / m_settings.exploitationRepeat / m_settings.seedSize);
+            m_stepCountLogStream.writeLine(static_cast<double>(totalStepCount) / m_settings.exploitationRepeat / m_settings.seedSize);
         }
     }
 
@@ -129,7 +129,7 @@ namespace xcspp
     {
         for (std::size_t j = 0; j < m_settings.seedSize; ++j)
         {
-            for (std::size_t k = 0; k < m_settings.explorationCount; ++k)
+            for (std::size_t k = 0; k < m_settings.explorationRepeat; ++k)
             {
                 do
                 {
