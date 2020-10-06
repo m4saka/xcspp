@@ -1,6 +1,7 @@
 #include "xcspp/helper/xcs_experiment_helper.hpp"
 #include <iostream>
 #include <fstream>
+#include <stdexcept>
 #include <cstdio> // std::printf, std::fflush
 #include <cmath> // std::abs
 
@@ -179,6 +180,11 @@ namespace xcspp
 
     void XCSExperimentHelper::runIteration(std::size_t repeat)
     {
+        if (m_experiments.empty())
+        {
+            throw std::domain_error("XCSExperimentHelper::constructEnvironments() must be called before XCSExperimentHelper::runIteration().");
+        }
+
         for (std::size_t i = 0; i < repeat; ++i)
         {
             runExploitationIteration();
