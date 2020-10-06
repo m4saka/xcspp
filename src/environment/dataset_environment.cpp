@@ -4,6 +4,19 @@
 namespace xcspp
 {
 
+    namespace
+    {
+        std::unordered_set<int> GetAvailableActionsInDataset(const Dataset & dataset)
+        {
+            std::unordered_set<int> availableActions;
+            for (const auto & action : dataset.actions)
+            {
+                availableActions.insert(action); // already inserted items are ignored here
+            }
+            return availableActions;
+        }
+    }
+
     std::size_t DatasetEnvironment::loadNext()
     {
         if (m_chooseRandom)
@@ -26,9 +39,9 @@ namespace xcspp
         }
     }
 
-    DatasetEnvironment::DatasetEnvironment(const Dataset & dataset, const std::unordered_set<int> & availableActions, bool chooseRandom)
+    DatasetEnvironment::DatasetEnvironment(const Dataset & dataset, bool chooseRandom)
         : m_dataset(dataset)
-        , m_availableActions(availableActions)
+        , m_availableActions(GetAvailableActionsInDataset(dataset))
         , m_nextIdx(0)
         , m_chooseRandom(chooseRandom)
         , m_isEndOfProblem(false)
