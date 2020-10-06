@@ -71,6 +71,7 @@ int main()
     // Experimental settings
     xcspp::ExperimentSettings settings;
     settings.outputSummaryToStdout = true; // This option enables to output summary log to console.
+    settings.outputSummaryFilename = "summary.csv";
 
     // XCS hyperparameters
     xcspp::XCSParams params;
@@ -82,6 +83,12 @@ int main()
 
     // Run experiment
     helper.runIteration(50000);
+    
+    // Get reference to XCS instance in helper
+    XCS & xcs = helper.experiment();
+
+    // Save population as "classifier.csv"
+    xcs.savePopulationCSVFile("classifier.csv");
 
     return 0;
 }
@@ -113,7 +120,7 @@ int main()
       95000    1000.000       9.190     215.330  0.00000000       1.000
      100000    1000.000       9.963     228.785  0.00000000       1.000
 ```
-In default, this summary log is saved as `summary.csv`, and the acquired population is saved as `classifier.csv`.
+In this example, this summary log is saved as `summary.csv`, and the acquired population is saved as `classifier.csv`.
 
 ## Library Linking (with CMake)
 Just include the xcspp directory using `add_subdirectory` and link the `xcspp` library to the target.
@@ -123,7 +130,7 @@ target_link_libraries(your_target xcspp)
 ```
 
 ## Library Linking (without CMake)
-You can compile xcspp library as the command below.
+The xcspp library can be compiled by the following command.
 ```bash
 $ mkdir build
 $ cd build
