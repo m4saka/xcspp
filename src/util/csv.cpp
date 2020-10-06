@@ -1,10 +1,4 @@
 #include "xcspp/util/csv.hpp"
-#include <istream>
-#include <sstream>
-#include <fstream>
-#include <vector>
-#include <cmath>
-#include <cstddef>
 
 #include "xcspp/util/dataset.hpp"
 #include "xcspp/classifier.hpp"
@@ -19,7 +13,7 @@ namespace xcspp
             std::vector<std::vector<int>> situations;
             std::vector<int> actions;
 
-            // Load all lines from csv
+            // Read all lines in csv
             std::string line;
             while (std::getline(is, line) && !line.empty())
             {
@@ -50,9 +44,13 @@ namespace xcspp
             return { situations, actions };
         }
 
-        Dataset ReadDataset(const std::string & filename, bool rounds)
+        Dataset ReadDatasetFromFile(const std::string & filename, bool rounds)
         {
             std::ifstream ifs(filename);
+            if (!ifs.good())
+            {
+                throw std::runtime_error("CSV::ReadDatasetFromFile: Failed to open the file '" + filename + "'.");
+            }
             return ReadDataset(ifs, rounds);
         }
 
@@ -143,9 +141,13 @@ namespace xcspp
             return classifiers;
         }
 
-        std::vector<Classifier> ReadClassifiers(const std::string & filename, bool skipFirstLine, bool skipFirstColumn)
+        std::vector<Classifier> ReadClassifiersFromFile(const std::string & filename, bool skipFirstLine, bool skipFirstColumn)
         {
             std::ifstream ifs(filename);
+            if (!ifs.good())
+            {
+                throw std::runtime_error("CSV::ReadClassifiersFromFile: Failed to open the file '" + filename + "'.");
+            }
             return ReadClassifiers(ifs, skipFirstLine, skipFirstColumn);
         }
     }
