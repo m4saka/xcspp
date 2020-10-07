@@ -95,7 +95,7 @@ namespace xcspp
 
         void outputPopulationCSV(std::ostream & os) const;
 
-        bool loadPopulationCSVFile(const std::string & filename, bool useAsInitialPopulation = true, bool syncTimeStamp = true);
+        bool loadPopulationCSVFile(const std::string & filename, bool initClassifierVariables = false, bool syncTimeStamp = true);
 
         bool savePopulationCSVFile(const std::string & filename);
 
