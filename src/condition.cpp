@@ -20,9 +20,11 @@ namespace xcspp
     std::string Condition::toString() const
     {
         std::string str;
+        str.reserve(m_symbols.size() * 2);
         for (const auto & symbol : m_symbols)
         {
             str += symbol.toString();
+            str += ' ';
         }
 
         // Erase last whitespace
