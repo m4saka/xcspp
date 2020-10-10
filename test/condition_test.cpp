@@ -88,3 +88,25 @@ TEST(ConditionTest, IsMoreGeneral)
     EXPECT_FALSE(cond2.isMoreGeneral(allDontCare));
     EXPECT_FALSE(cond3.isMoreGeneral(allDontCare));
 }
+
+TEST(ConditionTest, ToStringAndConstructor)
+{
+    // Original strings
+    const std::string condStr1 = "0 1 # #";
+    const std::string condStr2 = "0 1 # 1";
+    const std::string condStr3 = "1 1 # #";
+
+    // Generated conditions
+    const xcspp::Condition cond1(condStr1);
+    const xcspp::Condition cond2(condStr2);
+    const xcspp::Condition cond3(condStr3);
+
+    // Reconstructed strings
+    const std::string condStrRec1 = cond1.toString();
+    const std::string condStrRec2 = cond2.toString();
+    const std::string condStrRec3 = cond3.toString();
+
+    EXPECT_EQ(condStr1, condStrRec1);
+    EXPECT_EQ(condStr2, condStrRec2);
+    EXPECT_EQ(condStr3, condStrRec3);
+}
