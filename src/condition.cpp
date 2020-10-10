@@ -1,4 +1,5 @@
 #include "xcspp/condition.hpp"
+#include <sstream>
 
 #include "xcspp/random.hpp"
 
@@ -11,8 +12,15 @@ namespace xcspp
 
     Condition::Condition(const std::string & symbols)
     {
-        for (const char symbol : symbols)
+        std::istringstream iss(symbols);
+        std::string symbol;
+        while (std::getline(iss, symbol, ' '))
         {
+            if (symbol.empty())
+            {
+                continue;
+            }
+
             m_symbols.emplace_back(symbol);
         }
     }
