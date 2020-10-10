@@ -26,9 +26,21 @@ namespace xcspp
         if (!m_isDontCare && (m_value < 0 || m_value >= 10))
         {
             throw std::invalid_argument(
-                "Symbol::Symbol(char) received an invalid character.\n"
+                "Symbol::Symbol(char) received an invalid character '" + std::string{ c } + "'.\n"
                 "You need to use an integer ('0'-'9') or Don't Care symbol ('#').");
         }
+    }
+
+    Symbol::Symbol(const std::string & str) try
+        : m_value((str == "#") ? 0 : std::stoi(str))
+        , m_isDontCare(str == "#")
+    {
+    }
+    catch (const std::exception &)
+    {
+        throw std::invalid_argument(
+            "Symbol::Symbol(const std::string &) received an invalid string '" + str + "'.\n"
+            "You need to use an integer or Don't Care symbol ('#').");
     }
 
     std::string Symbol::toString() const

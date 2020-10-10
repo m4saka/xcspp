@@ -24,6 +24,9 @@ namespace xcspp
         // Constructor (with character '0'-'9' or '#')
         explicit Symbol(char c);
 
+        // Constructor (with integer string or "#")
+        explicit Symbol(const std::string & str);
+
         // Constructor (copy)
         Symbol(const Symbol &) = default;
 
