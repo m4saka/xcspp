@@ -21,7 +21,7 @@ TEST(ConditionTest, ConstructWithVector)
 
 TEST(ConditionTest, ConstructWithString)
 {
-    const xcspp::Condition cond("01##");
+    const xcspp::Condition cond("0 1 # #");
     EXPECT_TRUE(cond.matches({ 0, 1, 0, 0 }));
     EXPECT_TRUE(cond.matches({ 0, 1, 0, 1 }));
     EXPECT_TRUE(cond.matches({ 0, 1, 1, 0 }));
@@ -40,11 +40,11 @@ TEST(ConditionTest, Comparison)
 
     // "01##"
     const xcspp::Condition cond1_1({ zero, one, dontCare, dontCare });
-    const xcspp::Condition cond1_2("01##");
+    const xcspp::Condition cond1_2("0 1 # #");
 
     // "01#1"
     const xcspp::Condition cond2_1({ zero, one, dontCare, one });
-    const xcspp::Condition cond2_2("01#1");
+    const xcspp::Condition cond2_2("0 1 # 1");
 
     // ==
     EXPECT_EQ(cond1_1, cond1_2);
@@ -59,9 +59,9 @@ TEST(ConditionTest, Comparison)
 
 TEST(ConditionTest, IsMoreGeneral)
 {
-    const xcspp::Condition cond1("01##");
-    const xcspp::Condition cond2("01#1");
-    const xcspp::Condition cond3("11##");
+    const xcspp::Condition cond1("0 1 # #");
+    const xcspp::Condition cond2("0 1 # 1");
+    const xcspp::Condition cond3("1 1 # #");
 
     EXPECT_FALSE(cond1.isMoreGeneral(cond1));
     EXPECT_FALSE(cond2.isMoreGeneral(cond2));
@@ -80,7 +80,7 @@ TEST(ConditionTest, IsMoreGeneral)
     EXPECT_FALSE(cond3.isMoreGeneral(cond2));
 
     // vs. "####"
-    const xcspp::Condition allDontCare("####");
+    const xcspp::Condition allDontCare("# # # #");
     EXPECT_TRUE(allDontCare.isMoreGeneral(cond1));
     EXPECT_TRUE(allDontCare.isMoreGeneral(cond2));
     EXPECT_TRUE(allDontCare.isMoreGeneral(cond3));
