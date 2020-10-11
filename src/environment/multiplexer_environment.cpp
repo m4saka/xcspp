@@ -21,7 +21,7 @@ namespace xcspp
             {
                 if (situation[i] == 1)
                 {
-                    address += static_cast<std::size_t>(1) << (addressBitLength - i - static_cast<std::size_t>(1));
+                    address += std::size_t{1} << (addressBitLength - i - std::size_t{1});
                 }
             }
 
@@ -56,7 +56,7 @@ namespace xcspp
     {
         // Total length must be n + 2^n (n > 0)
         const auto addressBitLength = AddressBitLength(length);
-        if (length != (addressBitLength + (static_cast<std::size_t>(1) << addressBitLength)))
+        if (length != (addressBitLength + (std::size_t{1} << addressBitLength)))
         {
             throw std::invalid_argument("The input length of multiplexer problem must be n + 2^n (n > 0)");
         }
