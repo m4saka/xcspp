@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
-#include <cstddef>
-#include <cassert>
+#include <cstddef> // std::size_t
+#include <stdexcept>
 
 #include "ienvironment.hpp"
 #include "xcspp/random.hpp"
@@ -35,7 +35,10 @@ namespace xcspp
             , m_situation(randomSituation(length))
             , m_isEndOfProblem(false)
         {
-            assert((m_length % 2) == 1);
+            if ((m_length % 2) == 0)
+            {
+                throw std::invalid_argument("The length parameter of MajorityOnEnvironment must be an odd number.");
+            }
         }
 
         // Destructor
