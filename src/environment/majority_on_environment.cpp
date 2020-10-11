@@ -6,15 +6,25 @@ namespace xcspp
 
     namespace
     {
-        std::vector<bool> RandomSituation(std::size_t length)
+        std::vector<int> RandomSituation(std::size_t length)
         {
-            std::vector<bool> situation;
+            std::vector<int> situation;
             situation.reserve(length);
             for (std::size_t i = 0; i < length; ++i)
             {
                 situation.push_back(Random::nextInt(0, 1));
             }
             return situation;
+        }
+
+        int GetAnswerOfSituation(const std::vector<int> & situation)
+        {
+            std::size_t sum = 0;
+            for (const auto & s : situation)
+            {
+                sum += static_cast<std::size_t>(s);
+            }
+            return (sum > situation.size() / 2) ? 1 : 0;
         }
     }
 
@@ -29,12 +39,12 @@ namespace xcspp
         }
     }
 
-    std::vector<bool> MajorityOnEnvironment::situation() const
+    std::vector<int> MajorityOnEnvironment::situation() const
     {
         return m_situation;
     }
 
-    double MajorityOnEnvironment::executeAction(bool action)
+    double MajorityOnEnvironment::executeAction(int action)
     {
         double reward = (action == getAnswer()) ? 1000.0 : 0.0;
 
@@ -52,14 +62,9 @@ namespace xcspp
         return m_isEndOfProblem;
     }
 
-    bool MajorityOnEnvironment::getAnswer() const
+    int MajorityOnEnvironment::getAnswer() const
     {
-        std::size_t sum = 0;
-        for (bool b : m_situation)
-        {
-            sum += static_cast<std::size_t>(b);
-        }
-        return sum > m_length / 2;
+        return GetAnswerOfSituation(m_situation);
     }
 
     std::unordered_set<int> availableActions() const
