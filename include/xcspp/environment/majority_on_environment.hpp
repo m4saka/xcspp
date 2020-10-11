@@ -1,21 +1,21 @@
 #pragma once
-
 #include <vector>
 #include <cstddef>
 #include <cassert>
 
-#include "environment.hpp"
-#include "../random.hpp"
+#include "ienvironment.hpp"
+#include "xcspp/random.hpp"
 
-namespace xxr
+namespace xcspp
 {
 
-    class MajorityOnEnvironment final : public AbstractEnvironment<bool, bool>
+    class MajorityOnEnvironment : public IEnvironment
     {
     private:
         const std::size_t m_length;
         std::vector<bool> m_situation;
         bool m_isEndOfProblem;
+        Random m_random;
 
         static std::vector<bool> randomSituation(std::size_t length)
         {
@@ -31,21 +31,23 @@ namespace xxr
     public:
         // Constructor
         explicit MajorityOnEnvironment(std::size_t length)
-            : AbstractEnvironment<bool, bool>({ false, true })
-            , m_length(length)
+            : m_length(length)
             , m_situation(randomSituation(length))
             , m_isEndOfProblem(false)
         {
             assert((m_length % 2) == 1);
         }
 
+        // Destructor
         virtual ~MajorityOnEnvironment() = default;
 
+        // Returns current situation
         virtual std::vector<bool> situation() const override
         {
             return m_situation;
         }
 
+        // Executes action (and update situation), and returns reward
         virtual double executeAction(bool action) override
         {
             double reward = (action == getAnswer()) ? 1000.0 : 0.0;
@@ -59,6 +61,8 @@ namespace xxr
             return reward;
         }
 
+        // Returns true if the problem was solved by the previous action
+        // (Since it is a single-step problem, this function always returns true after the first action execution)
         virtual bool isEndOfProblem() const override
         {
             return m_isEndOfProblem;
@@ -73,6 +77,12 @@ namespace xxr
                 sum += static_cast<std::size_t>(b);
             }
             return sum > m_length / 2;
+        }
+
+        // Returns available action choices (e.g. { 0, 1 })
+        virtual std::unordered_set<int> availableActions() const override
+        {
+            return { 0, 1 };
         }
     };
 
