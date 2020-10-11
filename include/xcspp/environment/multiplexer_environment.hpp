@@ -11,13 +11,10 @@ namespace xcspp
     class MultiplexerEnvironment : public IEnvironment
     {
     private:
-        const std::size_t m_totalLength;
-        const std::size_t m_addressBitLength;
         const double m_minorityAcceptanceProbability;
         std::vector<int> m_situation;
         bool m_isEndOfProblem;
         Random m_random;
-        std::vector<int> randomSituation(std::size_t totalLength, double minorityAcceptanceProbability = 1.0);
 
     public:
         // Constructor
