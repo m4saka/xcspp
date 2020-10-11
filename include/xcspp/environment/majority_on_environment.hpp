@@ -11,10 +11,10 @@ namespace xcspp
     class MajorityOnEnvironment : public IEnvironment
     {
     private:
+        Random m_random;
         const std::size_t m_length;
         std::vector<int> m_situation;
         bool m_isEndOfProblem;
-        Random m_random;
 
     public:
         // Constructor
