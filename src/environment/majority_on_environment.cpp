@@ -6,15 +6,12 @@ namespace xcspp
 
     namespace
     {
-        std::vector<int> RandomSituation(Random & random, std::size_t length)
+        void SetRandomSituation(std::vector<int> & situation, Random & random)
         {
-            std::vector<int> situation;
-            situation.reserve(length);
-            for (std::size_t i = 0; i < length; ++i)
+            for (auto & s: situation)
             {
-                situation.push_back(random.nextInt(0, 1));
+                s = random.nextInt(0, 1);
             }
-            return situation;
         }
 
         int GetAnswerOfSituation(const std::vector<int> & situation)
@@ -30,13 +27,15 @@ namespace xcspp
 
     MajorityOnEnvironment::MajorityOnEnvironment(std::size_t length)
         : m_length(length)
-        , m_situation(RandomSituation(m_random, length))
+        , m_situation(length)
         , m_isEndOfProblem(false)
     {
         if ((m_length % 2) == 0)
         {
             throw std::invalid_argument("The length parameter of MajorityOnEnvironment must be an odd number.");
         }
+
+        SetRandomSituation(m_situation, m_random);
     }
 
     std::vector<int> MajorityOnEnvironment::situation() const
@@ -49,7 +48,7 @@ namespace xcspp
         double reward = (action == getAnswer()) ? 1000.0 : 0.0;
 
         // Update situation
-        m_situation = RandomSituation(m_random, m_length);
+        SetRandomSituation(m_situation, m_random);
 
         // Single-step problem
         m_isEndOfProblem = true;
