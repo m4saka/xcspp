@@ -33,11 +33,14 @@ namespace xcspp
         // (Since it is a single-step problem, this function always returns true after the first action execution)
         virtual bool isEndOfProblem() const override;
 
+        // Returns available action choices
+        virtual std::unordered_set<int> availableActions() const override
+        {
+            return { 0, 1 };
+        }
+
         // Returns answer to situation
         bool getAnswer() const;
-
-        // Returns available action choices (e.g. { 0, 1 })
-        virtual std::unordered_set<int> availableActions() const override;
     };
 
 }

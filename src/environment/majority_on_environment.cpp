@@ -67,9 +67,4 @@ namespace xcspp
         return GetAnswerOfSituation(m_situation);
     }
 
-    std::unordered_set<int> availableActions() const
-    {
-        return { 0, 1 };
-    }
-
 }
