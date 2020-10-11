@@ -16,16 +16,16 @@ namespace xcspp
         int GetAnswerOfSituation(const std::vector<int> & situation)
         {
             std::size_t address = 0;
-            const auto l = AddressBitLength(situation.size());
-            for (std::size_t i = 0; i < l; ++i)
+            const auto addressBitLength = AddressBitLength(situation.size());
+            for (std::size_t i = 0; i < addressBitLength; ++i)
             {
-                if (situation.at(i) == 1)
+                if (situation[i] == 1)
                 {
-                    address += (std::size_t)1 << (l - i - 1);
+                    address += static_cast<std::size_t>(1) << (addressBitLength - i - static_cast<std::size_t>(1));
                 }
             }
 
-            return situation.at(l + address);
+            return situation[addressBitLength + address];
         }
 
         void SetRandomSituation(std::vector<int> & situation, Random & random, double minorityAcceptanceProbability = 1.0)
