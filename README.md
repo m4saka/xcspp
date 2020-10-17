@@ -1,4 +1,4 @@
-# xcspp: XCS Library for C++17
+# xcspp: XCS Classifier System for C++17
 eXtended Learning Classifier System (XCS) library written in C++17.
 
 A minimal working example is available here: https://github.com/m4saka/xcspp-sample
