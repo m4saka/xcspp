@@ -56,6 +56,10 @@ namespace xcspp
         template <class Environment, class... Args>
         void constructEnvironments(Args && ... args);
 
+        void setExplorationCallback(std::function<void(IEnvironment &)> callback);
+
+        void setExploitationCallback(std::function<void(IEnvironment &)> callback);
+
         void runIteration(std::size_t repeat = 1);
 
         void switchToCondensationMode();

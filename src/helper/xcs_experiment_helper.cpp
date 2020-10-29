@@ -178,6 +178,16 @@ namespace xcspp
         }
     }
 
+    void XCSExperimentHelper::setExplorationCallback(std::function<void(IEnvironment &)> callback)
+    {
+        m_explorationCallback = callback;
+    }
+
+    void XCSExperimentHelper::setExploitationCallback(std::function<void(IEnvironment &)> callback)
+    {
+        m_exploitationCallback = callback;
+    }
+
     void XCSExperimentHelper::runIteration(std::size_t repeat)
     {
         if (m_experiments.empty())
