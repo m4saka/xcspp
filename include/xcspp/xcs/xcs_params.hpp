@@ -2,7 +2,7 @@
 #include <memory>
 #include <cstdint> // std::uint64_t
 
-#include "random.hpp"
+#include "xcspp/util/random.hpp"
 
 namespace xcspp
 {

@@ -1,6 +1,6 @@
 #pragma once
 #include "classifier_ptr_set.hpp"
-#include "random.hpp"
+#include "xcspp/util/random.hpp"
 
 namespace xcspp
 {

@@ -5,7 +5,7 @@
 
 #include "classifier.hpp"
 #include "xcs_params.hpp"
-#include "random.hpp"
+#include "xcspp/util/random.hpp"
 
 namespace xcspp
 {

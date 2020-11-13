@@ -8,7 +8,7 @@
 #include "match_set.hpp"
 #include "ga.hpp"
 #include "xcs_params.hpp"
-#include "random.hpp"
+#include "xcspp/util/random.hpp"
 
 namespace xcspp
 {

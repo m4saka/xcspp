@@ -5,7 +5,7 @@
 #include <cstddef> // std::size_t
 
 #include "ienvironment.hpp"
-#include "xcspp/random.hpp"
+#include "xcspp/util/random.hpp"
 
 namespace xcspp
 {

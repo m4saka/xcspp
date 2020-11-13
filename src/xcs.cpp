@@ -1,8 +1,8 @@
-#include "xcspp/xcs.hpp"
+#include "xcspp/xcs/xcs.hpp"
 #include <iostream>
 #include <memory> // std::make_shared
 
-#include "xcspp/match_set.hpp"
+#include "xcspp/xcs/match_set.hpp"
 #include "xcspp/util/csv.hpp"
 
 namespace xcspp

@@ -4,7 +4,7 @@
 #include "classifier_ptr_set.hpp"
 #include "population.hpp"
 #include "xcs_params.hpp"
-#include "random.hpp"
+#include "xcspp/util/random.hpp"
 
 namespace xcspp
 {

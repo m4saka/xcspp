@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include <cmath> // std::pow
 
-#include "xcspp/random.hpp"
+#include "xcspp/util/random.hpp"
 
 namespace xcspp
 {

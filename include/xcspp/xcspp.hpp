@@ -1,17 +1,16 @@
 #pragma once
 
-#include "action_set.hpp"
-#include "classifier.hpp"
-#include "classifier_ptr_set.hpp"
-#include "condition.hpp"
-#include "xcs_params.hpp"
-#include "ga.hpp"
-#include "match_set.hpp"
-#include "population.hpp"
-#include "prediction_array.hpp"
-#include "random.hpp"
-#include "symbol.hpp"
-#include "xcs.hpp"
+#include "xcs/action_set.hpp"
+#include "xcs/classifier.hpp"
+#include "xcs/classifier_ptr_set.hpp"
+#include "xcs/condition.hpp"
+#include "xcs/xcs_params.hpp"
+#include "xcs/ga.hpp"
+#include "xcs/match_set.hpp"
+#include "xcs/population.hpp"
+#include "xcs/prediction_array.hpp"
+#include "xcs/symbol.hpp"
+#include "xcs/xcs.hpp"
 
 #include "environment/ienvironment.hpp"
 #include "environment/multiplexer_environment.hpp"
@@ -25,3 +24,4 @@
 
 #include "util/csv.hpp"
 #include "util/dataset.hpp"
+#include "util/random.hpp"

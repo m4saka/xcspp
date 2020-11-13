@@ -1,4 +1,4 @@
-#include "xcspp/classifier_ptr_set.hpp"
+#include "xcspp/xcs/classifier_ptr_set.hpp"
 #include "xcspp/util/csv.hpp"
 
 namespace xcspp

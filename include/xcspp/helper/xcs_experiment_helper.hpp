@@ -5,7 +5,7 @@
 #include <unordered_set>
 #include <cstddef> // std::size_t
 
-#include "xcspp/xcs.hpp"
+#include "xcspp/xcs/xcs.hpp"
 #include "xcspp/environment/ienvironment.hpp"
 #include "experiment_settings.hpp"
 #include "experiment_log_stream.hpp"

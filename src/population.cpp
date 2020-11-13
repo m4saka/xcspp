@@ -1,8 +1,8 @@
-#include "xcspp/population.hpp"
+#include "xcspp/xcs/population.hpp"
 #include <cstdint> // std::uint64_t
 
-#include "xcspp/classifier_ptr_set.hpp"
-#include "xcspp/random.hpp"
+#include "xcspp/xcs/classifier_ptr_set.hpp"
+#include "xcspp/util/random.hpp"
 
 namespace xcspp
 {

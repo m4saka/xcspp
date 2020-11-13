@@ -1,4 +1,4 @@
-#include "xcspp/symbol.hpp"
+#include "xcspp/xcs/symbol.hpp"
 #include <ostream>
 #include <string>
 #include <vector>

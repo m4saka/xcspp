@@ -1,7 +1,7 @@
-#include "xcspp/condition.hpp"
+#include "xcspp/xcs/condition.hpp"
 #include <sstream>
 
-#include "xcspp/random.hpp"
+#include "xcspp/util/random.hpp"
 
 namespace xcspp
 {

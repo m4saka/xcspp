@@ -4,7 +4,7 @@
 #include <cstddef>
 
 #include "ienvironment.hpp"
-#include "xcspp/random.hpp"
+#include "xcspp/util/random.hpp"
 #include "xcspp/util/dataset.hpp"
 
 namespace xcspp

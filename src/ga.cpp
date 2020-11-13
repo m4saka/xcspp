@@ -1,4 +1,4 @@
-#include "xcspp/ga.hpp"
+#include "xcspp/xcs/ga.hpp"
 #include <memory> // std::shared_ptr, std::make_shared
 #include <vector>
 #include <unordered_set>
