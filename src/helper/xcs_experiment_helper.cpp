@@ -63,76 +63,74 @@ namespace xcspp
             double rewardSum = 0.0;
             double systemErrorSum = 0.0;
             double populationSizeSum = 0.0;
-            for (std::size_t j = 0; j < m_settings.seedSize; ++j)
+            for (std::size_t i = 0; i < m_settings.exploitationRepeat; ++i)
             {
-                for (std::size_t k = 0; k < m_settings.exploitationRepeat; ++k)
+                do
                 {
-                    do
+                    // Choose action
+                    auto action = m_experiment->exploit(m_exploitationEnvironment->situation(), m_settings.updateInExploitation);
+
+                    // Get reward
+                    double reward = m_exploitationEnvironment->executeAction(action);
+
+                    m_summaryRewardSum += reward / m_settings.exploitationRepeat;
+                    m_summarySystemErrorSum += std::abs(reward - m_experiment->prediction()) / m_settings.exploitationRepeat;
+                    m_summaryCoveringOccurrenceRateSum += static_cast<double>(m_experiment->isCoveringPerformed()) / m_settings.exploitationRepeat;
+
+                    // Update for multistep problems
+                    if (m_settings.updateInExploitation)
                     {
-                        // Choose action
-                        auto action = m_experiments[j]->exploit(m_exploitationEnvironments[j]->situation(), m_settings.updateInExploitation);
+                        m_experiment->reward(reward, m_exploitationEnvironment->isEndOfProblem());
+                    }
 
-                        // Get reward
-                        double reward = m_exploitationEnvironments[j]->executeAction(action);
-                        m_summaryRewardSum += reward / m_settings.exploitationRepeat / m_settings.seedSize;
-                        m_summarySystemErrorSum += std::abs(reward - m_experiments[j]->prediction()) / m_settings.exploitationRepeat / m_settings.seedSize;
-                        m_summaryCoveringOccurrenceRateSum += static_cast<double>(m_experiments[j]->isCoveringPerformed()) / m_settings.exploitationRepeat / m_settings.seedSize;
-                        if (m_settings.updateInExploitation)
-                        {
-                            m_experiments[j]->reward(reward, m_exploitationEnvironments[j]->isEndOfProblem());
-                        }
-                        rewardSum += reward;
-                        systemErrorSum += std::abs(reward - m_experiments[j]->prediction());
-                        ++totalStepCount;
+                    rewardSum += reward;
+                    systemErrorSum += std::abs(reward - m_experiment->prediction());
+                    ++totalStepCount;
 
-                        // Run callback if needed
-                        if (m_exploitationCallback != nullptr)
-                        {
-                            m_exploitationCallback(*m_exploitationEnvironments[j]);
-                        }
-                    } while (!m_exploitationEnvironments[j]->isEndOfProblem());
+                    // Run callback if needed
+                    if (m_exploitationCallback != nullptr)
+                    {
+                        m_exploitationCallback(*m_exploitationEnvironment);
+                    }
+                } while (!m_exploitationEnvironment->isEndOfProblem());
 
-                    populationSizeSum += m_experiments[j]->populationSize();
-                }
-                m_summaryPopulationSizeSum += static_cast<double>(m_experiments[j]->populationSize()) / m_settings.seedSize;
+                populationSizeSum += m_experiment->populationSize();
             }
 
-            m_summaryStepCountSum += static_cast<double>(totalStepCount) / m_settings.exploitationRepeat / m_settings.seedSize;
+            m_summaryPopulationSizeSum += static_cast<double>(m_experiment->populationSize());
+            m_summaryStepCountSum += static_cast<double>(totalStepCount) / m_settings.exploitationRepeat;
 
             if (m_settings.summaryInterval > 0 && (m_iterationCount + 1) % m_settings.summaryInterval == 0)
             {
                 outputSummaryLogLine();
             }
 
-            m_rewardLogStream.writeLine(rewardSum / m_settings.exploitationRepeat / m_settings.seedSize);
-            m_systemErrorLogStream.writeLine(systemErrorSum / m_settings.exploitationRepeat / m_settings.seedSize);
-            m_populationSizeLogStream.writeLine(populationSizeSum / m_settings.exploitationRepeat / m_settings.seedSize);
-            m_stepCountLogStream.writeLine(static_cast<double>(totalStepCount) / m_settings.exploitationRepeat / m_settings.seedSize);
+            m_rewardLogStream.writeLine(rewardSum / m_settings.exploitationRepeat);
+            m_systemErrorLogStream.writeLine(systemErrorSum / m_settings.exploitationRepeat);
+            m_populationSizeLogStream.writeLine(populationSizeSum / m_settings.exploitationRepeat);
+            m_stepCountLogStream.writeLine(static_cast<double>(totalStepCount) / m_settings.exploitationRepeat);
         }
     }
 
     void XCSExperimentHelper::runExplorationIteration()
     {
-        for (std::size_t j = 0; j < m_settings.seedSize; ++j)
+        for (std::size_t i = 0; i < m_settings.explorationRepeat; ++i)
         {
-            for (std::size_t k = 0; k < m_settings.explorationRepeat; ++k)
+            do
             {
-                do
+                // Choose action
+                auto action = m_experiment->explore(m_explorationEnvironment->situation());
+
+                // Get reward
+                double reward = m_explorationEnvironment->executeAction(action);
+                m_experiment->reward(reward, m_explorationEnvironment->isEndOfProblem());
+
+                // Run callback if needed
+                if (m_explorationCallback != nullptr)
                 {
-                    // Choose action
-                    auto action = m_experiments[j]->explore(m_explorationEnvironments[j]->situation());
-
-                    // Get reward
-                    double reward = m_explorationEnvironments[j]->executeAction(action);
-                    m_experiments[j]->reward(reward, m_explorationEnvironments[j]->isEndOfProblem());
-
-                    // Run callback if needed
-                    if (m_explorationCallback != nullptr)
-                    {
-                        m_explorationCallback(*m_explorationEnvironments[j]);
-                    }
-                } while (!m_explorationEnvironments[j]->isEndOfProblem());
-            }
+                    m_explorationCallback(*m_explorationEnvironment);
+                }
+            } while (!m_explorationEnvironment->isEndOfProblem());
         }
     }
 
@@ -155,10 +153,7 @@ namespace xcspp
     {
         if (!settings.inputClassifierFilename.empty())
         {
-            for (const auto & experiment : m_experiments)
-            {
-                experiment->loadPopulationCSVFile(settings.inputClassifierFilename, !settings.useInputClassifierToResume);
-            }
+            m_experiment->loadPopulationCSVFile(settings.inputClassifierFilename, !settings.useInputClassifierToResume);
         }
     }
 
@@ -174,9 +169,19 @@ namespace xcspp
 
     void XCSExperimentHelper::runIteration(std::size_t repeat)
     {
-        if (m_experiments.empty())
+        if (!m_experiment)
         {
-            throw std::domain_error("XCSExperimentHelper::constructEnvironments() must be called before XCSExperimentHelper::runIteration().");
+            throw std::domain_error("XCSExperimentHelper::constructExperiment() must be called before XCSExperimentHelper::runIteration().");
+        }
+
+        if (!m_explorationEnvironment)
+        {
+            throw std::domain_error("XCSExperimentHelper::constructEnvironment() or XCSExperimentHelper::constructExplorationEnvironment() must be called before XCSExperimentHelper::runIteration().");
+        }
+
+        if (!m_exploitationEnvironment)
+        {
+            throw std::domain_error("XCSExperimentHelper::constructEnvironment() or XCSExperimentHelper::constructExploitationEnvironment() must be called before XCSExperimentHelper::runIteration().");
         }
 
         for (std::size_t i = 0; i < repeat; ++i)
@@ -189,44 +194,36 @@ namespace xcspp
 
     void XCSExperimentHelper::switchToCondensationMode()
     {
-        for (const auto & experiment : m_experiments)
-        {
-            experiment->switchToCondensationMode();
-        }
+        m_experiment->switchToCondensationMode();
     }
 
-    std::size_t XCSExperimentHelper::seedSize() const
+    XCS & XCSExperimentHelper::experiment()
     {
-        return m_settings.seedSize;
+        return *m_experiment;
     }
 
-    XCS & XCSExperimentHelper::experiment(std::size_t seedIdx)
+    const XCS & XCSExperimentHelper::experiment() const
     {
-        return *m_experiments.at(seedIdx);
+        return *m_experiment;
     }
 
-    const XCS & XCSExperimentHelper::experiment(std::size_t seedIdx) const
+    IEnvironment & XCSExperimentHelper::explorationEnvironment()
     {
-        return *m_experiments.at(seedIdx);
+        return *m_explorationEnvironment;
     }
 
-    IEnvironment & XCSExperimentHelper::explorationEnvironment(std::size_t seedIdx)
+    const IEnvironment & XCSExperimentHelper::explorationEnvironment() const
     {
-        return *m_explorationEnvironments.at(seedIdx);
+        return *m_explorationEnvironment;
     }
 
-    const IEnvironment & XCSExperimentHelper::explorationEnvironment(std::size_t seedIdx) const
+    IEnvironment & XCSExperimentHelper::exploitationEnvironment()
     {
-        return *m_explorationEnvironments.at(seedIdx);
+        return *m_exploitationEnvironment;
     }
 
-    IEnvironment & XCSExperimentHelper::exploitationEnvironment(std::size_t seedIdx)
+    const IEnvironment & XCSExperimentHelper::exploitationEnvironment() const
     {
-        return *m_exploitationEnvironments.at(seedIdx);
-    }
-
-    const IEnvironment & XCSExperimentHelper::exploitationEnvironment(std::size_t seedIdx) const
-    {
-        return *m_exploitationEnvironments.at(seedIdx);
+        return *m_exploitationEnvironment;
     }
 }

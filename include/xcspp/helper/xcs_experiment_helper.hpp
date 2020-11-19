@@ -17,9 +17,9 @@ namespace xcspp
     {
     private:
         const ExperimentSettings m_settings;
-        std::vector<std::unique_ptr<XCS>> m_experiments;
-        std::vector<std::unique_ptr<IEnvironment>> m_explorationEnvironments;
-        std::vector<std::unique_ptr<IEnvironment>> m_exploitationEnvironments;
+        std::unique_ptr<XCS> m_experiment;
+        std::unique_ptr<IEnvironment> m_explorationEnvironment;
+        std::unique_ptr<IEnvironment> m_exploitationEnvironment;
         std::function<void(IEnvironment &)> m_explorationCallback;
         std::function<void(IEnvironment &)> m_exploitationCallback;
         std::ofstream m_summaryLogStream;
@@ -48,10 +48,16 @@ namespace xcspp
         ~XCSExperimentHelper() = default;
 
         template <class... Args>
-        void constructExperiments(Args && ... args);
+        void constructExperiment(Args && ... args);
 
         template <class Environment, class... Args>
         void constructEnvironments(Args && ... args);
+
+        template <class Environment, class... Args>
+        void constructExplorationEnvironment(Args && ... args);
+
+        template <class Environment, class... Args>
+        void constructExploitationEnvironment(Args && ... args);
 
         void setExplorationCallback(std::function<void(IEnvironment &)> callback);
 
@@ -61,61 +67,42 @@ namespace xcspp
 
         void switchToCondensationMode();
 
-        std::size_t seedSize() const;
+        XCS & experiment();
 
-        XCS & experiment(std::size_t seedIdx = 0);
+        const XCS & experiment() const;
 
-        const XCS & experiment(std::size_t seedIdx = 0) const;
+        IEnvironment & explorationEnvironment();
 
-        IEnvironment & explorationEnvironment(std::size_t seedIdx = 0);
+        const IEnvironment & explorationEnvironment() const;
 
-        const IEnvironment & explorationEnvironment(std::size_t seedIdx = 0) const;
+        IEnvironment & exploitationEnvironment();
 
-        IEnvironment & exploitationEnvironment(std::size_t seedIdx = 0);
-
-        const IEnvironment & exploitationEnvironment(std::size_t seedIdx = 0) const;
+        const IEnvironment & exploitationEnvironment() const;
     };
 
     template <class... Args>
-    void XCSExperimentHelper::constructExperiments(Args && ... args)
+    void XCSExperimentHelper::constructExperiment(Args && ... args)
     {
-        // Clear experiment array
-        m_experiments.clear();
-
-        // Construct experiments
-        m_experiments.reserve(m_settings.seedSize);
-        for (std::size_t i = 0; i < m_settings.seedSize; ++i)
-        {
-            // Note: std::forward is not used here because it is unsafe when seedSize > 1
-            m_experiments.push_back(
-                std::make_unique<XCS>(args...)
-            );
-        }
-
-        // Shrink array
-        m_experiments.shrink_to_fit();
+        m_experiment = std::make_unique<XCS>(args...);
     }
 
     template <class Environment, class... Args>
     void XCSExperimentHelper::constructEnvironments(Args && ... args)
     {
-        // Clear environment arrays
-        m_explorationEnvironments.clear();
-        m_exploitationEnvironments.clear();
+        constructExplorationEnvironment(args...); // Note: std::forward is not used here because it is unsafe to move the same object twice
+        constructExploitationEnvironment(std::forward<Args>(args)...);
+    }
 
-        // Construct environments
-        m_explorationEnvironments.reserve(m_settings.seedSize);
-        m_exploitationEnvironments.reserve(m_settings.seedSize);
-        for (std::size_t i = 0; i < m_settings.seedSize; ++i)
-        {
-            // Note: std::forward is not used here because it is unsafe due to multiple calls
-            m_explorationEnvironments.push_back(std::make_unique<Environment>(args...));
-            m_exploitationEnvironments.push_back(std::make_unique<Environment>(args...));
-        }
+    template <class Environment, class... Args>
+    void XCSExperimentHelper::constructExplorationEnvironment(Args && ... args)
+    {
+        m_explorationEnvironment = std::make_unique<Environment>(std::forward<Args>(args)...);
+    }
 
-        // Shrink arrays
-        m_explorationEnvironments.shrink_to_fit();
-        m_exploitationEnvironments.shrink_to_fit();
+    template <class Environment, class... Args>
+    void XCSExperimentHelper::constructExploitationEnvironment(Args && ... args)
+    {
+        m_exploitationEnvironment = std::make_unique<Environment>(std::forward<Args>(args)...);
     }
 
 }
