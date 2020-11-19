@@ -38,9 +38,9 @@ namespace xcspp
 
         void outputSummaryLogLine();
 
-        void runExploitationIteration();
-
         void runExplorationIteration();
+
+        void runExploitationIteration();
 
     public:
         XCSExperimentHelper(const ExperimentSettings & settings, const XCSParams & params);

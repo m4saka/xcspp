@@ -55,6 +55,28 @@ namespace xcspp
         m_summaryStepCountSum = 0.0;
     }
 
+    void XCSExperimentHelper::runExplorationIteration()
+    {
+        for (std::size_t i = 0; i < m_settings.explorationRepeat; ++i)
+        {
+            do
+            {
+                // Choose action
+                auto action = m_experiment->explore(m_explorationEnvironment->situation());
+
+                // Get reward
+                double reward = m_explorationEnvironment->executeAction(action);
+                m_experiment->reward(reward, m_explorationEnvironment->isEndOfProblem());
+
+                // Run callback if needed
+                if (m_explorationCallback != nullptr)
+                {
+                    m_explorationCallback(*m_explorationEnvironment);
+                }
+            } while (!m_explorationEnvironment->isEndOfProblem());
+        }
+    }
+
     void XCSExperimentHelper::runExploitationIteration()
     {
         if (m_settings.exploitationRepeat > 0)
@@ -109,28 +131,6 @@ namespace xcspp
             m_systemErrorLogStream.writeLine(systemErrorSum / m_settings.exploitationRepeat);
             m_populationSizeLogStream.writeLine(populationSizeSum / m_settings.exploitationRepeat);
             m_stepCountLogStream.writeLine(static_cast<double>(totalStepCount) / m_settings.exploitationRepeat);
-        }
-    }
-
-    void XCSExperimentHelper::runExplorationIteration()
-    {
-        for (std::size_t i = 0; i < m_settings.explorationRepeat; ++i)
-        {
-            do
-            {
-                // Choose action
-                auto action = m_experiment->explore(m_explorationEnvironment->situation());
-
-                // Get reward
-                double reward = m_explorationEnvironment->executeAction(action);
-                m_experiment->reward(reward, m_explorationEnvironment->isEndOfProblem());
-
-                // Run callback if needed
-                if (m_explorationCallback != nullptr)
-                {
-                    m_explorationCallback(*m_explorationEnvironment);
-                }
-            } while (!m_explorationEnvironment->isEndOfProblem());
         }
     }
 
