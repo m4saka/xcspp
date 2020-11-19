@@ -43,7 +43,7 @@ namespace xcspp
         void runExploitationIteration();
 
     public:
-        XCSExperimentHelper(const ExperimentSettings & settings, const XCSParams & params);
+        explicit XCSExperimentHelper(const ExperimentSettings & settings);
 
         ~XCSExperimentHelper() = default;
 

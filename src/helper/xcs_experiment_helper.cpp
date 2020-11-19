@@ -134,7 +134,7 @@ namespace xcspp
         }
     }
 
-    XCSExperimentHelper::XCSExperimentHelper(const ExperimentSettings & settings, const XCSParams & params)
+    XCSExperimentHelper::XCSExperimentHelper(const ExperimentSettings & settings)
         : m_settings(settings)
         , m_explorationCallback(nullptr)
         , m_exploitationCallback(nullptr)
