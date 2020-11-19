@@ -78,6 +78,8 @@ namespace xcspp
         IEnvironment & exploitationEnvironment();
 
         const IEnvironment & exploitationEnvironment() const;
+
+        std::size_t iterationCount() const;
     };
 
     template <class... Args>

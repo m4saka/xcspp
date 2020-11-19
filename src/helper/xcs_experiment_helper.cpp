@@ -226,4 +226,10 @@ namespace xcspp
     {
         return *m_exploitationEnvironment;
     }
+
+    std::size_t XCSExperimentHelper::iterationCount() const
+    {
+        return m_iterationCount;
+    }
+
 }
