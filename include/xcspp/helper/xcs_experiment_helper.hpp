@@ -17,7 +17,6 @@ namespace xcspp
     {
     private:
         const ExperimentSettings m_settings;
-        const XCSParams m_params;
         std::vector<std::unique_ptr<XCS>> m_experiments;
         std::vector<std::unique_ptr<IEnvironment>> m_explorationEnvironments;
         std::vector<std::unique_ptr<IEnvironment>> m_exploitationEnvironments;
@@ -37,11 +36,6 @@ namespace xcspp
         double m_summaryStepCountSum;
         std::size_t m_iterationCount;
 
-        static std::vector<std::unique_ptr<XCS>> MakeExperiments(
-            const ExperimentSettings & settings,
-            const std::unordered_set<int> & availableActions,
-            const XCSParams & params);
-
         void outputSummaryLogLine();
 
         void runExploitationIteration();
@@ -52,6 +46,9 @@ namespace xcspp
         XCSExperimentHelper(const ExperimentSettings & settings, const XCSParams & params);
 
         ~XCSExperimentHelper() = default;
+
+        template <class... Args>
+        void constructExperiments(Args && ... args);
 
         template <class Environment, class... Args>
         void constructEnvironments(Args && ... args);
@@ -79,6 +76,26 @@ namespace xcspp
         const IEnvironment & exploitationEnvironment(std::size_t seedIdx = 0) const;
     };
 
+    template <class... Args>
+    void XCSExperimentHelper::constructExperiments(Args && ... args)
+    {
+        // Clear experiment array
+        m_experiments.clear();
+
+        // Construct experiments
+        m_experiments.reserve(m_settings.seedSize);
+        for (std::size_t i = 0; i < m_settings.seedSize; ++i)
+        {
+            // Note: std::forward is not used here because it is unsafe when seedSize > 1
+            m_experiments.push_back(
+                std::make_unique<XCS>(args...)
+            );
+        }
+
+        // Shrink array
+        m_experiments.shrink_to_fit();
+    }
+
     template <class Environment, class... Args>
     void XCSExperimentHelper::constructEnvironments(Args && ... args)
     {
@@ -86,20 +103,19 @@ namespace xcspp
         m_explorationEnvironments.clear();
         m_exploitationEnvironments.clear();
 
-        if (m_settings.seedSize == 0)
-        {
-            return;
-        }
-
         // Construct environments
+        m_explorationEnvironments.reserve(m_settings.seedSize);
+        m_exploitationEnvironments.reserve(m_settings.seedSize);
         for (std::size_t i = 0; i < m_settings.seedSize; ++i)
         {
-            m_explorationEnvironments.push_back(std::make_unique<Environment>(std::forward<Args>(args)...));
-            m_exploitationEnvironments.push_back(std::make_unique<Environment>(std::forward<Args>(args)...));
+            // Note: std::forward is not used here because it is unsafe due to multiple calls
+            m_explorationEnvironments.push_back(std::make_unique<Environment>(args...));
+            m_exploitationEnvironments.push_back(std::make_unique<Environment>(args...));
         }
 
-        // Construct experiments
-        m_experiments = MakeExperiments(m_settings, m_explorationEnvironments.at(0)->availableActions(), m_params);
+        // Shrink arrays
+        m_explorationEnvironments.shrink_to_fit();
+        m_exploitationEnvironments.shrink_to_fit();
     }
 
 }

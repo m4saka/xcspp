@@ -8,21 +8,6 @@
 namespace xcspp
 {
 
-    std::vector<std::unique_ptr<XCS>> XCSExperimentHelper::MakeExperiments(
-        const ExperimentSettings & settings,
-        const std::unordered_set<int> & availableActions,
-        const XCSParams & params)
-    {
-        std::vector<std::unique_ptr<XCS>> experiments;
-        for (std::size_t i = 0; i < settings.seedSize; ++i)
-        {
-            experiments.push_back(
-                std::make_unique<XCS>(availableActions, params)
-            );
-        }
-        return experiments;
-    }
-
     void XCSExperimentHelper::outputSummaryLogLine()
     {
         if (!m_alreadyOutputSummaryHeader)
@@ -153,7 +138,6 @@ namespace xcspp
 
     XCSExperimentHelper::XCSExperimentHelper(const ExperimentSettings & settings, const XCSParams & params)
         : m_settings(settings)
-        , m_params(params)
         , m_explorationCallback(nullptr)
         , m_exploitationCallback(nullptr)
         , m_summaryLogStream(settings.outputSummaryFilename.empty() ? "" : (settings.outputFilenamePrefix + settings.outputSummaryFilename))
