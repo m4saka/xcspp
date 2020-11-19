@@ -17,7 +17,7 @@
 #include "environment/block_world_environment.hpp"
 #include "environment/dataset_environment.hpp"
 
-#include "helper/xcs_experiment_helper.hpp"
+#include "helper/experiment_helper.hpp"
 #include "helper/experiment_log_stream.hpp"
 #include "helper/experiment_settings.hpp"
 #include "helper/simple_moving_average.hpp"

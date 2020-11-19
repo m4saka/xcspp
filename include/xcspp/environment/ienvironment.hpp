@@ -6,7 +6,7 @@ namespace xcspp
 {
 
     // Environment interface
-    //   If you would like to use your own enviroment/problem with XCSExperimentHelper, 
+    //   If you would like to use your own enviroment/problem with ExperimentHelper, 
     //   your class should implement this interface.
     template <typename T>
     class IBasicEnvironment

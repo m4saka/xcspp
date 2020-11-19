@@ -13,7 +13,7 @@
 namespace xcspp
 {
 
-    class XCSExperimentHelper
+    class ExperimentHelper
     {
     private:
         const ExperimentSettings m_settings;
@@ -43,9 +43,9 @@ namespace xcspp
         void runExploitationIteration();
 
     public:
-        explicit XCSExperimentHelper(const ExperimentSettings & settings);
+        explicit ExperimentHelper(const ExperimentSettings & settings);
 
-        ~XCSExperimentHelper() = default;
+        ~ExperimentHelper() = default;
 
         template <class... Args>
         void constructExperiment(Args && ... args);
@@ -83,26 +83,26 @@ namespace xcspp
     };
 
     template <class... Args>
-    void XCSExperimentHelper::constructExperiment(Args && ... args)
+    void ExperimentHelper::constructExperiment(Args && ... args)
     {
         m_experiment = std::make_unique<XCS>(args...);
     }
 
     template <class Environment, class... Args>
-    void XCSExperimentHelper::constructEnvironments(Args && ... args)
+    void ExperimentHelper::constructEnvironments(Args && ... args)
     {
         constructExplorationEnvironment(args...); // Note: std::forward is not used here because it is unsafe to move the same object twice
         constructExploitationEnvironment(std::forward<Args>(args)...);
     }
 
     template <class Environment, class... Args>
-    void XCSExperimentHelper::constructExplorationEnvironment(Args && ... args)
+    void ExperimentHelper::constructExplorationEnvironment(Args && ... args)
     {
         m_explorationEnvironment = std::make_unique<Environment>(std::forward<Args>(args)...);
     }
 
     template <class Environment, class... Args>
-    void XCSExperimentHelper::constructExploitationEnvironment(Args && ... args)
+    void ExperimentHelper::constructExploitationEnvironment(Args && ... args)
     {
         m_exploitationEnvironment = std::make_unique<Environment>(std::forward<Args>(args)...);
     }

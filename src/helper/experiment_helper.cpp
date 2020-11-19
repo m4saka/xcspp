@@ -1,4 +1,4 @@
-#include "xcspp/helper/xcs_experiment_helper.hpp"
+#include "xcspp/helper/experiment_helper.hpp"
 #include <iostream>
 #include <fstream>
 #include <stdexcept>
@@ -8,7 +8,7 @@
 namespace xcspp
 {
 
-    void XCSExperimentHelper::outputSummaryLogLine()
+    void ExperimentHelper::outputSummaryLogLine()
     {
         if (!m_alreadyOutputSummaryHeader)
         {
@@ -55,7 +55,7 @@ namespace xcspp
         m_summaryStepCountSum = 0.0;
     }
 
-    void XCSExperimentHelper::runExplorationIteration()
+    void ExperimentHelper::runExplorationIteration()
     {
         for (std::size_t i = 0; i < m_settings.explorationRepeat; ++i)
         {
@@ -77,7 +77,7 @@ namespace xcspp
         }
     }
 
-    void XCSExperimentHelper::runExploitationIteration()
+    void ExperimentHelper::runExploitationIteration()
     {
         if (m_settings.exploitationRepeat > 0)
         {
@@ -134,7 +134,7 @@ namespace xcspp
         }
     }
 
-    XCSExperimentHelper::XCSExperimentHelper(const ExperimentSettings & settings)
+    ExperimentHelper::ExperimentHelper(const ExperimentSettings & settings)
         : m_settings(settings)
         , m_explorationCallback(nullptr)
         , m_exploitationCallback(nullptr)
@@ -157,31 +157,31 @@ namespace xcspp
         }
     }
 
-    void XCSExperimentHelper::setExplorationCallback(std::function<void(IEnvironment &)> callback)
+    void ExperimentHelper::setExplorationCallback(std::function<void(IEnvironment &)> callback)
     {
         m_explorationCallback = callback;
     }
 
-    void XCSExperimentHelper::setExploitationCallback(std::function<void(IEnvironment &)> callback)
+    void ExperimentHelper::setExploitationCallback(std::function<void(IEnvironment &)> callback)
     {
         m_exploitationCallback = callback;
     }
 
-    void XCSExperimentHelper::runIteration(std::size_t repeat)
+    void ExperimentHelper::runIteration(std::size_t repeat)
     {
         if (!m_experiment)
         {
-            throw std::domain_error("XCSExperimentHelper::constructExperiment() must be called before XCSExperimentHelper::runIteration().");
+            throw std::domain_error("ExperimentHelper::constructExperiment() must be called before ExperimentHelper::runIteration().");
         }
 
         if (!m_explorationEnvironment)
         {
-            throw std::domain_error("XCSExperimentHelper::constructEnvironment() or XCSExperimentHelper::constructExplorationEnvironment() must be called before XCSExperimentHelper::runIteration().");
+            throw std::domain_error("ExperimentHelper::constructEnvironment() or ExperimentHelper::constructExplorationEnvironment() must be called before ExperimentHelper::runIteration().");
         }
 
         if (!m_exploitationEnvironment)
         {
-            throw std::domain_error("XCSExperimentHelper::constructEnvironment() or XCSExperimentHelper::constructExploitationEnvironment() must be called before XCSExperimentHelper::runIteration().");
+            throw std::domain_error("ExperimentHelper::constructEnvironment() or ExperimentHelper::constructExploitationEnvironment() must be called before ExperimentHelper::runIteration().");
         }
 
         for (std::size_t i = 0; i < repeat; ++i)
@@ -192,42 +192,42 @@ namespace xcspp
         }
     }
 
-    void XCSExperimentHelper::switchToCondensationMode()
+    void ExperimentHelper::switchToCondensationMode()
     {
         m_experiment->switchToCondensationMode();
     }
 
-    XCS & XCSExperimentHelper::experiment()
+    XCS & ExperimentHelper::experiment()
     {
         return *m_experiment;
     }
 
-    const XCS & XCSExperimentHelper::experiment() const
+    const XCS & ExperimentHelper::experiment() const
     {
         return *m_experiment;
     }
 
-    IEnvironment & XCSExperimentHelper::explorationEnvironment()
+    IEnvironment & ExperimentHelper::explorationEnvironment()
     {
         return *m_explorationEnvironment;
     }
 
-    const IEnvironment & XCSExperimentHelper::explorationEnvironment() const
+    const IEnvironment & ExperimentHelper::explorationEnvironment() const
     {
         return *m_explorationEnvironment;
     }
 
-    IEnvironment & XCSExperimentHelper::exploitationEnvironment()
+    IEnvironment & ExperimentHelper::exploitationEnvironment()
     {
         return *m_exploitationEnvironment;
     }
 
-    const IEnvironment & XCSExperimentHelper::exploitationEnvironment() const
+    const IEnvironment & ExperimentHelper::exploitationEnvironment() const
     {
         return *m_exploitationEnvironment;
     }
 
-    std::size_t XCSExperimentHelper::iterationCount() const
+    std::size_t ExperimentHelper::iterationCount() const
     {
         return m_iterationCount;
     }

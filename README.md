@@ -58,8 +58,8 @@ int main()
 ```
 - Note: In the LCS community, `explore`/`exploit` has a similar meaning to "train"/"test" used in ordinary machine learning.
 
-## `XCSExperimentHelper` class
-The `XCSExperimentHelper` class allows you to evaluate the performance of XCS with a simple code. 
+## `ExperimentHelper` class
+The `ExperimentHelper` class allows you to evaluate the performance of XCS with a simple code. 
 This is useful especially for research purposes.
 
 ### Sample code (20-bit multiplexer problem):
@@ -78,7 +78,7 @@ int main()
     params.n = 1200; // N (max number of classifiers)
 
     // Initialize experiment and environment
-    xcspp::XCSExperimentHelper helper(settings, params);
+    xcspp::ExperimentHelper helper(settings, params);
     helper.constructEnvironments<xcspp::MultiplexerEnvironment>(20); // This calls xcspp::MultiplexerEnvironment constructor.
 
     // Run experiment
@@ -93,7 +93,7 @@ int main()
     return 0;
 }
 ```
-- Note: If you want to use your own benchmark problem class with `XCSExperimentHelper`, it is required that your environment class implements `IEnvironment` interface declared in `include/xcspp/environment/ienvironment.hpp`.
+- Note: If you want to use your own benchmark problem class with `ExperimentHelper`, it is required that your environment class implements `IEnvironment` interface declared in `include/xcspp/environment/ienvironment.hpp`.
 
 ### Output example ("Reward" is the classification accuracy):
 ```
