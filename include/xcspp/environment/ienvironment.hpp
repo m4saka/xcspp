@@ -8,15 +8,16 @@ namespace xcspp
     // Environment interface
     //   If you would like to use your own enviroment/problem with XCSExperimentHelper, 
     //   your class should implement this interface.
-    class IEnvironment
+    template <typename T>
+    class IBasicEnvironment
     {
     public:
-        IEnvironment() = default;
+        IBasicEnvironment() = default;
 
-        virtual ~IEnvironment() = default;
+        virtual ~IBasicEnvironment() = default;
 
         // Returns current situation
-        virtual std::vector<int> situation() const = 0;
+        virtual std::vector<T> situation() const = 0;
 
         // Executes action (and updates situation), and returns reward
         virtual double executeAction(int action) = 0;
@@ -28,5 +29,8 @@ namespace xcspp
         // Returns available action choices (e.g. { 0, 1 })
         virtual std::unordered_set<int> availableActions() const = 0;
     };
+
+    // Environment interface for XCS
+    using IEnvironment = IBasicEnvironment<int>;
 
 }
