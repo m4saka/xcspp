@@ -91,8 +91,8 @@ namespace xcspp
     template <class Environment, class... Args>
     void ExperimentHelper::constructEnvironments(Args && ... args)
     {
-        constructExplorationEnvironment(args...); // Note: std::forward is not used here because it is unsafe to move the same object twice
-        constructExploitationEnvironment(std::forward<Args>(args)...);
+        constructExplorationEnvironment<Environment>(args...); // Note: std::forward is not used here because it is unsafe to move the same object twice
+        constructExploitationEnvironment<Environment>(std::forward<Args>(args)...);
     }
 
     template <class Environment, class... Args>
