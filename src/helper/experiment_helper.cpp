@@ -62,11 +62,11 @@ namespace xcspp
             do
             {
                 // Choose action
-                auto action = m_experiment->explore(m_explorationEnvironment->situation());
+                auto action = m_system->explore(m_explorationEnvironment->situation());
 
                 // Get reward
                 double reward = m_explorationEnvironment->executeAction(action);
-                m_experiment->reward(reward, m_explorationEnvironment->isEndOfProblem());
+                m_system->reward(reward, m_explorationEnvironment->isEndOfProblem());
 
                 // Run callback if needed
                 if (m_explorationCallback != nullptr)
@@ -90,23 +90,23 @@ namespace xcspp
                 do
                 {
                     // Choose action
-                    auto action = m_experiment->exploit(m_exploitationEnvironment->situation(), m_settings.updateInExploitation);
+                    auto action = m_system->exploit(m_exploitationEnvironment->situation(), m_settings.updateInExploitation);
 
                     // Get reward
                     double reward = m_exploitationEnvironment->executeAction(action);
 
                     m_summaryRewardSum += reward / m_settings.exploitationRepeat;
-                    m_summarySystemErrorSum += std::abs(reward - m_experiment->prediction()) / m_settings.exploitationRepeat;
-                    m_summaryCoveringOccurrenceRateSum += static_cast<double>(m_experiment->isCoveringPerformed()) / m_settings.exploitationRepeat;
+                    m_summarySystemErrorSum += std::abs(reward - m_system->prediction()) / m_settings.exploitationRepeat;
+                    m_summaryCoveringOccurrenceRateSum += static_cast<double>(m_system->isCoveringPerformed()) / m_settings.exploitationRepeat;
 
                     // Update for multistep problems
                     if (m_settings.updateInExploitation)
                     {
-                        m_experiment->reward(reward, m_exploitationEnvironment->isEndOfProblem());
+                        m_system->reward(reward, m_exploitationEnvironment->isEndOfProblem());
                     }
 
                     rewardSum += reward;
-                    systemErrorSum += std::abs(reward - m_experiment->prediction());
+                    systemErrorSum += std::abs(reward - m_system->prediction());
                     ++totalStepCount;
 
                     // Run callback if needed
@@ -116,10 +116,10 @@ namespace xcspp
                     }
                 } while (!m_exploitationEnvironment->isEndOfProblem());
 
-                populationSizeSum += m_experiment->populationSize();
+                populationSizeSum += m_system->populationSize();
             }
 
-            m_summaryPopulationSizeSum += static_cast<double>(m_experiment->populationSize());
+            m_summaryPopulationSizeSum += static_cast<double>(m_system->populationSize());
             m_summaryStepCountSum += static_cast<double>(totalStepCount) / m_settings.exploitationRepeat;
 
             if (m_settings.summaryInterval > 0 && (m_iterationCount + 1) % m_settings.summaryInterval == 0)
@@ -153,7 +153,7 @@ namespace xcspp
     {
         if (!settings.inputClassifierFilename.empty())
         {
-            m_experiment->loadPopulationCSVFile(settings.inputClassifierFilename, !settings.useInputClassifierToResume);
+            m_system->loadPopulationCSVFile(settings.inputClassifierFilename, !settings.useInputClassifierToResume);
         }
     }
 
@@ -169,7 +169,7 @@ namespace xcspp
 
     void ExperimentHelper::runIteration(std::size_t repeat)
     {
-        if (!m_experiment)
+        if (!m_system)
         {
             throw std::domain_error("ExperimentHelper::constructExperiment() must be called before ExperimentHelper::runIteration().");
         }
@@ -194,17 +194,17 @@ namespace xcspp
 
     void ExperimentHelper::switchToCondensationMode()
     {
-        m_experiment->switchToCondensationMode();
+        m_system->switchToCondensationMode();
     }
 
     IClassifierSystem & ExperimentHelper::experiment()
     {
-        return *m_experiment;
+        return *m_system;
     }
 
     const IClassifierSystem & ExperimentHelper::experiment() const
     {
-        return *m_experiment;
+        return *m_system;
     }
 
     IEnvironment & ExperimentHelper::explorationEnvironment()

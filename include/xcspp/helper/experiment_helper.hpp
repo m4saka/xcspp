@@ -17,7 +17,7 @@ namespace xcspp
     {
     private:
         const ExperimentSettings m_settings;
-        std::unique_ptr<IClassifierSystem> m_experiment;
+        std::unique_ptr<IClassifierSystem> m_system;
         std::unique_ptr<IEnvironment> m_explorationEnvironment;
         std::unique_ptr<IEnvironment> m_exploitationEnvironment;
         std::function<void(IEnvironment &)> m_explorationCallback;
@@ -85,7 +85,7 @@ namespace xcspp
     template <class Experiment, class... Args>
     void ExperimentHelper::constructExperiment(Args && ... args)
     {
-        m_experiment = std::make_unique<Experiment>(args...);
+        m_system = std::make_unique<Experiment>(args...);
     }
 
     template <class Environment, class... Args>
