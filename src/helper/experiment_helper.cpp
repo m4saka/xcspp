@@ -62,10 +62,10 @@ namespace xcspp
             do
             {
                 // Choose action
-                auto action = m_system->explore(m_explorationEnvironment->situation());
+                const auto action = m_system->explore(m_explorationEnvironment->situation());
 
                 // Get reward
-                double reward = m_explorationEnvironment->executeAction(action);
+                const double reward = m_explorationEnvironment->executeAction(action);
                 m_system->reward(reward, m_explorationEnvironment->isEndOfProblem());
 
                 // Run callback if needed
