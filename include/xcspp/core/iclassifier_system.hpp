@@ -5,15 +5,16 @@
 namespace xcspp
 {
 
+    // Learning classifier system interface
     template <typename T>
-    class IBasicExperiment
+    class IBasicClassifierSystem
     {
     public:
         // Constructor
-        IBasicExperiment() = default;
+        IBasicClassifierSystem() = default;
 
         // Destructor
-        virtual ~IBasicExperiment() = default;
+        virtual ~IBasicClassifierSystem() = default;
 
         // Run with exploration
         virtual int explore(const std::vector<T> & situation) = 0;
@@ -50,6 +51,6 @@ namespace xcspp
         virtual void switchToCondensationMode() = 0;
     };
 
-    using IExperiment = IBasicExperiment<int>;
+    using IClassifierSystem = IBasicClassifierSystem<int>;
 
 }

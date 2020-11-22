@@ -1,7 +1,7 @@
-#include "xcspp/experiment/xcs/population.hpp"
+#include "xcspp/core/xcs/population.hpp"
 #include <cstdint> // std::uint64_t
 
-#include "xcspp/experiment/xcs/classifier_ptr_set.hpp"
+#include "xcspp/core/xcs/classifier_ptr_set.hpp"
 #include "xcspp/util/random.hpp"
 
 namespace xcspp::xcs

@@ -4,7 +4,7 @@
 #include <cstdint> // std::uint64_t
 #include <cstddef> // std::size_t
 
-#include "xcspp/experiment/iexperiment.hpp"
+#include "xcspp/core/iclassifier_system.hpp"
 #include "xcs_params.hpp"
 #include "population.hpp"
 #include "action_set.hpp"
@@ -13,7 +13,7 @@
 namespace xcspp::xcs
 {
 
-    class XCS : public IExperiment
+    class XCS : public IClassifierSystem
     {
     private:
         // Random utility instance

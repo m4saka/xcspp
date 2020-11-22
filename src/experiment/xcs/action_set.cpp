@@ -1,4 +1,4 @@
-#include "xcspp/experiment/xcs/action_set.hpp"
+#include "xcspp/core/xcs/action_set.hpp"
 #include <cmath>
 
 namespace xcspp::xcs

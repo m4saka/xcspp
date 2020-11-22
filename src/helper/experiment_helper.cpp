@@ -197,12 +197,12 @@ namespace xcspp
         m_experiment->switchToCondensationMode();
     }
 
-    IExperiment & ExperimentHelper::experiment()
+    IClassifierSystem & ExperimentHelper::experiment()
     {
         return *m_experiment;
     }
 
-    const IExperiment & ExperimentHelper::experiment() const
+    const IClassifierSystem & ExperimentHelper::experiment() const
     {
         return *m_experiment;
     }

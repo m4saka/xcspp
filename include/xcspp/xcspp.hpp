@@ -1,16 +1,16 @@
 #pragma once
 
-#include "experiment/xcs/action_set.hpp"
-#include "experiment/xcs/classifier.hpp"
-#include "experiment/xcs/classifier_ptr_set.hpp"
-#include "experiment/xcs/condition.hpp"
-#include "experiment/xcs/xcs_params.hpp"
-#include "experiment/xcs/ga.hpp"
-#include "experiment/xcs/match_set.hpp"
-#include "experiment/xcs/population.hpp"
-#include "experiment/xcs/prediction_array.hpp"
-#include "experiment/xcs/symbol.hpp"
-#include "experiment/xcs/xcs.hpp"
+#include "core/xcs/action_set.hpp"
+#include "core/xcs/classifier.hpp"
+#include "core/xcs/classifier_ptr_set.hpp"
+#include "core/xcs/condition.hpp"
+#include "core/xcs/xcs_params.hpp"
+#include "core/xcs/ga.hpp"
+#include "core/xcs/match_set.hpp"
+#include "core/xcs/population.hpp"
+#include "core/xcs/prediction_array.hpp"
+#include "core/xcs/symbol.hpp"
+#include "core/xcs/xcs.hpp"
 
 namespace xcspp
 {

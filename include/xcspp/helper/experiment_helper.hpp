@@ -5,7 +5,7 @@
 #include <unordered_set>
 #include <cstddef> // std::size_t
 
-#include "xcspp/experiment/xcs/xcs.hpp"
+#include "xcspp/core/xcs/xcs.hpp"
 #include "xcspp/environment/ienvironment.hpp"
 #include "experiment_settings.hpp"
 #include "experiment_log_stream.hpp"
@@ -17,7 +17,7 @@ namespace xcspp
     {
     private:
         const ExperimentSettings m_settings;
-        std::unique_ptr<IExperiment> m_experiment;
+        std::unique_ptr<IClassifierSystem> m_experiment;
         std::unique_ptr<IEnvironment> m_explorationEnvironment;
         std::unique_ptr<IEnvironment> m_exploitationEnvironment;
         std::function<void(IEnvironment &)> m_explorationCallback;
@@ -67,9 +67,9 @@ namespace xcspp
 
         void switchToCondensationMode();
 
-        IExperiment & experiment();
+        IClassifierSystem & experiment();
 
-        const IExperiment & experiment() const;
+        const IClassifierSystem & experiment() const;
 
         IEnvironment & explorationEnvironment();
 
