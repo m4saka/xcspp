@@ -48,7 +48,7 @@ namespace xcspp
         ~ExperimentHelper() = default;
 
         template <class Experiment, class... Args>
-        void constructExperiment(Args && ... args);
+        void constructClassifierSystem(Args && ... args);
 
         template <class Environment, class... Args>
         void constructEnvironments(Args && ... args);
@@ -67,9 +67,9 @@ namespace xcspp
 
         void switchToCondensationMode();
 
-        IClassifierSystem & experiment();
+        IClassifierSystem & classifierSystem();
 
-        const IClassifierSystem & experiment() const;
+        const IClassifierSystem & classifierSystem() const;
 
         IEnvironment & explorationEnvironment();
 
@@ -83,7 +83,7 @@ namespace xcspp
     };
 
     template <class Experiment, class... Args>
-    void ExperimentHelper::constructExperiment(Args && ... args)
+    void ExperimentHelper::constructClassifierSystem(Args && ... args)
     {
         m_system = std::make_unique<Experiment>(args...);
     }
