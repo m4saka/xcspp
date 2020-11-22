@@ -91,7 +91,7 @@ namespace xcspp
         {
             throw std::bad_alloc();
         }
-        return *dynamic_cast<ClassifierSystem *>(m_system);
+        return *dynamic_cast<ClassifierSystem *>(m_system.get());
     }
 
     template <class Environment, class... Args>
