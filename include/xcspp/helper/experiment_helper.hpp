@@ -94,18 +94,21 @@ namespace xcspp
     {
         constructExplorationEnvironment<Environment>(args...); // Note: std::forward is not used here because it is unsafe to move the same object twice
         constructExploitationEnvironment<Environment>(std::forward<Args>(args)...);
+        return { std::ref(*m_explorationEnvironment), std::ref(*m_exploitationEnvironment) };
     }
 
     template <class Environment, class... Args>
     Environment & ExperimentHelper::constructExplorationEnvironment(Args && ... args)
     {
         m_explorationEnvironment = std::make_unique<Environment>(std::forward<Args>(args)...);
+        return *m_explorationEnvironment;
     }
 
     template <class Environment, class... Args>
     Environment & ExperimentHelper::constructExploitationEnvironment(Args && ... args)
     {
         m_exploitationEnvironment = std::make_unique<Environment>(std::forward<Args>(args)...);
+        return *m_exploitationEnvironment;
     }
 
 }
