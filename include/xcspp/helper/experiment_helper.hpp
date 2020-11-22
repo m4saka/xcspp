@@ -87,6 +87,7 @@ namespace xcspp
     ClassifierSystem & ExperimentHelper::constructClassifierSystem(Args && ... args)
     {
         m_system = std::make_unique<ClassifierSystem>(args...);
+        return *m_system;
     }
 
     template <class Environment, class... Args>
