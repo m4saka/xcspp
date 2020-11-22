@@ -7,7 +7,7 @@
 #include "xcs_params.hpp"
 #include "xcspp/util/random.hpp"
 
-namespace xcspp
+namespace xcspp::xcs
 {
 
     using ClassifierPtr = std::shared_ptr<StoredClassifier>;

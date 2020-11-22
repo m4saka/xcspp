@@ -4,7 +4,7 @@
 
 #include "xcspp/util/random.hpp"
 
-namespace xcspp
+namespace xcspp::xcs
 {
 
     // XCS Hyperparameters

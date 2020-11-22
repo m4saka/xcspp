@@ -1,7 +1,7 @@
 #include "xcspp/experiment/xcs/classifier_ptr_set.hpp"
 #include "xcspp/util/csv.hpp"
 
-namespace xcspp
+namespace xcspp::xcs
 {
 
     namespace
@@ -50,7 +50,7 @@ namespace xcspp
 
     void ClassifierPtrSet::inputCSV(std::istream & is, bool initClassifierVariables)
     {
-        auto classifiers = CSV::ReadClassifiers(is);
+        auto classifiers = CSV::ReadClassifiers<Classifier>(is);
         if (initClassifierVariables)
         {
             for (auto & cl : classifiers)

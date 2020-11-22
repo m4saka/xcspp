@@ -2,7 +2,7 @@
 #include <memory> // std::make_shared
 #include <sstream> // std::ostringstream
 
-namespace xcspp
+namespace xcspp::xcs
 {
 
     namespace

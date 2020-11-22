@@ -5,7 +5,7 @@
 #include <cstdint> // std::uint64_t
 #include <cstddef> // std::size_t
 
-namespace xcspp
+namespace xcspp::xcs
 {
 
     namespace

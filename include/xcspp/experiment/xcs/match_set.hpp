@@ -6,7 +6,7 @@
 #include "xcs_params.hpp"
 #include "xcspp/util/random.hpp"
 
-namespace xcspp
+namespace xcspp::xcs
 {
 
     class MatchSet : public ClassifierPtrSet

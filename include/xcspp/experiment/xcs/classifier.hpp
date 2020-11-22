@@ -6,7 +6,7 @@
 #include "condition.hpp"
 #include "xcs_params.hpp"
 
-namespace xcspp
+namespace xcspp::xcs
 {
 
     struct ConditionActionPair

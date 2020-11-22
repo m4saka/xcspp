@@ -5,7 +5,7 @@
 #include "xcspp/experiment/xcs/match_set.hpp"
 #include "xcspp/util/csv.hpp"
 
-namespace xcspp
+namespace xcspp::xcs
 {
 
     void XCS::syncTimeStampWithPopulation()

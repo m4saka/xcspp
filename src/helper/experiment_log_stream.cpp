@@ -1,4 +1,5 @@
 #include "xcspp/helper/experiment_log_stream.hpp"
+#include <iostream>
 
 namespace xcspp
 {

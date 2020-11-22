@@ -4,7 +4,7 @@
 #include "xcspp/experiment/xcs/classifier_ptr_set.hpp"
 #include "xcspp/util/random.hpp"
 
-namespace xcspp
+namespace xcspp::xcs
 {
 
     namespace

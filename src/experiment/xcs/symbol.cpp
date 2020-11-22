@@ -1,10 +1,9 @@
 #include "xcspp/experiment/xcs/symbol.hpp"
-#include <ostream>
 #include <string>
 #include <vector>
 #include <stdexcept>
 
-namespace xcspp
+namespace xcspp::xcs
 {
 
     Symbol::Symbol()

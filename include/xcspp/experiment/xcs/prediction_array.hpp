@@ -5,7 +5,7 @@
 #include "match_set.hpp"
 #include "xcs_params.hpp"
 
-namespace xcspp
+namespace xcspp::xcs
 {
 
     class PredictionArray

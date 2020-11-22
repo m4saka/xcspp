@@ -3,7 +3,7 @@
 
 #include "xcspp/util/random.hpp"
 
-namespace xcspp
+namespace xcspp::xcs
 {
 
     Condition::Condition(const std::vector<Symbol> & symbols) : m_symbols(symbols) {}

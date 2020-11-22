@@ -3,7 +3,7 @@
 #include <cstddef> // std::size_t
 #include <cmath> // std::pow
 
-namespace xcspp
+namespace xcspp::xcs
 {
 
     ConditionActionPair::ConditionActionPair(const Condition & condition, int action)

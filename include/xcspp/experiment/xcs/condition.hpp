@@ -1,12 +1,12 @@
 #pragma once
-#include <ostream>
+#include <ostream> // operator<<
 #include <string>
 #include <vector>
 #include <cstddef> // std::size_t
 
 #include "symbol.hpp"
 
-namespace xcspp
+namespace xcspp::xcs
 {
 
     class Condition

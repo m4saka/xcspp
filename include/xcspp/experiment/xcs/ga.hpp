@@ -9,7 +9,7 @@
 #include "classifier_ptr_set.hpp"
 #include "population.hpp"
 
-namespace xcspp
+namespace xcspp::xcs
 {
 
     namespace GA

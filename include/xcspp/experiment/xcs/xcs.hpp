@@ -1,5 +1,5 @@
 #pragma once
-#include <iostream>
+#include <iosfwd> // std::ostream
 #include <vector>
 #include <cstdint> // std::uint64_t
 #include <cstddef> // std::size_t
@@ -10,7 +10,7 @@
 #include "action_set.hpp"
 #include "prediction_array.hpp"
 
-namespace xcspp
+namespace xcspp::xcs
 {
 
     class XCS : public IExperiment

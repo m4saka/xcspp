@@ -17,7 +17,7 @@ namespace xcspp
     {
     private:
         const ExperimentSettings m_settings;
-        std::unique_ptr<XCS> m_experiment;
+        std::unique_ptr<IExperiment> m_experiment;
         std::unique_ptr<IEnvironment> m_explorationEnvironment;
         std::unique_ptr<IEnvironment> m_exploitationEnvironment;
         std::function<void(IEnvironment &)> m_explorationCallback;
@@ -47,7 +47,7 @@ namespace xcspp
 
         ~ExperimentHelper() = default;
 
-        template <class... Args>
+        template <class Experiment, class... Args>
         void constructExperiment(Args && ... args);
 
         template <class Environment, class... Args>
@@ -67,9 +67,9 @@ namespace xcspp
 
         void switchToCondensationMode();
 
-        XCS & experiment();
+        IExperiment & experiment();
 
-        const XCS & experiment() const;
+        const IExperiment & experiment() const;
 
         IEnvironment & explorationEnvironment();
 
@@ -82,10 +82,10 @@ namespace xcspp
         std::size_t iterationCount() const;
     };
 
-    template <class... Args>
+    template <class Experiment, class... Args>
     void ExperimentHelper::constructExperiment(Args && ... args)
     {
-        m_experiment = std::make_unique<XCS>(args...);
+        m_experiment = std::make_unique<Experiment>(args...);
     }
 
     template <class Environment, class... Args>

@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 #include <xcspp/xcspp.hpp>
 
+using namespace xcspp;
+
 TEST(SymbolTest, ConstructWithNumberChar)
 {
     // Numbers
@@ -9,7 +11,7 @@ TEST(SymbolTest, ConstructWithNumberChar)
         // Generate '0'--'9' character
         const char c = '0' + i;
 
-        const xcspp::Symbol number(c);
+        const xcs::Symbol number(c);
         EXPECT_FALSE(number.isDontCare());
         EXPECT_EQ(number.value(), i);
         EXPECT_TRUE(number.matches(i));
@@ -20,7 +22,7 @@ TEST(SymbolTest, ConstructWithNumberChar)
 TEST(SymbolTest, ConstructWithDontCareChar)
 {
     // Don't Care
-    const xcspp::Symbol dontCare('#');
+    const xcs::Symbol dontCare('#');
     EXPECT_TRUE(dontCare.isDontCare());
     EXPECT_TRUE(dontCare.matches(0));
     EXPECT_TRUE(dontCare.matches(1));
@@ -30,7 +32,7 @@ TEST(SymbolTest, ConstructWithInt)
 {
     for (int i = 0; i < 10; ++i)
     {
-        const xcspp::Symbol number(i);
+        const xcs::Symbol number(i);
         EXPECT_FALSE(number.isDontCare());
         EXPECT_EQ(number.value(), i);
         EXPECT_TRUE(number.matches(i));
@@ -40,16 +42,16 @@ TEST(SymbolTest, ConstructWithInt)
 
 TEST(SymbolTest, CopyConstruct)
 {
-    const xcspp::Symbol one(1);
-    const xcspp::Symbol oneClone(one);
+    const xcs::Symbol one(1);
+    const xcs::Symbol oneClone(one);
     EXPECT_FALSE(oneClone.isDontCare());
     EXPECT_EQ(oneClone.value(), 1);
     EXPECT_TRUE(oneClone.matches(1));
     EXPECT_FALSE(oneClone.matches(0));
     EXPECT_EQ(one, oneClone);
 
-    const xcspp::Symbol dontCare('#');
-    const xcspp::Symbol dontCareClone(dontCare);
+    const xcs::Symbol dontCare('#');
+    const xcs::Symbol dontCareClone(dontCare);
     EXPECT_TRUE(dontCareClone.isDontCare());
     EXPECT_TRUE(dontCareClone.matches(0));
     EXPECT_TRUE(dontCareClone.matches(1));
@@ -58,7 +60,7 @@ TEST(SymbolTest, CopyConstruct)
 
 TEST(SymbolTest, SetValue)
 {
-    xcspp::Symbol symbol(1);
+    xcs::Symbol symbol(1);
     EXPECT_FALSE(symbol.isDontCare());
     EXPECT_EQ(symbol.value(), 1);
     EXPECT_TRUE(symbol.matches(1));
@@ -84,14 +86,14 @@ TEST(SymbolTest, SetValue)
 
 TEST(SymbolTest, AssignmentAndComparison)
 {
-    xcspp::Symbol symbol(0);
-    xcspp::Symbol zero = symbol;
+    xcs::Symbol symbol(0);
+    xcs::Symbol zero = symbol;
 
     symbol.setToDontCare();
-    xcspp::Symbol dontCare = symbol;
+    xcs::Symbol dontCare = symbol;
 
     symbol.setValue(1);
-    xcspp::Symbol one = symbol;
+    xcs::Symbol one = symbol;
 
     symbol.setValue(0);
     EXPECT_EQ(symbol, zero);

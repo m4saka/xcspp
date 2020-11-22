@@ -12,6 +12,15 @@
 #include "experiment/xcs/symbol.hpp"
 #include "experiment/xcs/xcs.hpp"
 
+namespace xcspp
+{
+    // xcspp::XCS = xcspp::xcs::XCS
+    using xcs::XCS;
+
+    // xcs::XCSParams = xcspp::XCSParams
+    using xcs::XCSParams;
+}
+
 #include "environment/ienvironment.hpp"
 #include "environment/multiplexer_environment.hpp"
 #include "environment/block_world_environment.hpp"

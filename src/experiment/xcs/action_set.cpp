@@ -1,7 +1,7 @@
 #include "xcspp/experiment/xcs/action_set.hpp"
 #include <cmath>
 
-namespace xcspp
+namespace xcspp::xcs
 {
 
     // UPDATE FITNESS

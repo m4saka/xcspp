@@ -1,10 +1,10 @@
 #pragma once
-#include <ostream>
+#include <ostream> // operator<<
 #include <string>
 #include <vector>
 #include <stdexcept>
 
-namespace xcspp
+namespace xcspp::xcs
 {
 
     // The standard symbol for XCS (integer or "#" = "Don't Care")
