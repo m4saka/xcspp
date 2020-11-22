@@ -17,7 +17,7 @@ namespace xcspp
     // xcspp::XCS = xcspp::xcs::XCS
     using xcs::XCS;
 
-    // xcs::XCSParams = xcspp::XCSParams
+    // xcspp::XCSParams = xcspp::xcs::XCSParams
     using xcs::XCSParams;
 }
 
