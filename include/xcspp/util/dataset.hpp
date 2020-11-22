@@ -4,10 +4,13 @@
 namespace xcspp
 {
 
-    struct Dataset
+    template <typename T>
+    struct BasicDataset
     {
-        std::vector<std::vector<int>> situations;
-        std::vector<int> actions;
+        std::vector<std::vector<T>> situations;
+        std::vector<T> actions;
     };
+
+    using Dataset = BasicDataset<int>;
 
 }
