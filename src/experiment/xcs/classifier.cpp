@@ -1,4 +1,4 @@
-#include "xcspp/xcs/classifier.hpp"
+#include "xcspp/experiment/xcs/classifier.hpp"
 #include <utility> // std::move
 #include <cstddef> // std::size_t
 #include <cmath> // std::pow

@@ -4,6 +4,7 @@
 #include <cstdint> // std::uint64_t
 #include <cstddef> // std::size_t
 
+#include "xcspp/experiment/iexperiment.hpp"
 #include "xcs_params.hpp"
 #include "population.hpp"
 #include "action_set.hpp"
@@ -12,7 +13,7 @@
 namespace xcspp
 {
 
-    class XCS
+    class XCS : public IExperiment
     {
     private:
         // Random utility instance
@@ -66,6 +67,7 @@ namespace xcspp
         // Run with exploration
         int explore(const std::vector<int> & situation);
 
+        // Feedback reward to system
         void reward(double value, bool isEndOfProblem = true);
 
         // Run without exploration
@@ -84,8 +86,10 @@ namespace xcspp
         // (Call this function after explore() or exploit())
         bool isCoveringPerformed() const;
 
+        // Get all classifiers that match the given situation
         std::vector<Classifier> getMatchingClassifiers(const std::vector<int> & situation) const;
 
+        // Get const reference to population
         const Population & population() const;
 
         void setPopulationClassifiers(const std::vector<Classifier> & classifiers, bool syncTimeStamp = true);

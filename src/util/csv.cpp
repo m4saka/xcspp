@@ -1,7 +1,7 @@
 #include "xcspp/util/csv.hpp"
 
 #include "xcspp/util/dataset.hpp"
-#include "xcspp/xcs/classifier.hpp"
+#include "xcspp/experiment/xcs/classifier.hpp"
 
 namespace xcspp
 {

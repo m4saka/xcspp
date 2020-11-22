@@ -1,4 +1,4 @@
-#include "xcspp/xcs/condition.hpp"
+#include "xcspp/experiment/xcs/condition.hpp"
 #include <sstream>
 
 #include "xcspp/util/random.hpp"

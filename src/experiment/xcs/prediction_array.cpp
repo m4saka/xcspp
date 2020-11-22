@@ -1,4 +1,4 @@
-#include "xcspp/xcs/prediction_array.hpp"
+#include "xcspp/experiment/xcs/prediction_array.hpp"
 #include <cfloat> // DBL_EPSILON
 #include <cmath> // std::abs
 

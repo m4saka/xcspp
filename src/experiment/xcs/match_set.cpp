@@ -1,4 +1,4 @@
-#include "xcspp/xcs/match_set.hpp"
+#include "xcspp/experiment/xcs/match_set.hpp"
 #include <memory> // std::make_shared
 #include <sstream> // std::ostringstream
 

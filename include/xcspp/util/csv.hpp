@@ -8,7 +8,7 @@
 #include <cstddef>
 
 #include "dataset.hpp"
-#include "xcspp/xcs/classifier.hpp"
+#include "xcspp/experiment/xcs/classifier.hpp"
 
 namespace xcspp
 {
