@@ -51,10 +51,6 @@ namespace xcspp
         ClassifierSystem & constructClassifierSystem(Args && ... args);
 
         template <class Environment, class... Args>
-        std::pair<std::reference_wrapper<Environment>, std::reference_wrapper<Environment>>
-            constructEnvironments(Args && ... args);
-
-        template <class Environment, class... Args>
         Environment & constructExplorationEnvironment(Args && ... args);
 
         template <class Environment, class... Args>
@@ -92,14 +88,6 @@ namespace xcspp
             throw std::bad_alloc();
         }
         return *dynamic_cast<ClassifierSystem *>(m_system.get());
-    }
-
-    template <class Environment, class... Args>
-    std::pair<std::reference_wrapper<Environment>, std::reference_wrapper<Environment>> ExperimentHelper::constructEnvironments(Args && ... args)
-    {
-        constructExplorationEnvironment<Environment>(args...); // Note: std::forward is not used here because it is unsafe to move the same object twice
-        constructExploitationEnvironment<Environment>(std::forward<Args>(args)...);
-        return { std::ref(*dynamic_cast<Environment *>(m_explorationEnvironment.get())), std::ref(*dynamic_cast<Environment *>(m_exploitationEnvironment.get())) };
     }
 
     template <class Environment, class... Args>
