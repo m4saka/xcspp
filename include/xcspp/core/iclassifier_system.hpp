@@ -42,7 +42,7 @@ namespace xcspp
 
         virtual bool loadPopulationCSVFile(const std::string & filename, bool initClassifierVariables = false, bool syncTimeStamp = true) = 0;
 
-        virtual bool savePopulationCSVFile(const std::string & filename) = 0;
+        virtual bool savePopulationCSVFile(const std::string & filename) const = 0;
 
         virtual std::size_t populationSize() const = 0;
 

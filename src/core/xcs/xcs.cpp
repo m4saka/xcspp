@@ -258,7 +258,7 @@ namespace xcspp::xcs
         return ret;
     }
 
-    bool XCS::savePopulationCSVFile(const std::string & filename)
+    bool XCS::savePopulationCSVFile(const std::string & filename) const
     {
         return m_population.saveCSVFile(filename);
     }

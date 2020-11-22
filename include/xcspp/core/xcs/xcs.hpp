@@ -101,7 +101,7 @@ namespace xcspp::xcs
 
         bool loadPopulationCSVFile(const std::string & filename, bool initClassifierVariables = false, bool syncTimeStamp = true);
 
-        bool savePopulationCSVFile(const std::string & filename);
+        bool savePopulationCSVFile(const std::string & filename) const;
 
         std::size_t populationSize() const;
 
