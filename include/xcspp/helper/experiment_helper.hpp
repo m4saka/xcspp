@@ -47,17 +47,18 @@ namespace xcspp
 
         ~ExperimentHelper() = default;
 
-        template <class Experiment, class... Args>
-        void constructClassifierSystem(Args && ... args);
+        template <class ClassifierSystem, class... Args>
+        ClassifierSystem & constructClassifierSystem(Args && ... args);
 
         template <class Environment, class... Args>
-        void constructEnvironments(Args && ... args);
+        std::pair<std::reference_wrapper<Environment>, std::reference_wrapper<Environment>>
+            constructEnvironments(Args && ... args);
 
         template <class Environment, class... Args>
-        void constructExplorationEnvironment(Args && ... args);
+        Environment & constructExplorationEnvironment(Args && ... args);
 
         template <class Environment, class... Args>
-        void constructExploitationEnvironment(Args && ... args);
+        Environment & constructExploitationEnvironment(Args && ... args);
 
         void setExplorationCallback(std::function<void(IEnvironment &)> callback);
 
@@ -82,27 +83,27 @@ namespace xcspp
         std::size_t iterationCount() const;
     };
 
-    template <class Experiment, class... Args>
-    void ExperimentHelper::constructClassifierSystem(Args && ... args)
+    template <class ClassifierSystem, class... Args>
+    ClassifierSystem & ExperimentHelper::constructClassifierSystem(Args && ... args)
     {
-        m_system = std::make_unique<Experiment>(args...);
+        m_system = std::make_unique<ClassifierSystem>(args...);
     }
 
     template <class Environment, class... Args>
-    void ExperimentHelper::constructEnvironments(Args && ... args)
+    std::pair<std::reference_wrapper<Environment>, std::reference_wrapper<Environment>> ExperimentHelper::constructEnvironments(Args && ... args)
     {
         constructExplorationEnvironment<Environment>(args...); // Note: std::forward is not used here because it is unsafe to move the same object twice
         constructExploitationEnvironment<Environment>(std::forward<Args>(args)...);
     }
 
     template <class Environment, class... Args>
-    void ExperimentHelper::constructExplorationEnvironment(Args && ... args)
+    Environment & ExperimentHelper::constructExplorationEnvironment(Args && ... args)
     {
         m_explorationEnvironment = std::make_unique<Environment>(std::forward<Args>(args)...);
     }
 
     template <class Environment, class... Args>
-    void ExperimentHelper::constructExploitationEnvironment(Args && ... args)
+    Environment & ExperimentHelper::constructExploitationEnvironment(Args && ... args)
     {
         m_exploitationEnvironment = std::make_unique<Environment>(std::forward<Args>(args)...);
     }
