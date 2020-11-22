@@ -87,7 +87,11 @@ namespace xcspp
     ClassifierSystem & ExperimentHelper::constructClassifierSystem(Args && ... args)
     {
         m_system = std::make_unique<ClassifierSystem>(args...);
-        return *m_system;
+        if (!m_system)
+        {
+            throw std::bad_alloc();
+        }
+        return *dynamic_cast<ClassifierSystem *>(m_system);
     }
 
     template <class Environment, class... Args>
@@ -95,21 +99,29 @@ namespace xcspp
     {
         constructExplorationEnvironment<Environment>(args...); // Note: std::forward is not used here because it is unsafe to move the same object twice
         constructExploitationEnvironment<Environment>(std::forward<Args>(args)...);
-        return { std::ref(*m_explorationEnvironment), std::ref(*m_exploitationEnvironment) };
+        return { std::ref(*dynamic_cast<Environment *>(m_explorationEnvironment.get())), std::ref(*dynamic_cast<Environment *>(m_exploitationEnvironment.get())) };
     }
 
     template <class Environment, class... Args>
     Environment & ExperimentHelper::constructExplorationEnvironment(Args && ... args)
     {
         m_explorationEnvironment = std::make_unique<Environment>(std::forward<Args>(args)...);
-        return *m_explorationEnvironment;
+        if (!m_explorationEnvironment)
+        {
+            throw std::bad_alloc();
+        }
+        return *dynamic_cast<Environment *>(m_explorationEnvironment.get());
     }
 
     template <class Environment, class... Args>
     Environment & ExperimentHelper::constructExploitationEnvironment(Args && ... args)
     {
         m_exploitationEnvironment = std::make_unique<Environment>(std::forward<Args>(args)...);
-        return *m_exploitationEnvironment;
+        if (!m_exploitationEnvironment)
+        {
+            throw std::bad_alloc();
+        }
+        return *dynamic_cast<Environment *>(m_exploitationEnvironment.get());
     }
 
 }
