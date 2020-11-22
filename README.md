@@ -73,19 +73,23 @@ int main()
     settings.outputSummaryToStdout = true; // This option enables to output summary log to console.
     settings.outputSummaryFilename = "summary.csv";
 
+    // Initialize helper
+    xcspp::ExperimentHelper helper(settings);
+
     // XCS hyperparameters
     xcspp::XCSParams params;
     params.n = 1200; // N (max number of classifiers)
 
-    // Initialize experiment and environment
-    xcspp::ExperimentHelper helper(settings, params);
-    helper.constructEnvironments<xcspp::MultiplexerEnvironment>(20); // This calls xcspp::MultiplexerEnvironment constructor.
+    // Initialize environments
+    // (These call the constructor of xcspp::MultiplexerEnvironment)
+    const auto & trainEnv = helper.constructExplorationEnvironment<xcspp::MultiplexerEnvironment>(20); 
+    const auto & testEnv = helper.constructExploitationEnvironment<xcspp::MultiplexerEnvironment>(20);
+
+    // Construct XCS and get reference to it
+    auto & xcs = helper.constructClassifierSystem<xcspp::XCS>(trainEnv.availableActions(), params);
 
     // Run experiment
     helper.runIteration(50000);
-    
-    // Get reference to XCS instance in helper
-    XCS & xcs = helper.experiment();
 
     // Save population as "classifier.csv"
     xcs.savePopulationCSVFile("classifier.csv");
