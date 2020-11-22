@@ -1,5 +1,6 @@
 #pragma once
 #include <iosfwd> // std::ostream
+#include <string>
 #include <cstddef> // std::size_t
 
 namespace xcspp
