@@ -82,11 +82,11 @@ int main()
 
     // Initialize environments
     // (These call the constructor of xcspp::MultiplexerEnvironment)
-    const auto & trainEnv = helper.constructExplorationEnvironment<xcspp::MultiplexerEnvironment>(20); 
-    const auto & testEnv = helper.constructExploitationEnvironment<xcspp::MultiplexerEnvironment>(20);
+    const auto & trainEnv = helper.constructTrainEnv<xcspp::MultiplexerEnvironment>(20); 
+    const auto & testEnv = helper.constructTestEnv<xcspp::MultiplexerEnvironment>(20);
 
     // Construct XCS and get reference to it
-    auto & xcs = helper.constructClassifierSystem<xcspp::XCS>(trainEnv.availableActions(), params);
+    auto & xcs = helper.constructSystem<xcspp::XCS>(trainEnv.availableActions(), params);
 
     // Run experiment
     helper.runIteration(50000);
