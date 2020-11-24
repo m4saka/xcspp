@@ -183,7 +183,7 @@ ExperimentSettings ParseExperimentSettings(const cxxopts::ParseResult & parsedOp
     settings.outputPopulationSizeFilename = parsedOptions["noutput"].as<std::string>();
     settings.outputStepCountFilename = parsedOptions["nsoutput"].as<std::string>();
     settings.inputClassifierFilename = parsedOptions["cinput"].as<std::string>();
-    settings.useInputClassifierToResume = !parsedOptions["cinput-init"].as<bool>();
+    settings.initializeInputClassifier = parsedOptions["cinput-init"].as<bool>();
     settings.smaWidth = parsedOptions["sma"].as<uint64_t>();
 
     return settings;

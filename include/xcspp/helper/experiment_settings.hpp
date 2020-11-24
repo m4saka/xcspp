@@ -46,7 +46,7 @@ namespace xcspp
         // Whether to use initial classifiers (--cinput) to resume previous experiment
         //   "false": initialize p/epsilon/F/exp/ts/as to defaults
         //   "true": do not initialize values and set system time stamp to the same as that of the latest classifier
-        bool useInputClassifierToResume = true;
+        bool initializeInputClassifier = false;
 
         // The width of the simple moving average for the reward log
         std::size_t smaWidth = 1;

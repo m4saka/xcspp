@@ -153,7 +153,7 @@ namespace xcspp
     {
         if (!settings.inputClassifierFilename.empty())
         {
-            m_system->loadPopulationCSVFile(settings.inputClassifierFilename, !settings.useInputClassifierToResume);
+            m_system->loadPopulationCSVFile(settings.inputClassifierFilename, settings.initializeInputClassifier);
         }
     }
 
