@@ -197,32 +197,32 @@ namespace xcspp
         m_system->switchToCondensationMode();
     }
 
-    IClassifierSystem & ExperimentHelper::classifierSystem()
+    IClassifierSystem & ExperimentHelper::system()
     {
         return *m_system;
     }
 
-    const IClassifierSystem & ExperimentHelper::classifierSystem() const
+    const IClassifierSystem & ExperimentHelper::system() const
     {
         return *m_system;
     }
 
-    IEnvironment & ExperimentHelper::explorationEnvironment()
+    IEnvironment & ExperimentHelper::trainEnv()
     {
         return *m_explorationEnvironment;
     }
 
-    const IEnvironment & ExperimentHelper::explorationEnvironment() const
+    const IEnvironment & ExperimentHelper::trainEnv() const
     {
         return *m_explorationEnvironment;
     }
 
-    IEnvironment & ExperimentHelper::exploitationEnvironment()
+    IEnvironment & ExperimentHelper::testEnv()
     {
         return *m_exploitationEnvironment;
     }
 
-    const IEnvironment & ExperimentHelper::exploitationEnvironment() const
+    const IEnvironment & ExperimentHelper::testEnv() const
     {
         return *m_exploitationEnvironment;
     }

@@ -260,10 +260,10 @@ int main(int argc, char *argv[])
     // Use multiplexer problem
     if (result.count("mux"))
     {
-        const auto & env = experimentHelper.constructExplorationEnvironment<MultiplexerEnvironment>(result["mux"].as<int>());
-        experimentHelper.constructExploitationEnvironment<MultiplexerEnvironment>(result["mux"].as<int>());
+        const auto & env = experimentHelper.constructTrainEnv<MultiplexerEnvironment>(result["mux"].as<int>());
+        experimentHelper.constructTestEnv<MultiplexerEnvironment>(result["mux"].as<int>());
 
-        experimentHelper.constructClassifierSystem<XCS>(env.availableActions(), params);
+        experimentHelper.constructSystem<XCS>(env.availableActions(), params);
     }
 
     // Use csv file
@@ -299,10 +299,10 @@ int main(int argc, char *argv[])
             testFilename = result["csv-eval"].as<std::string>();
         }
 
-        const auto & env = experimentHelper.constructExplorationEnvironment<DatasetEnvironment>(CSV::ReadDatasetFromFile(trainFilename), result["csv-random"].as<bool>());
-        experimentHelper.constructExploitationEnvironment<DatasetEnvironment>(CSV::ReadDatasetFromFile(testFilename), result["csv-random"].as<bool>());
+        const auto & env = experimentHelper.constructTrainEnv<DatasetEnvironment>(CSV::ReadDatasetFromFile(trainFilename), result["csv-random"].as<bool>());
+        experimentHelper.constructTestEnv<DatasetEnvironment>(CSV::ReadDatasetFromFile(testFilename), result["csv-random"].as<bool>());
 
-        experimentHelper.constructClassifierSystem<XCS>(env.availableActions(), params);
+        experimentHelper.constructSystem<XCS>(env.availableActions(), params);
     }
 
     // Run experiment
@@ -325,7 +325,7 @@ int main(int argc, char *argv[])
         }
         if (os)
         {
-            experimentHelper.classifierSystem().outputPopulationCSV(os);
+            experimentHelper.system().outputPopulationCSV(os);
         }
     }
 

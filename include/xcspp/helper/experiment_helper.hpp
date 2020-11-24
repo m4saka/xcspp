@@ -48,13 +48,13 @@ namespace xcspp
         ~ExperimentHelper() = default;
 
         template <class ClassifierSystem, class... Args>
-        ClassifierSystem & constructClassifierSystem(Args && ... args);
+        ClassifierSystem & constructSystem(Args && ... args);
 
         template <class Environment, class... Args>
-        Environment & constructExplorationEnvironment(Args && ... args);
+        Environment & constructTrainEnv(Args && ... args);
 
         template <class Environment, class... Args>
-        Environment & constructExploitationEnvironment(Args && ... args);
+        Environment & constructTestEnv(Args && ... args);
 
         void setExplorationCallback(std::function<void(IEnvironment &)> callback);
 
@@ -64,23 +64,23 @@ namespace xcspp
 
         void switchToCondensationMode();
 
-        IClassifierSystem & classifierSystem();
+        IClassifierSystem & system();
 
-        const IClassifierSystem & classifierSystem() const;
+        const IClassifierSystem & system() const;
 
-        IEnvironment & explorationEnvironment();
+        IEnvironment & trainEnv();
 
-        const IEnvironment & explorationEnvironment() const;
+        const IEnvironment & trainEnv() const;
 
-        IEnvironment & exploitationEnvironment();
+        IEnvironment & testEnv();
 
-        const IEnvironment & exploitationEnvironment() const;
+        const IEnvironment & testEnv() const;
 
         std::size_t iterationCount() const;
     };
 
     template <class ClassifierSystem, class... Args>
-    ClassifierSystem & ExperimentHelper::constructClassifierSystem(Args && ... args)
+    ClassifierSystem & ExperimentHelper::constructSystem(Args && ... args)
     {
         m_system = std::make_unique<ClassifierSystem>(args...);
         if (!m_system)
@@ -91,7 +91,7 @@ namespace xcspp
     }
 
     template <class Environment, class... Args>
-    Environment & ExperimentHelper::constructExplorationEnvironment(Args && ... args)
+    Environment & ExperimentHelper::constructTrainEnv(Args && ... args)
     {
         m_explorationEnvironment = std::make_unique<Environment>(std::forward<Args>(args)...);
         if (!m_explorationEnvironment)
@@ -102,7 +102,7 @@ namespace xcspp
     }
 
     template <class Environment, class... Args>
-    Environment & ExperimentHelper::constructExploitationEnvironment(Args && ... args)
+    Environment & ExperimentHelper::constructTestEnv(Args && ... args)
     {
         m_exploitationEnvironment = std::make_unique<Environment>(std::forward<Args>(args)...);
         if (!m_exploitationEnvironment)
