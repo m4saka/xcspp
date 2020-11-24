@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     cxxopts::Options options(argv[0], "XCS Classifier System");
 
     options
-        .allow_unrecognised_options()
+        //.allow_unrecognised_options()
         .add_options()
         ("summary-interval", "The iteration interval of summary log output", cxxopts::value<uint64_t>()->default_value("5000"), "COUNT")
         ("p,prefix", "The filename prefix for log file output", cxxopts::value<std::string>()->default_value(""), "PREFIX")
