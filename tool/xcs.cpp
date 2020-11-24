@@ -26,7 +26,7 @@ void AddOptions(cxxopts::Options & options)
         ("n,noutput", "The filename of macro-classifier count log csv output", cxxopts::value<std::string>()->default_value(""), "FILENAME")
         ("nsoutput", "The filename of number-of-step log csv output in the multi-step problem", cxxopts::value<std::string>()->default_value(""), "FILENAME")
         ("cinput", "The classifier csv filename for initial population", cxxopts::value<std::string>()->default_value(""), "FILENAME")
-        ("resume", "Whether to use initial classifiers (--cinput) to resume previous experiment (\"false\": initialize p/epsilon/F/exp/ts/as to defaults, \"true\": do not initialize values and set system time stamp to the same as that of the latest classifier)", cxxopts::value<bool>()->default_value("false"), "true/false")
+        ("cinput-init", "Whether to initialize p/epsilon/F/exp/ts/as to defaults", cxxopts::value<bool>()->default_value("false"), "true/false")
         ("m,mux", "Use the multiplexer problem", cxxopts::value<int>(), "LENGTH")
         ("mux-i", "Class imbalance level i of the multiplexer problem (used only in train iterations)", cxxopts::value<unsigned int>()->default_value("0"), "LEVEL")
         //("parity", "Use the even-parity problem", cxxopts::value<int>(), "LENGTH")
@@ -183,7 +183,7 @@ ExperimentSettings ParseExperimentSettings(const cxxopts::ParseResult & parsedOp
     settings.outputPopulationSizeFilename = parsedOptions["noutput"].as<std::string>();
     settings.outputStepCountFilename = parsedOptions["nsoutput"].as<std::string>();
     settings.inputClassifierFilename = parsedOptions["cinput"].as<std::string>();
-    settings.useInputClassifierToResume = parsedOptions["resume"].as<bool>();
+    settings.useInputClassifierToResume = !parsedOptions["cinput-init"].as<bool>();
     settings.smaWidth = parsedOptions["sma"].as<uint64_t>();
 
     return settings;
