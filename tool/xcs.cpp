@@ -255,7 +255,9 @@ void OutputXCSParams(const XCSParams & params)
     // Output optional settings
     std::stringstream ss;
     if (params.tau > 0.0 && params.tau <= 1.0)
-        ss << "             tau = " << params.tau << '\n';
+        ss << "     GASelection = tournament (tau=" << params.tau << ")\n";
+    else
+        ss << "     GASelection = roulette\n";
     if (!params.doActionMutation)
         ss << "doActionMutation = false\n";
     if (!params.useMAM)
