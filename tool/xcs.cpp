@@ -148,6 +148,63 @@ void RunExperiment(ExperimentHelper & experimentHelper, std::uint64_t iterationC
     }
 }
 
+void OutputXCSParams(const XCSParams & params)
+{
+    // Output parameters
+    std::cout << "[ XCS General Parameters ]\n";
+    std::cout << "               N = " << params.n << '\n';
+    std::cout << "            beta = " << params.beta << '\n';
+    std::cout << "           alpha = " << params.alpha << '\n';
+    std::cout << "       epsilon_0 = " << params.epsilonZero << '\n';
+    std::cout << "              nu = " << params.nu << '\n';
+    std::cout << "           gamma = " << params.gamma << '\n';
+    std::cout << "        theta_GA = " << params.thetaGA << '\n';
+    std::cout << "             chi = " << params.chi << '\n';
+    std::cout << "              mu = " << params.mu << '\n';
+    std::cout << "       theta_del = " << params.thetaDel << '\n';
+    std::cout << "           delta = " << params.delta << '\n';
+    std::cout << "       theta_sub = " << params.thetaSub << '\n';
+    std::cout << "             P_# = " << params.dontCareProbability << '\n';
+    std::cout << "             p_I = " << params.initialPrediction << '\n';
+    std::cout << "       epsilon_I = " << params.initialEpsilon << '\n';
+    std::cout << "             F_I = " << params.initialFitness << '\n';
+    std::cout << "         p_explr = " << params.exploreProbability << '\n';
+    if (params.thetaMna != 0) std::cout << "       theta_mna = " << params.thetaMna << '\n';
+    std::cout << " doGASubsumption = " << (params.doGASubsumption ? "true" : "false") << '\n';
+    std::cout << " doASSubsumption = " << (params.doActionSetSubsumption ? "true" : "false") << '\n';
+    std::cout << " crossoverMethod = ";
+    switch (params.crossoverMethod)
+    {
+    case XCSParams::CrossoverMethod::kUniformCrossover:
+        std::cout << "uniform\n";
+        break;
+    case XCSParams::CrossoverMethod::kOnePointCrossover:
+        std::cout << "one-point\n";
+        break;
+    case XCSParams::CrossoverMethod::kTwoPointCrossover:
+        std::cout << "two-point\n";
+        break;
+    }
+    std::cout << '\n';
+
+    // Output optional settings
+    std::stringstream ss;
+    if (params.tau > 0.0 && params.tau <= 1.0)
+        ss << "             tau = " << params.tau << '\n';
+    if (!params.doActionMutation)
+        ss << "doActionMutation = false\n";
+    if (!params.useMAM)
+        ss << "          useMAM = false\n";
+    std::string str = ss.str();
+    if (!str.empty())
+    {
+        std::cout << "[ XCS Optional Settings ]\n";
+        std::cout << str << '\n';
+    }
+
+    std::cout << std::flush;
+}
+
 int main(int argc, char *argv[])
 {
     // Parse command line arguments
@@ -229,60 +286,8 @@ int main(int argc, char *argv[])
         std::cout << options.help({"", "Group"}) << std::endl;
         std::exit(0);
     }
-    else
-    {
-        // Output parameters
-        std::cout << "[ XCS General Parameters ]" << std::endl;
-        std::cout << "               N = " << params.n << std::endl;
-        std::cout << "            beta = " << params.beta << std::endl;
-        std::cout << "           alpha = " << params.alpha << std::endl;
-        std::cout << "       epsilon_0 = " << params.epsilonZero << std::endl;
-        std::cout << "              nu = " << params.nu << std::endl;
-        std::cout << "           gamma = " << params.gamma << std::endl;
-        std::cout << "        theta_GA = " << params.thetaGA << std::endl;
-        std::cout << "             chi = " << params.chi << std::endl;
-        std::cout << "              mu = " << params.mu << std::endl;
-        std::cout << "       theta_del = " << params.thetaDel << std::endl;
-        std::cout << "           delta = " << params.delta << std::endl;
-        std::cout << "       theta_sub = " << params.thetaSub << std::endl;
-        std::cout << "             P_# = " << params.dontCareProbability << std::endl;
-        std::cout << "             p_I = " << params.initialPrediction << std::endl;
-        std::cout << "       epsilon_I = " << params.initialEpsilon << std::endl;
-        std::cout << "             F_I = " << params.initialFitness << std::endl;
-        std::cout << "         p_explr = " << params.exploreProbability << std::endl;
-        if (params.thetaMna != 0) std::cout << "       theta_mna = " << params.thetaMna << std::endl;
-        std::cout << " doGASubsumption = " << (params.doGASubsumption ? "true" : "false") << std::endl;
-        std::cout << " doASSubsumption = " << (params.doActionSetSubsumption ? "true" : "false") << std::endl;
-        std::cout << " crossoverMethod = ";
-        switch (params.crossoverMethod)
-        {
-        case XCSParams::CrossoverMethod::kUniformCrossover:
-            std::cout << "uniform" << std::endl;
-            break;
-        case XCSParams::CrossoverMethod::kOnePointCrossover:
-            std::cout << "one-point" << std::endl;
-            break;
-        case XCSParams::CrossoverMethod::kTwoPointCrossover:
-            std::cout << "two-point" << std::endl;
-            break;
-        }
-        std::cout << std::endl;
 
-        // Output optional settings
-        std::stringstream ss;
-        if (params.tau > 0.0 && params.tau <= 1.0)
-            ss << "             tau = " << params.tau << std::endl;
-        if (!params.doActionMutation)
-            ss << "doActionMutation = false" << std::endl;
-        if (!params.useMAM)
-            ss << "          useMAM = false" << std::endl;
-        std::string str = ss.str();
-        if (!str.empty())
-        {
-            std::cout << "[ XCS Optional Settings ]" << std::endl;
-            std::cout << str << std::endl;
-        }
-    }
+    OutputXCSParams(params);
 
     // Initialize experiment helper
     const ExperimentSettings settings = ParseExperimentSettings(parsedOptions);
