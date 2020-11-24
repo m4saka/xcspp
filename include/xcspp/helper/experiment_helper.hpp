@@ -38,9 +38,9 @@ namespace xcspp
 
         void outputSummaryLogLine();
 
-        void runExplorationIteration();
+        void runTrainIteration();
 
-        void runExploitationIteration();
+        void runTestIteration();
 
     public:
         explicit ExperimentHelper(const ExperimentSettings & settings);

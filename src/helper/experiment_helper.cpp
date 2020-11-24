@@ -55,7 +55,7 @@ namespace xcspp
         m_summaryStepCountSum = 0.0;
     }
 
-    void ExperimentHelper::runExplorationIteration()
+    void ExperimentHelper::runTrainIteration()
     {
         for (std::size_t i = 0; i < m_settings.explorationRepeat; ++i)
         {
@@ -77,7 +77,7 @@ namespace xcspp
         }
     }
 
-    void ExperimentHelper::runExploitationIteration()
+    void ExperimentHelper::runTestIteration()
     {
         if (m_settings.exploitationRepeat > 0)
         {
@@ -186,8 +186,8 @@ namespace xcspp
 
         for (std::size_t i = 0; i < repeat; ++i)
         {
-            runExploitationIteration();
-            runExplorationIteration();
+            runTestIteration();
+            runTrainIteration();
             ++m_iterationCount;
         }
     }
