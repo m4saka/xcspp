@@ -54,7 +54,6 @@ int main(int argc, char *argv[])
         ("exploit", "The number of exploitation (= test mode) performed in each test iteration (set \"0\" if you don't need evaluation)", cxxopts::value<uint64_t>()->default_value("1"), "COUNT")
         ("exploit-upd", "Whether to update classifier parameters in test mode (\"auto\": false for single-step & true for multi-step)", cxxopts::value<std::string>()->default_value("auto"), "auto/true/false")
         ("sma", "The width of the simple moving average for the reward log", cxxopts::value<uint64_t>()->default_value("1"), "COUNT")
-        ("a,action", "The available action choices for csv (comma-separated, integer only)", cxxopts::value<std::string>(), "ACTIONS")
         ("N,max-population", "The maximum size of the population", cxxopts::value<uint64_t>()->default_value(std::to_string(params.n)), "COUNT")
         ("alpha", "The fall of rate in the fitness evaluation", cxxopts::value<double>()->default_value(std::to_string(params.alpha)), "ALPHA")
         ("beta", "The learning rate for updating fitness, prediction, prediction error, and action set size estimate in XCS's classifiers", cxxopts::value<double>()->default_value(std::to_string(params.beta)), "BETA")
@@ -269,35 +268,8 @@ int main(int argc, char *argv[])
     // Use csv file
     if (result.count("csv"))
     {
-        // Get available action choices
-        if (!result.count("action"))
-        {
-            std::cout << "Error: Available action list (--action) is not specified." << std::endl;
-            exit(1);
-        }
-        const std::string availableActionsStr = result["action"].as<std::string>();
-        std::string availableActionStr;
-        std::stringstream ss(availableActionsStr);
-        std::unordered_set<int> availableActions;
-        while (std::getline(ss, availableActionStr, ','))
-        {
-            try
-            {
-                availableActions.insert(std::stoi(availableActionStr));
-            }
-            catch (std::exception & e)
-            {
-                std::cout << "Error: Action must be an integer." << std::endl;
-                exit(1);
-            }
-        }
-
         const std::string trainFilename = result["csv"].as<std::string>();
-        std::string testFilename = trainFilename;
-        if (result.count("csv-eval"))
-        {
-            testFilename = result["csv-eval"].as<std::string>();
-        }
+        const std::string testFilename = result.count("csv-eval") ? result["csv-eval"].as<std::string>() : trainFilename;
 
         const auto & env = experimentHelper.constructTrainEnv<DatasetEnvironment>(CSV::ReadDatasetFromFile(trainFilename), result["csv-random"].as<bool>());
         experimentHelper.constructTestEnv<DatasetEnvironment>(CSV::ReadDatasetFromFile(testFilename), result["csv-random"].as<bool>());
