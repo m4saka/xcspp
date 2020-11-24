@@ -14,7 +14,7 @@ namespace xcspp::xcs
         //   The maximum size of the population
         //   (the sum of the classifier numerosities in micro-classifiers)
         //   Recommended: large enough
-        std::uint64_t n = 2000;
+        std::uint64_t n = 10000;
 
         // beta
         //   The learning rate for updating fitness, prediction, prediction error, and
@@ -90,8 +90,8 @@ namespace xcspp::xcs
 
         // P_sharp
         //   The probability of using a don't care symbol in an allele when covering
-        //   Recommended: 0.33
-        double dontCareProbability = 0.33;
+        //   Recommended: it depends on the problem to solve
+        double dontCareProbability = 1;
 
         // p_I
         //   The initial prediction value when generating a new classifier
