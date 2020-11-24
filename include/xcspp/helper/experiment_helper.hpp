@@ -18,10 +18,10 @@ namespace xcspp
     private:
         const ExperimentSettings m_settings;
         std::unique_ptr<IClassifierSystem> m_system;
-        std::unique_ptr<IEnvironment> m_explorationEnvironment;
-        std::unique_ptr<IEnvironment> m_exploitationEnvironment;
-        std::function<void(IEnvironment &)> m_explorationCallback;
-        std::function<void(IEnvironment &)> m_exploitationCallback;
+        std::unique_ptr<IEnvironment> m_trainEnvironment;
+        std::unique_ptr<IEnvironment> m_testEnvironment;
+        std::function<void(IEnvironment &)> m_trainCallback;
+        std::function<void(IEnvironment &)> m_testCallback;
         std::ofstream m_summaryLogStream;
         bool m_outputSummaryLogFile;
         SMAExperimentLogStream m_rewardLogStream;
@@ -56,9 +56,9 @@ namespace xcspp
         template <class Environment, class... Args>
         Environment & constructTestEnv(Args && ... args);
 
-        void setExplorationCallback(std::function<void(IEnvironment &)> callback);
+        void setTrainCallback(std::function<void(IEnvironment &)> callback);
 
-        void setExploitationCallback(std::function<void(IEnvironment &)> callback);
+        void setTestCallback(std::function<void(IEnvironment &)> callback);
 
         void runIteration(std::size_t repeat = 1);
 
@@ -93,23 +93,23 @@ namespace xcspp
     template <class Environment, class... Args>
     Environment & ExperimentHelper::constructTrainEnv(Args && ... args)
     {
-        m_explorationEnvironment = std::make_unique<Environment>(std::forward<Args>(args)...);
-        if (!m_explorationEnvironment)
+        m_trainEnvironment = std::make_unique<Environment>(std::forward<Args>(args)...);
+        if (!m_trainEnvironment)
         {
             throw std::bad_alloc();
         }
-        return *dynamic_cast<Environment *>(m_explorationEnvironment.get());
+        return *dynamic_cast<Environment *>(m_trainEnvironment.get());
     }
 
     template <class Environment, class... Args>
     Environment & ExperimentHelper::constructTestEnv(Args && ... args)
     {
-        m_exploitationEnvironment = std::make_unique<Environment>(std::forward<Args>(args)...);
-        if (!m_exploitationEnvironment)
+        m_testEnvironment = std::make_unique<Environment>(std::forward<Args>(args)...);
+        if (!m_testEnvironment)
         {
             throw std::bad_alloc();
         }
-        return *dynamic_cast<Environment *>(m_exploitationEnvironment.get());
+        return *dynamic_cast<Environment *>(m_testEnvironment.get());
     }
 
 }

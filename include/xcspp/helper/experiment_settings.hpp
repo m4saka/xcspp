@@ -7,10 +7,10 @@ namespace xcspp
 
     struct ExperimentSettings
     {
-        // The number of exploration performed in each iteration
+        // The number of exploration performed in each train iteration
         std::size_t explorationRepeat = 1;
 
-        // The number of exploitation (= test mode) performed in each iteration (set "0" if you don't need evaluation)
+        // The number of exploitation (= test mode) performed in each test iteration (set "0" if you don't need evaluation)
         std::size_t exploitationRepeat = 1;
 
         // Whether to update classifier parameters in test mode (usually "false" for single-step problems and "true" for multi-step problems)

@@ -62,18 +62,18 @@ namespace xcspp
             do
             {
                 // Choose action
-                const auto action = m_system->explore(m_explorationEnvironment->situation());
+                const auto action = m_system->explore(m_trainEnvironment->situation());
 
                 // Get reward
-                const double reward = m_explorationEnvironment->executeAction(action);
-                m_system->reward(reward, m_explorationEnvironment->isEndOfProblem());
+                const double reward = m_trainEnvironment->executeAction(action);
+                m_system->reward(reward, m_trainEnvironment->isEndOfProblem());
 
                 // Run callback if needed
-                if (m_explorationCallback != nullptr)
+                if (m_trainCallback != nullptr)
                 {
-                    m_explorationCallback(*m_explorationEnvironment);
+                    m_trainCallback(*m_trainEnvironment);
                 }
-            } while (!m_explorationEnvironment->isEndOfProblem());
+            } while (!m_trainEnvironment->isEndOfProblem());
         }
     }
 
@@ -90,10 +90,10 @@ namespace xcspp
                 do
                 {
                     // Choose action
-                    auto action = m_system->exploit(m_exploitationEnvironment->situation(), m_settings.updateInExploitation);
+                    auto action = m_system->exploit(m_testEnvironment->situation(), m_settings.updateInExploitation);
 
                     // Get reward
-                    double reward = m_exploitationEnvironment->executeAction(action);
+                    double reward = m_testEnvironment->executeAction(action);
 
                     m_summaryRewardSum += reward / m_settings.exploitationRepeat;
                     m_summarySystemErrorSum += std::abs(reward - m_system->prediction()) / m_settings.exploitationRepeat;
@@ -102,7 +102,7 @@ namespace xcspp
                     // Update for multistep problems
                     if (m_settings.updateInExploitation)
                     {
-                        m_system->reward(reward, m_exploitationEnvironment->isEndOfProblem());
+                        m_system->reward(reward, m_testEnvironment->isEndOfProblem());
                     }
 
                     rewardSum += reward;
@@ -110,11 +110,11 @@ namespace xcspp
                     ++totalStepCount;
 
                     // Run callback if needed
-                    if (m_exploitationCallback != nullptr)
+                    if (m_testCallback != nullptr)
                     {
-                        m_exploitationCallback(*m_exploitationEnvironment);
+                        m_testCallback(*m_testEnvironment);
                     }
-                } while (!m_exploitationEnvironment->isEndOfProblem());
+                } while (!m_testEnvironment->isEndOfProblem());
 
                 populationSizeSum += m_system->populationSize();
             }
@@ -136,8 +136,8 @@ namespace xcspp
 
     ExperimentHelper::ExperimentHelper(const ExperimentSettings & settings)
         : m_settings(settings)
-        , m_explorationCallback(nullptr)
-        , m_exploitationCallback(nullptr)
+        , m_trainCallback(nullptr)
+        , m_testCallback(nullptr)
         , m_summaryLogStream(settings.outputSummaryFilename.empty() ? "" : (settings.outputFilenamePrefix + settings.outputSummaryFilename))
         , m_rewardLogStream(settings.outputRewardFilename.empty() ? "" : (settings.outputFilenamePrefix + settings.outputRewardFilename), settings.smaWidth, false)
         , m_systemErrorLogStream(settings.outputSystemErrorFilename.empty() ? "" : (settings.outputFilenamePrefix + settings.outputSystemErrorFilename), settings.smaWidth, false)
@@ -157,14 +157,14 @@ namespace xcspp
         }
     }
 
-    void ExperimentHelper::setExplorationCallback(std::function<void(IEnvironment &)> callback)
+    void ExperimentHelper::setTrainCallback(std::function<void(IEnvironment &)> callback)
     {
-        m_explorationCallback = callback;
+        m_trainCallback = callback;
     }
 
-    void ExperimentHelper::setExploitationCallback(std::function<void(IEnvironment &)> callback)
+    void ExperimentHelper::setTestCallback(std::function<void(IEnvironment &)> callback)
     {
-        m_exploitationCallback = callback;
+        m_testCallback = callback;
     }
 
     void ExperimentHelper::runIteration(std::size_t repeat)
@@ -174,12 +174,12 @@ namespace xcspp
             throw std::domain_error("ExperimentHelper::constructExperiment() must be called before ExperimentHelper::runIteration().");
         }
 
-        if (!m_explorationEnvironment)
+        if (!m_trainEnvironment)
         {
             throw std::domain_error("ExperimentHelper::constructEnvironment() or ExperimentHelper::constructExplorationEnvironment() must be called before ExperimentHelper::runIteration().");
         }
 
-        if (!m_exploitationEnvironment)
+        if (!m_testEnvironment)
         {
             throw std::domain_error("ExperimentHelper::constructEnvironment() or ExperimentHelper::constructExploitationEnvironment() must be called before ExperimentHelper::runIteration().");
         }
@@ -209,22 +209,22 @@ namespace xcspp
 
     IEnvironment & ExperimentHelper::trainEnv()
     {
-        return *m_explorationEnvironment;
+        return *m_trainEnvironment;
     }
 
     const IEnvironment & ExperimentHelper::trainEnv() const
     {
-        return *m_explorationEnvironment;
+        return *m_trainEnvironment;
     }
 
     IEnvironment & ExperimentHelper::testEnv()
     {
-        return *m_exploitationEnvironment;
+        return *m_testEnvironment;
     }
 
     const IEnvironment & ExperimentHelper::testEnv() const
     {
-        return *m_exploitationEnvironment;
+        return *m_testEnvironment;
     }
 
     std::size_t ExperimentHelper::iterationCount() const
