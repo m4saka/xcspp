@@ -65,15 +65,15 @@ XCSParams ParseXCSParams(const cxxopts::ParseResult & parsedOptions)
     // Determine crossover method
     if (parsedOptions["x-method"].as<std::string>() == "uniform")
     {
-        params.crossoverMethod = XCSParams::CrossoverMethod::UNIFORM_CROSSOVER;
+        params.crossoverMethod = XCSParams::CrossoverMethod::kUniformCrossover;
     }
     else if (parsedOptions["x-method"].as<std::string>() == "one-point")
     {
-        params.crossoverMethod = XCSParams::CrossoverMethod::ONE_POINT_CROSSOVER;
+        params.crossoverMethod = XCSParams::CrossoverMethod::kOnePointCrossover;
     }
     else if (parsedOptions["x-method"].as<std::string>() == "two-point")
     {
-        params.crossoverMethod = XCSParams::CrossoverMethod::TWO_POINT_CROSSOVER;
+        params.crossoverMethod = XCSParams::CrossoverMethod::kTwoPointCrossover;
     }
     else
     {
@@ -256,13 +256,13 @@ int main(int argc, char *argv[])
         std::cout << " crossoverMethod = ";
         switch (params.crossoverMethod)
         {
-        case XCSParams::CrossoverMethod::UNIFORM_CROSSOVER:
+        case XCSParams::CrossoverMethod::kUniformCrossover:
             std::cout << "uniform" << std::endl;
             break;
-        case XCSParams::CrossoverMethod::ONE_POINT_CROSSOVER:
+        case XCSParams::CrossoverMethod::kOnePointCrossover:
             std::cout << "one-point" << std::endl;
             break;
-        case XCSParams::CrossoverMethod::TWO_POINT_CROSSOVER:
+        case XCSParams::CrossoverMethod::kTwoPointCrossover:
             std::cout << "two-point" << std::endl;
             break;
         }

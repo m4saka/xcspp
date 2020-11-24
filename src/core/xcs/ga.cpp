@@ -114,13 +114,13 @@ namespace xcspp::xcs
         {
             switch (crossoverMethod)
             {
-            case XCSParams::CrossoverMethod::UNIFORM_CROSSOVER:
+            case XCSParams::CrossoverMethod::kUniformCrossover:
                 return UniformCrossover(cl1, cl2, random);
 
-            case XCSParams::CrossoverMethod::ONE_POINT_CROSSOVER:
+            case XCSParams::CrossoverMethod::kOnePointCrossover:
                 return OnePointCrossover(cl1, cl2, random);
 
-            case XCSParams::CrossoverMethod::TWO_POINT_CROSSOVER:
+            case XCSParams::CrossoverMethod::kTwoPointCrossover:
                 return TwoPointCrossover(cl1, cl2, random);
 
             default:

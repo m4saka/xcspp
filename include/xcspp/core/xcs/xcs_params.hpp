@@ -55,11 +55,11 @@ namespace xcspp::xcs
         // crossoverMethod
         enum class CrossoverMethod
         {
-            UNIFORM_CROSSOVER,
-            ONE_POINT_CROSSOVER,
-            TWO_POINT_CROSSOVER,
+            kUniformCrossover,
+            kOnePointCrossover,
+            kTwoPointCrossover,
         };
-        CrossoverMethod crossoverMethod = CrossoverMethod::UNIFORM_CROSSOVER;
+        CrossoverMethod crossoverMethod = CrossoverMethod::kUniformCrossover;
 
         // mu
         //   The probability of mutating one allele and the action
