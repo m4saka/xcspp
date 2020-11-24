@@ -284,7 +284,7 @@ int main(int argc, char *argv[])
     if (parsedOptions.count("help") || !isEnvironmentSpecified)
     {
         std::cout << options.help({"", "Group"}) << std::endl;
-        std::exit(0);
+        std::exit(parsedOptions.count("help") ? 0 : 1);
     }
 
     OutputXCSParams(params);
