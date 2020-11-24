@@ -1,3 +1,6 @@
 [submodule "test/googletest"]
 	path = test/googletest
 	url = https://github.com/google/googletest.git
+[submodule "tool/cxxopts"]
+	path = tool/cxxopts
+	url = https://github.com/jarro2783/cxxopts.git
