@@ -59,7 +59,7 @@ namespace xcspp::xcs
             ONE_POINT_CROSSOVER,
             TWO_POINT_CROSSOVER,
         };
-        CrossoverMethod crossoverMethod = CrossoverMethod::TWO_POINT_CROSSOVER;
+        CrossoverMethod crossoverMethod = CrossoverMethod::UNIFORM_CROSSOVER;
 
         // mu
         //   The probability of mutating one allele and the action
@@ -91,7 +91,7 @@ namespace xcspp::xcs
         // P_sharp
         //   The probability of using a don't care symbol in an allele when covering
         //   Recommended: it depends on the problem to solve
-        double dontCareProbability = 1;
+        double dontCareProbability = 1.0;
 
         // p_I
         //   The initial prediction value when generating a new classifier
