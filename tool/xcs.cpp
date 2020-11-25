@@ -31,12 +31,12 @@ void AddOptions(cxxopts::Options & options)
         ("mux-i", "Class imbalance level i of the multiplexer problem (used only in train iterations)", cxxopts::value<unsigned int>()->default_value("0"), "LEVEL")
         //("parity", "Use the even-parity problem", cxxopts::value<int>(), "LENGTH")
         ("majority", "Use the majority-on problem", cxxopts::value<int>(), "LENGTH")
-        //("blc", "Use the block world problem", cxxopts::value<std::string>(), "FILENAME")
-        //("blc-3bit", "Use 3-bit representation for each block in a situation", cxxopts::value<bool>()->default_value("false"), "true/false")
-        //("blc-diag", "Allow diagonal actions in the block world problem", cxxopts::value<bool>()->default_value("true"), "true/false")
-        //("blc-output-best", "Output the parsedOptions of the desired action for blocks in the block world problem", cxxopts::value<std::string>()->default_value(""), "FILENAME")
-        //("blc-output-best-uni", "Use UTF-8 square & arrow characters for --blc-output", cxxopts::value<bool>()->default_value("false"), "true/false")
-        //("blc-output-trace", "Output the coordinate of the animat in the block world problem", cxxopts::value<std::string>()->default_value(""), "FILENAME")
+        ("blc", "Use the block world problem", cxxopts::value<std::string>(), "FILENAME")
+        ("blc-3bit", "Use 3-bit representation for each block in a situation", cxxopts::value<bool>()->default_value("false"), "true/false")
+        ("blc-diag", "Allow diagonal actions in the block world problem", cxxopts::value<bool>()->default_value("true"), "true/false")
+        ("blc-output-best", "Output the parsedOptions of the desired action for blocks in the block world problem", cxxopts::value<std::string>()->default_value(""), "FILENAME")
+        ("blc-output-best-uni", "Use UTF-8 square & arrow characters for --blc-output", cxxopts::value<bool>()->default_value("false"), "true/false")
+        ("blc-output-trace", "Output the coordinate of the animat in the block world problem", cxxopts::value<std::string>()->default_value(""), "FILENAME")
         ("c,csv", "The csv file to train", cxxopts::value<std::string>(), "FILENAME")
         ("csv-test", "The csv file to test", cxxopts::value<std::string>(), "FILENAME")
         ("csv-random", "Whether to choose lines in random order from the csv file", cxxopts::value<bool>()->default_value("true"), "true/false")
@@ -308,6 +308,147 @@ int main(int argc, char *argv[])
         experimentHelper.constructSystem<XCS>(env.availableActions(), params);
 
         RunExperiment(experimentHelper, parsedOptions["iter"].as<std::uint64_t>(), parsedOptions["condense-iter"].as<std::uint64_t>());
+    }
+    else if (parsedOptions.count("blc"))
+    {
+        // Block world problem
+        const auto & trainEnv = experimentHelper.constructTrainEnv<BlockWorldEnvironment>(parsedOptions["blc"].as<std::string>(), parsedOptions["max-step"].as<uint64_t>(), parsedOptions["blc-3bit"].as<bool>(), parsedOptions["blc-diag"].as<bool>());
+        const auto & testEnv = experimentHelper.constructTestEnv<BlockWorldEnvironment>(parsedOptions["blc"].as<std::string>(), parsedOptions["max-step"].as<uint64_t>(), parsedOptions["blc-3bit"].as<bool>(), parsedOptions["blc-diag"].as<bool>());
+
+        auto & xcs = experimentHelper.constructSystem<XCS>(trainEnv.availableActions(), params);
+
+        // Prepare trace output
+        std::ofstream traceLogStream;
+        bool outputTraceLog = !parsedOptions["blc-output-trace"].as<std::string>().empty();
+        if (outputTraceLog)
+        {
+            traceLogStream.open(parsedOptions["blc-output-trace"].as<std::string>());
+        }
+        experimentHelper.setTrainCallback([outputTraceLog, &traceLogStream, &env = trainEnv]() {
+            if (outputTraceLog)
+            {
+                if (env.lastStep() <= 1)
+                {
+                    traceLogStream << "(" << env.lastInitialX() << "," << env.lastInitialY() << ")";
+                }
+                traceLogStream << "(" << env.lastX() << "," << env.lastY() << ")";
+                if (env.isEndOfProblem())
+                {
+                    traceLogStream << " Explore" << std::endl;
+                }
+            }
+        });
+        experimentHelper.setTestCallback([outputTraceLog, &traceLogStream, &env = testEnv]() {
+            if (outputTraceLog)
+            {
+                if (env.lastStep() <= 1)
+                {
+                    traceLogStream << "(" << env.lastInitialX() << "," << env.lastInitialY() << ")";
+                }
+                traceLogStream << "(" << env.lastX() << "," << env.lastY() << ")";
+                if (env.isEndOfProblem())
+                {
+                    traceLogStream << " Exploit" << std::endl;
+                }
+            }
+        });
+
+        RunExperiment(experimentHelper, parsedOptions["iter"].as<std::uint64_t>(), parsedOptions["condense-iter"].as<std::uint64_t>());
+
+        // Output best action map
+        if (!parsedOptions["blc-output-best"].as<std::string>().empty())
+        {
+            std::ofstream ofs(parsedOptions["blc-output-best"].as<std::string>());
+
+            bool useUnicode = parsedOptions["blc-output-best-uni"].as<bool>();
+
+            for (int y = 0; y < testEnv.worldHeight(); ++y)
+            {
+                for (int x = 0; x < testEnv.worldWidth(); ++x)
+                {
+                    if (testEnv.isEmpty(x, y))
+                    {
+                        // Output the selected action
+                        auto situation = testEnv.situation(x, y);
+                        int action = xcs.exploit(situation);
+                        if (useUnicode)
+                        {
+                            switch (action)
+                            {
+                            case 0:
+                                ofs << u8"↑";
+                                break;
+
+                            case 1:
+                                ofs << u8"↗";
+                                break;
+
+                            case 2:
+                                ofs << u8"→";
+                                break;
+
+                            case 3:
+                                ofs << u8"↘";
+                                break;
+
+                            case 4:
+                                ofs << u8"↓";
+                                break;
+
+                            case 5:
+                                ofs << u8"↙";
+                                break;
+
+                            case 6:
+                                ofs << u8"←";
+                                break;
+
+                            case 7:
+                                ofs << u8"↖";
+                                break;
+
+                            default:
+                                ofs << u8"？";
+                            }
+                        }
+                        else
+                        {
+                            ofs << action;
+                        }
+                    }
+                    else
+                    {
+                        // Obstacle or Food
+                        const char c = testEnv.getBlockChar(x, y);
+                        if (useUnicode)
+                        {
+                            switch (c)
+                            {
+                            case 'Q':
+                                ofs << u8"◆";
+                                break;
+
+                            case 'F':
+                                ofs << u8"Ｆ";
+                                break;
+
+                            case 'G':
+                                ofs << u8"Ｇ";
+                                break;
+
+                            default:
+                                ofs << u8"■";
+                            }
+                        }
+                        else
+                        {
+                            ofs << c;
+                        }
+                    }
+                }
+                ofs << std::endl;
+            }
+        }
     }
     else if (parsedOptions.count("csv"))
     {
