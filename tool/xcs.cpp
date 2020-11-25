@@ -292,7 +292,7 @@ int main(int argc, char *argv[])
     if (parsedOptions.count("mux"))
     {
         // Multiplexer problem
-        const auto & env = experimentHelper.constructTrainEnv<MultiplexerEnvironment>(parsedOptions["mux"].as<int>());
+        const auto & env = experimentHelper.constructTrainEnv<MultiplexerEnvironment>(parsedOptions["mux"].as<int>(), parsedOptions["mux-i"].as<unsigned int>());
         experimentHelper.constructTestEnv<MultiplexerEnvironment>(parsedOptions["mux"].as<int>());
 
         experimentHelper.constructSystem<XCS>(env.availableActions(), params);
