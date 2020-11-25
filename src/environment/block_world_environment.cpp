@@ -80,6 +80,11 @@ namespace xcspp
         , m_threeBitMode(threeBitMode)
     {
         std::ifstream ifs(mapFilename);
+        if (!ifs.good())
+        {
+            throw std::runtime_error("BlockWorldEnvironment::BlockWorldEnvironment: Failed to open the file '" + mapFilename + "'.");
+        }
+
         std::string line;
         while (std::getline(ifs, line))
         {
