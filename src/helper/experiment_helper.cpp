@@ -71,7 +71,7 @@ namespace xcspp
                 // Run callback if needed
                 if (m_trainCallback != nullptr)
                 {
-                    m_trainCallback(*m_trainEnvironment);
+                    m_trainCallback();
                 }
             } while (!m_trainEnvironment->isEndOfProblem());
         }
@@ -112,7 +112,7 @@ namespace xcspp
                     // Run callback if needed
                     if (m_testCallback != nullptr)
                     {
-                        m_testCallback(*m_testEnvironment);
+                        m_testCallback();
                     }
                 } while (!m_testEnvironment->isEndOfProblem());
 
@@ -157,12 +157,12 @@ namespace xcspp
         }
     }
 
-    void ExperimentHelper::setTrainCallback(std::function<void(IEnvironment &)> callback)
+    void ExperimentHelper::setTrainCallback(std::function<void()> callback)
     {
         m_trainCallback = callback;
     }
 
-    void ExperimentHelper::setTestCallback(std::function<void(IEnvironment &)> callback)
+    void ExperimentHelper::setTestCallback(std::function<void()> callback)
     {
         m_testCallback = callback;
     }

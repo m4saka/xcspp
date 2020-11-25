@@ -20,8 +20,8 @@ namespace xcspp
         std::unique_ptr<IClassifierSystem> m_system;
         std::unique_ptr<IEnvironment> m_trainEnvironment;
         std::unique_ptr<IEnvironment> m_testEnvironment;
-        std::function<void(IEnvironment &)> m_trainCallback;
-        std::function<void(IEnvironment &)> m_testCallback;
+        std::function<void()> m_trainCallback;
+        std::function<void()> m_testCallback;
         std::ofstream m_summaryLogStream;
         bool m_outputSummaryLogFile;
         SMAExperimentLogStream m_rewardLogStream;
@@ -56,9 +56,9 @@ namespace xcspp
         template <class Environment, class... Args>
         Environment & constructTestEnv(Args && ... args);
 
-        void setTrainCallback(std::function<void(IEnvironment &)> callback);
+        void setTrainCallback(std::function<void()> callback);
 
-        void setTestCallback(std::function<void(IEnvironment &)> callback);
+        void setTestCallback(std::function<void()> callback);
 
         void runIteration(std::size_t repeat = 1);
 
