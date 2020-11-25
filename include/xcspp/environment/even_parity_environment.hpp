@@ -1,78 +1,46 @@
 #pragma once
-
 #include <vector>
-#include <cstddef>
-#include <cassert>
+#include <cstddef> // std::size_t
 
-#include "environment.hpp"
-#include "../random.hpp"
+#include "ienvironment.hpp"
+#include "xcspp/util/random.hpp"
 
-namespace xxr
+namespace xcspp
 {
 
-    class EvenParityEnvironment final : public AbstractEnvironment<bool, bool>
+    class EvenParityEnvironment : public IEnvironment
     {
     private:
         const std::size_t m_length;
-        std::vector<bool> m_situation;
+        std::vector<int> m_situation;
         bool m_isEndOfProblem;
-
-        static std::vector<bool> randomSituation(std::size_t length)
-        {
-            std::vector<bool> situation;
-            situation.reserve(length);
-            for (std::size_t i = 0; i < length; ++i)
-            {
-                situation.push_back(Random::nextInt(0, 1));
-            }
-            return situation;
-        }
+        Random m_random;
 
     public:
         // Constructor
-        explicit EvenParityEnvironment(std::size_t length)
-            : AbstractEnvironment<bool, bool>({ false, true })
-            , m_length(length)
-            , m_situation(randomSituation(length))
-            , m_isEndOfProblem(false)
-        {
-        }
+        explicit EvenParityEnvironment(std::size_t length);
 
+        // Destructor
         virtual ~EvenParityEnvironment() = default;
 
-        virtual std::vector<bool> situation() const override
+        // Returns current situation
+        virtual std::vector<int> situation() const override;
+
+        // Executes action (and update situation), and returns reward
+        virtual double executeAction(int action) override;
+
+        // Returns true if the problem was solved by the previous action
+        // (Since it is a single-step problem, this function always returns true after the first action execution)
+        virtual bool isEndOfProblem() const override;
+
+        // Returns available action choices
+        virtual std::unordered_set<int> availableActions() const override
         {
-            return m_situation;
-        }
-
-        virtual double executeAction(bool action) override
-        {
-            double reward = (action == getAnswer()) ? 1000.0 : 0.0;
-
-            // Update situation
-            m_situation = randomSituation(m_length);
-
-            // Single-step problem
-            m_isEndOfProblem = true;
-
-            return reward;
-        }
-
-        virtual bool isEndOfProblem() const override
-        {
-            return m_isEndOfProblem;
+            return { 0, 1 };
         }
 
         // Returns answer to situation
-        bool getAnswer() const
-        {
-            int sum = 0;
-            for (bool b : m_situation)
-            {
-                sum += static_cast<int>(b);
-            }
-            return (sum % 2) == 0; // even => 1, odd => 0
-        }
+        int getAnswer() const;
     };
 
 }
