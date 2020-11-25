@@ -29,7 +29,7 @@ void AddOptions(cxxopts::Options & options)
         ("cinput-init", "Whether to initialize p/epsilon/F/exp/ts/as to defaults", cxxopts::value<bool>()->default_value("false"), "true/false")
         ("m,mux", "Use the multiplexer problem", cxxopts::value<int>(), "LENGTH")
         ("mux-i", "Class imbalance level i of the multiplexer problem (used only in train iterations)", cxxopts::value<unsigned int>()->default_value("0"), "LEVEL")
-        //("parity", "Use the even-parity problem", cxxopts::value<int>(), "LENGTH")
+        ("parity", "Use the even-parity problem", cxxopts::value<int>(), "LENGTH")
         ("majority", "Use the majority-on problem", cxxopts::value<int>(), "LENGTH")
         ("blc", "Use the block world problem", cxxopts::value<std::string>(), "FILENAME")
         ("blc-3bit", "Use 3-bit representation for each block in a situation", cxxopts::value<bool>()->default_value("false"), "true/false")
@@ -294,6 +294,16 @@ int main(int argc, char *argv[])
         // Multiplexer problem
         const auto & env = experimentHelper.constructTrainEnv<MultiplexerEnvironment>(parsedOptions["mux"].as<int>(), parsedOptions["mux-i"].as<unsigned int>());
         experimentHelper.constructTestEnv<MultiplexerEnvironment>(parsedOptions["mux"].as<int>());
+
+        experimentHelper.constructSystem<XCS>(env.availableActions(), params);
+
+        RunExperiment(experimentHelper, parsedOptions["iter"].as<std::uint64_t>(), parsedOptions["condense-iter"].as<std::uint64_t>());
+    }
+    else if (parsedOptions.count("parity"))
+    {
+        // Even-parity problem
+        const auto & env = experimentHelper.constructTrainEnv<EvenParityEnvironment>(parsedOptions["parity"].as<int>());
+        experimentHelper.constructTestEnv<EvenParityEnvironment>(parsedOptions["parity"].as<int>());
 
         experimentHelper.constructSystem<XCS>(env.availableActions(), params);
 
