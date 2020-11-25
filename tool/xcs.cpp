@@ -30,7 +30,7 @@ void AddOptions(cxxopts::Options & options)
         ("m,mux", "Use the multiplexer problem", cxxopts::value<int>(), "LENGTH")
         ("mux-i", "Class imbalance level i of the multiplexer problem (used only in train iterations)", cxxopts::value<unsigned int>()->default_value("0"), "LEVEL")
         //("parity", "Use the even-parity problem", cxxopts::value<int>(), "LENGTH")
-        //("majority", "Use the majority-on problem", cxxopts::value<int>(), "LENGTH")
+        ("majority", "Use the majority-on problem", cxxopts::value<int>(), "LENGTH")
         //("blc", "Use the block world problem", cxxopts::value<std::string>(), "FILENAME")
         //("blc-3bit", "Use 3-bit representation for each block in a situation", cxxopts::value<bool>()->default_value("false"), "true/false")
         //("blc-diag", "Allow diagonal actions in the block world problem", cxxopts::value<bool>()->default_value("true"), "true/false")
@@ -296,6 +296,18 @@ int main(int argc, char *argv[])
         experimentHelper.constructTestEnv<MultiplexerEnvironment>(parsedOptions["mux"].as<int>());
 
         experimentHelper.constructSystem<XCS>(env.availableActions(), params);
+
+        RunExperiment(experimentHelper, parsedOptions["iter"].as<std::uint64_t>(), parsedOptions["condense-iter"].as<std::uint64_t>());
+    }
+    else if (parsedOptions.count("majority"))
+    {
+        // Majority-on problem
+        const auto & env = experimentHelper.constructTrainEnv<MajorityOnEnvironment>(parsedOptions["majority"].as<int>());
+        experimentHelper.constructTestEnv<MajorityOnEnvironment>(parsedOptions["majority"].as<int>());
+
+        experimentHelper.constructSystem<XCS>(env.availableActions(), params);
+
+        RunExperiment(experimentHelper, parsedOptions["iter"].as<std::uint64_t>(), parsedOptions["condense-iter"].as<std::uint64_t>());
     }
     else if (parsedOptions.count("csv"))
     {
@@ -307,14 +319,14 @@ int main(int argc, char *argv[])
         experimentHelper.constructTestEnv<DatasetEnvironment>(CSV::ReadDatasetFromFile(testFilename), parsedOptions["csv-random"].as<bool>());
 
         experimentHelper.constructSystem<XCS>(env.availableActions(), params);
+
+        RunExperiment(experimentHelper, parsedOptions["iter"].as<std::uint64_t>(), parsedOptions["condense-iter"].as<std::uint64_t>());
     }
     else
     {
         std::cout << options.help({"", "Group"}) << std::endl;
         std::exit(parsedOptions.count("help") ? 0 : 1);
     }
-
-    RunExperiment(experimentHelper, parsedOptions["iter"].as<std::uint64_t>(), parsedOptions["condense-iter"].as<std::uint64_t>());
 
     OutputPopulation(experimentHelper, settings.outputFilenamePrefix + parsedOptions["coutput"].as<std::string>());
 
