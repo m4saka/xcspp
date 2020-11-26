@@ -2,6 +2,7 @@
 #include <memory>
 #include <cstdint> // std::uint64_t
 
+#include "xcsr_repr.hpp"
 #include "xcspp/util/random.hpp"
 
 namespace xcspp::xcsr
@@ -147,13 +148,7 @@ namespace xcspp::xcsr
         double m = 0.1;
 
         // XCSR representation
-        enum class Repr
-        {
-            kCSR, // Center-Spread Representation   [  c - s   ,  c + s   )
-            kOBR, // Ordered-Bound Representation   [    l     ,    u     )
-            kUBR, // Unordered-Bound Representation [ min(p,q) , max(p,q) )
-        };
-        Repr repr = Repr::kCSR;
+        XCSRRepr repr = XCSRRepr::kCSR;
 
         // The maximum/minimum value of a classifier symbol value
         double minValue = 0.0;
