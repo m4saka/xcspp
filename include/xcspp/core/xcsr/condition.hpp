@@ -20,7 +20,7 @@ namespace xcspp::xcsr
 
         Condition(const std::vector<Symbol> & symbols);
 
-        Condition(const std::vector<int> & symbols);
+        Condition(const std::vector<double> & symbols);
 
         explicit Condition(const std::string & symbols);
 
@@ -30,7 +30,7 @@ namespace xcspp::xcsr
         std::string toString() const;
 
         // DOES MATCH
-        bool matches(const std::vector<int> & situation) const;
+        bool matches(const std::vector<double> & situation, XCSRRepr repr) const;
 
         // IS MORE GENERAL
         bool isMoreGeneral(const Condition & cl) const;

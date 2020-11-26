@@ -8,7 +8,7 @@ namespace xcspp::xcsr
 
     Condition::Condition(const std::vector<Symbol> & symbols) : m_symbols(symbols) {}
 
-    Condition::Condition(const std::vector<int> & symbols) : m_symbols(symbols.begin(), symbols.end()) {}
+    Condition::Condition(const std::vector<double> & symbols) : m_symbols(symbols.begin(), symbols.end()) {}
 
     Condition::Condition(const std::string & symbols)
     {
@@ -45,7 +45,7 @@ namespace xcspp::xcsr
     }
 
     // DOES MATCH
-    bool Condition::matches(const std::vector<int> & situation) const
+    bool Condition::matches(const std::vector<double> & situation, XCSRRepr repr) const
     {
         if (m_symbols.size() != situation.size())
         {
@@ -54,7 +54,7 @@ namespace xcspp::xcsr
 
         for (std::size_t i = 0; i < m_symbols.size(); ++i)
         {
-            if (!m_symbols[i].matches(situation[i]))
+            if (!m_symbols[i].matches(situation[i], repr))
             {
                 return false;
             }
