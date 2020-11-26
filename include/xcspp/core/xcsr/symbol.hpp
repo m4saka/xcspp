@@ -4,27 +4,28 @@
 #include <vector>
 #include <stdexcept>
 
+#include "xcsr_repr.hpp"
+
 namespace xcspp::xcsr
 {
 
-    // The standard symbol for XCS (integer or "#" = "Don't Care")
+    // The symbol for XCSR
     class Symbol
     {
-    private:
-        int m_value;
-        bool m_isDontCare;
-
     public:
+        // 1st attribute (e.g., c for CSR)
+        double v1;
+
+        // 2nd attribute (e.g., s for CSR)
+        double v2;
+
         // Constructor (default)
-        Symbol();
+        Symbol() = default;
 
         // Constructor (with integer)
-        explicit Symbol(int value);
+        Symbol(double v1, double v2);
 
-        // Constructor (with character '0'-'9' or '#')
-        explicit Symbol(char c);
-
-        // Constructor (with integer string or "#")
+        // Constructor (with ';'-separated string; e.g., '0.2;0.1')
         explicit Symbol(const std::string & str);
 
         // Constructor (copy)
@@ -39,19 +40,7 @@ namespace xcspp::xcsr
         std::string toString() const;
 
         // DOES MATCH
-        bool matches(int value) const;
-
-        // Returns integer value
-        // (make sure to confirm "isDontCare() == false" before calling this)
-        int value() const;
-
-        // Set to integer value
-        void setValue(int value);
-
-        // Returns whether the symbol is "#" (Don't Care) or not
-        bool isDontCare() const;
-
-        void setToDontCare();
+        bool matches(double value, XCSRRepr repr) const;
 
         friend std::ostream & operator<< (std::ostream & os, const Symbol & obj);
 
