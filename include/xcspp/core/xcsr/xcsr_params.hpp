@@ -88,10 +88,7 @@ namespace xcspp::xcsr
         //   (set "0" to use the roulette-wheel selection)
         double tau = 0.4;
 
-        // P_sharp
-        //   The probability of using a don't care symbol in an allele when covering
-        //   Recommended: it depends on the problem to solve
-        double dontCareProbability = 1.0;
+        // Note: XCSR does not have P_sharp parameter
 
         // p_I
         //   The initial prediction value when generating a new classifier
@@ -138,6 +135,44 @@ namespace xcspp::xcsr
         //   Whether to use the moyenne adaptive modifee (MAM) for updating the
         //   prediction and the prediction error of classifiers
         bool useMAM = true;
+
+        // ========== XCSR parameters from here ==========
+
+        // s_0
+        //   The maximum value of a spread in the covering operator
+        double s0 = 0.25;
+
+        // m
+        //   The maximum change of a spread value or a center value in the mutation
+        double m = 0.1;
+
+        // XCSR representation
+        enum class Repr
+        {
+            kCSR, // Center-Spread Representation   [  c - s   ,  c + s   )
+            kOBR, // Ordered-Bound Representation   [    l     ,    u     )
+            kUBR, // Unordered-Bound Representation [ min(p,q) , max(p,q) )
+        };
+        Repr repr = Repr::kCSR;
+
+        // The maximum/minimum value of a classifier symbol value
+        double minValue = 0.0;
+        double maxValue = 1.0;
+
+        // doRangeRestriction (ignored when repr=CSR)
+        //   Whether to restrict the range of the condition to the interval
+        //   [min-value, max-value)
+        bool doRangeRestriction = true;
+
+        // doCoveringRandomRangeTruncation (ignored when repr=CSR)
+        //   Whether to truncate the covering random range before generating random
+        //   intervals if the interval [x-s_0, x+s_0) is not contained in
+        //   [min-value, max-value).
+        //   "false" is common for this option, but the covering operator can
+        //   generate too many maximum-range intervals if s_0 is larger than
+        //   (max-value - min-value) / 2.
+        //   Choose "true" to avoid the random bias in this situation.
+        bool doCoveringRandomRangeTruncation = false;
     };
 
 }
