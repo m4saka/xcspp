@@ -36,7 +36,7 @@ namespace xcspp::xcsr
 
     bool operator== (const Symbol & lhs, const Symbol & rhs)
     {
-        return lhs.isDontCare() == rhs.isDontCare() && (lhs.isDontCare() || lhs.value() == rhs.value());
+        return lhs.v1 == rhs.v1 && lhs.v2 == rhs.v2;
     }
 
     bool operator!= (const Symbol & lhs, const Symbol & rhs)
