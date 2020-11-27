@@ -33,13 +33,11 @@ namespace xcspp::xcsr
         bool matches(const std::vector<double> & situation, XCSRRepr repr) const;
 
         // IS MORE GENERAL
-        bool isMoreGeneral(const Condition & cl) const;
-
-        std::size_t dontCareCount() const;
+        bool isMoreGeneral(const Condition & cl, XCSRRepr repr) const;
 
         friend std::ostream & operator<< (std::ostream & os, const Condition & obj);
 
-        // --- The functions below are just the wrapper for std::vector<Symbol> ---
+        // --- The functions below are just wrappers for std::vector<Symbol> ---
 
         auto empty() const noexcept
         {

@@ -28,7 +28,7 @@ namespace xcspp::xcsr
     std::string Condition::toString() const
     {
         std::string str;
-        str.reserve(m_symbols.size() * 2);
+        str.reserve(m_symbols.size() * 7); // 'x.x;y.y': 7 chars (minimum length)
         for (const auto & symbol : m_symbols)
         {
             str += symbol.toString();
@@ -63,45 +63,39 @@ namespace xcspp::xcsr
         return true;
     }
 
-    bool Condition::isMoreGeneral(const Condition & cond) const
+    bool Condition::isMoreGeneral(const Condition & cond, XCSRRepr repr) const
     {
         if (m_symbols.size() != cond.size())
         {
             throw std::invalid_argument("In Condition::isMoreGeneral(), both conditions must have the same length.");
         }
 
-        bool ret = false;
+        std::size_t equalCount = 0;
 
         for (std::size_t i = 0; i < m_symbols.size(); ++i)
         {
-            if (m_symbols[i] != cond[i])
+            const double otherL = GetLowerBound(cond[i], repr);
+            const double otherU = GetUpperBound(cond[i], repr);
+            const double selfL = GetLowerBound(m_symbols[i], repr);
+            const double selfU = GetUpperBound(m_symbols[i], repr);
+
+            if (otherL < selfL || selfU < otherU)
             {
-                if (m_symbols[i].isDontCare())
-                {
-                    ret = true;
-                }
-                else 
-                {
-                    return false;
-                }
+                return false;
+            }
+
+            if (otherL == selfL && selfU == otherU)
+            {
+                ++equalCount;
             }
         }
 
-        return ret;
-    }
-
-    std::size_t Condition::dontCareCount() const
-    {
-        std::size_t count = 0;
-        for (const auto & symbol : m_symbols)
+        if (equalCount == m_symbols.size())
         {
-            if (symbol.isDontCare())
-            {
-                count++;
-            }
+            return false;
         }
 
-        return count;
+        return true;
     }
 
     std::ostream & operator<< (std::ostream & os, const Condition & obj)
