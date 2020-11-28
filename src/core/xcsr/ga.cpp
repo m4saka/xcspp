@@ -58,7 +58,12 @@ namespace xcspp::xcsr
             {
                 if (random.nextDouble() < 0.5)
                 {
-                    std::swap(cl1.condition[i], cl2.condition[i]);
+                    std::swap(cl1.condition[i].v1, cl2.condition[i].v1);
+                    isChanged = true;
+                }
+                if (random.nextDouble() < 0.5)
+                {
+                    std::swap(cl1.condition[i].v2, cl2.condition[i].v2);
                     isChanged = true;
                 }
             }
@@ -76,9 +81,16 @@ namespace xcspp::xcsr
             std::size_t x = random.nextInt<std::size_t>(0, cl1.condition.size());
 
             bool isChanged = false;
-            for (std::size_t i = x + 1; i < cl1.condition.size(); ++i)
+            for (std::size_t i = x + 1; i < cl1.condition.size() * 2; ++i)
             {
-                std::swap(cl1.condition[i], cl2.condition[i]);
+                if (i % 2 == 0)
+                {
+                    std::swap(cl1.condition[i / 2].v1, cl2.condition[i / 2].v1);
+                }
+                else
+                {
+                    std::swap(cl1.condition[i / 2].v2, cl2.condition[i / 2].v2);
+                }
                 isChanged = true;
             }
             return isChanged;
@@ -103,7 +115,14 @@ namespace xcspp::xcsr
             bool isChanged = false;
             for (std::size_t i = x + 1; i < y; ++i)
             {
-                std::swap(cl1.condition[i], cl2.condition[i]);
+                if (i % 2 == 0)
+                {
+                    std::swap(cl1.condition[i / 2].v1, cl2.condition[i / 2].v1);
+                }
+                else
+                {
+                    std::swap(cl1.condition[i / 2].v2, cl2.condition[i / 2].v2);
+                }
                 isChanged = true;
             }
             return isChanged;
@@ -129,29 +148,31 @@ namespace xcspp::xcsr
         }
 
         // APPLY MUTATION
-        void mutate(Classifier & cl, const std::vector<double> & situation, const std::unordered_set<int> & availableActions, double mu, bool doActionMutation, Random & random)
+        void mutate(Classifier & cl, const std::vector<double> & situation, const std::unordered_set<int> & availableActions, const XCSRParams *pParams, Random & random)
         {
             if (cl.condition.size() != situation.size())
             {
                 std::invalid_argument("GA::mutate() could not process the situation with a different length.");
             }
 
-            for (std::size_t i = 0; i < cl.condition.size(); ++i)
+            for (auto & symbol : cl.condition)
             {
-                if (random.nextDouble() < mu)
+                if (random.nextDouble() < pParams->mu)
                 {
-                    if (cl.condition[i].isDontCare())
+                    if (random.nextDouble() < 0.5)
                     {
-                        cl.condition[i] = Symbol(situation.at(i));
+                        symbol.v1 += random.nextDouble(-pParams->m, pParams->m);
+                        symbol.v1 = ClampSymbolValue1(symbol.v1, pParams->repr, pParams->minValue, pParams->maxValue);
                     }
                     else
                     {
-                        cl.condition[i].setToDontCare();
+                        symbol.v2 += random.nextDouble(-pParams->m, pParams->m);
+                        symbol.v2 = ClampSymbolValue2(symbol.v2, pParams->repr, pParams->minValue, pParams->maxValue);
                     }
                 }
             }
 
-            if (doActionMutation && (random.nextDouble() < mu) && (availableActions.size() >= 2))
+            if (pParams->doActionMutation && (random.nextDouble() < pParams->mu) && (availableActions.size() >= 2))
             {
                 std::unordered_set<int> otherPossibleActions(availableActions);
                 otherPossibleActions.erase(cl.action);
@@ -243,8 +264,8 @@ namespace xcspp::xcsr
                 isChangedByCrossover = false;
             }
 
-            mutate(child1, situation, availableActions, pParams->mu, pParams->doActionMutation, random);
-            mutate(child2, situation, availableActions, pParams->mu, pParams->doActionMutation, random);
+            mutate(child1, situation, availableActions, pParams, random);
+            mutate(child2, situation, availableActions, pParams, random);
 
             if (isChangedByCrossover)
             {

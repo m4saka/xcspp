@@ -18,4 +18,8 @@ namespace xcspp::xcsr
 
     double GetUpperBound(const Symbol & s, XCSRRepr repr);
 
+    double ClampSymbolValue1(double v1, XCSRRepr repr, double minValue, double maxValue);
+
+    double ClampSymbolValue2(double v2, XCSRRepr repr, double minValue, double maxValue);
+
 }
