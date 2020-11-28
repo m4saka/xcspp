@@ -146,7 +146,7 @@ namespace xcspp::xcsr
             MatchSet matchSet(&m_params, m_availableActions);
             for (const auto & cl : m_population)
             {
-                if (cl->condition.matches(situation))
+                if (cl->condition.matches(situation, m_params.repr))
                 {
                     matchSet.insert(cl);
                 }
@@ -198,7 +198,7 @@ namespace xcspp::xcsr
         std::vector<Classifier> classifiers;
         for (const auto & cl : m_population)
         {
-            if (cl->condition.matches(situation))
+            if (cl->condition.matches(situation, m_params.repr))
             {
                 classifiers.emplace_back(*cl);
             }
