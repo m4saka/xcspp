@@ -59,7 +59,7 @@ namespace xcspp::xcsr
     {
     }
 
-    Classifier::Classifier(const std::vector<int> & situation, int action, double prediction, double epsilon, double fitness, std::uint64_t timeStamp)
+    Classifier::Classifier(const std::vector<double> & situation, int action, double prediction, double epsilon, double fitness, std::uint64_t timeStamp)
         : Classifier(Condition(situation), action, prediction, epsilon, fitness, timeStamp)
     {
     }
@@ -105,7 +105,7 @@ namespace xcspp::xcsr
     {
     }
 
-    StoredClassifier::StoredClassifier(const std::vector<int> & situation, int action, std::uint64_t timeStamp, const XCSRParams *pParams)
+    StoredClassifier::StoredClassifier(const std::vector<double> & situation, int action, std::uint64_t timeStamp, const XCSRParams *pParams)
         : Classifier(situation, action, pParams->initialPrediction, pParams->initialEpsilon, pParams->initialFitness, timeStamp)
         , m_pParams(pParams)
     {
@@ -126,7 +126,7 @@ namespace xcspp::xcsr
     // DOES SUBSUME
     bool StoredClassifier::subsumes(const Classifier & cl) const
     {
-        return action == cl.action && isSubsumer() && condition.isMoreGeneral(cl.condition);
+        return action == cl.action && isSubsumer() && condition.isMoreGeneral(cl.condition, m_pParams->repr);
     }
 
     double StoredClassifier::accuracy() const

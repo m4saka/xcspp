@@ -81,7 +81,7 @@ namespace xcspp::xcsr
 
         Classifier(ConditionActionPair && conditionActionPair, double prediction, double epsilon, double fitness, std::uint64_t timeStamp);
 
-        Classifier(const std::vector<int> & situation, int action, double prediction, double epsilon, double fitness, std::uint64_t timeStamp);
+        Classifier(const std::vector<double> & situation, int action, double prediction, double epsilon, double fitness, std::uint64_t timeStamp);
 
         Classifier(const std::string & condition, int action, double prediction, double epsilon, double fitness, std::uint64_t timeStamp);
 
@@ -110,7 +110,7 @@ namespace xcspp::xcsr
 
         StoredClassifier(ConditionActionPair && conditionActionPair, std::uint64_t timeStamp, const XCSRParams *pParams);
 
-        StoredClassifier(const std::vector<int> & situation, int action, std::uint64_t timeStamp, const XCSRParams *pParams);
+        StoredClassifier(const std::vector<double> & situation, int action, std::uint64_t timeStamp, const XCSRParams *pParams);
 
         StoredClassifier(const std::string & condition, int action, std::uint64_t timeStamp, const XCSRParams *pParams);
 
