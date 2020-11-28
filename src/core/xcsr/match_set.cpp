@@ -15,18 +15,13 @@ namespace xcspp::xcsr
             const XCSRParams *pParams,
             Random & random)
         {
-            const auto cl = std::make_shared<StoredClassifier>(situation, random.chooseFrom(unselectedActions), timeStamp, pParams);
-
-            // Set to "#" (don't care) at random
-            for (auto & symbol : cl->condition)
+            std::vector<Symbol> symbols;
+            for (const auto & s : situation)
             {
-                if (random.nextDouble() < pParams->dontCareProbability)
-                {
-                    symbol.setToDontCare();
-                }
+                symbols.push_back(MakeCoveringSymbol(s, pParams, random));
             }
 
-            return cl;
+            return std::make_shared<StoredClassifier>(symbols, random.chooseFrom(unselectedActions), timeStamp, pParams);
         }
     }
 
@@ -51,7 +46,7 @@ namespace xcspp::xcsr
         {
             for (const auto & cl : population)
             {
-                if (cl->condition.matches(situation))
+                if (cl->condition.matches(situation, m_pParams->repr))
                 {
                     m_set.insert(cl);
                     unselectedActions.erase(cl->action);
@@ -64,7 +59,7 @@ namespace xcspp::xcsr
                 const auto coveringClassifier = GenerateCoveringClassifier(situation, unselectedActions, timeStamp, m_pParams, random);
 
                 // Make sure the generated covering classifier covers the given input
-                if (!coveringClassifier->condition.matches(situation))
+                if (!coveringClassifier->condition.matches(situation, m_pParams->repr))
                 {
                     std::ostringstream oss;
                     oss <<
