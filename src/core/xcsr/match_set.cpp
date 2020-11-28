@@ -9,7 +9,7 @@ namespace xcspp::xcsr
     {
         // GENERATE COVERING CLASSIFIER
         ClassifierPtr GenerateCoveringClassifier(
-            const std::vector<int> & situation,
+            const std::vector<double> & situation,
             const std::unordered_set<int> & unselectedActions,
             std::uint64_t timeStamp,
             const XCSRParams *pParams,
@@ -30,7 +30,7 @@ namespace xcspp::xcsr
         }
     }
 
-    MatchSet::MatchSet(Population & population, const std::vector<int> & situation, std::uint64_t timeStamp, const XCSRParams *pParams, const std::unordered_set<int> & availableActions, Random & random)
+    MatchSet::MatchSet(Population & population, const std::vector<double> & situation, std::uint64_t timeStamp, const XCSRParams *pParams, const std::unordered_set<int> & availableActions, Random & random)
         : ClassifierPtrSet(pParams, availableActions)
         , m_isCoveringPerformed(false)
     {
@@ -38,7 +38,7 @@ namespace xcspp::xcsr
     }
 
     // GENERATE MATCH SET
-    void MatchSet::generateSet(Population & population, const std::vector<int> & situation, std::uint64_t timeStamp, Random & random)
+    void MatchSet::generateSet(Population & population, const std::vector<double> & situation, std::uint64_t timeStamp, Random & random)
     {
         // Set theta_mna (the minimal number of actions) to the number of action choices if theta_mna is 0
         auto thetaMna = (m_pParams->thetaMna == 0) ? m_availableActions.size() : m_pParams->thetaMna;

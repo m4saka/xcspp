@@ -129,7 +129,7 @@ namespace xcspp::xcsr
         }
 
         // APPLY MUTATION
-        void mutate(Classifier & cl, const std::vector<int> & situation, const std::unordered_set<int> & availableActions, double mu, bool doActionMutation, Random & random)
+        void mutate(Classifier & cl, const std::vector<double> & situation, const std::unordered_set<int> & availableActions, double mu, bool doActionMutation, Random & random)
         {
             if (cl.condition.size() != situation.size())
             {
@@ -217,7 +217,7 @@ namespace xcspp::xcsr
     namespace GA
     {
         // RUN GA (refer to ActionSet::runGA() for the former part)
-        void Run(ClassifierPtrSet & actionSet, const std::vector<int> & situation, Population & population, const std::unordered_set<int> & availableActions, const XCSRParams *pParams, Random & random)
+        void Run(ClassifierPtrSet & actionSet, const std::vector<double> & situation, Population & population, const std::unordered_set<int> & availableActions, const XCSRParams *pParams, Random & random)
         {
             const ClassifierPtr parent1 = SelectOffspring(actionSet, pParams->tau, random);
             const ClassifierPtr parent2 = SelectOffspring(actionSet, pParams->tau, random);

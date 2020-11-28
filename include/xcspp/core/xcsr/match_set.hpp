@@ -18,13 +18,13 @@ namespace xcspp::xcsr
         // Constructor
         using ClassifierPtrSet::ClassifierPtrSet; // inherits all constructors from ClassifierPtrSet
 
-        MatchSet(Population & population, const std::vector<int> & situation, std::uint64_t timeStamp, const XCSRParams *pParams, const std::unordered_set<int> & availableActions, Random & random);
+        MatchSet(Population & population, const std::vector<double> & situation, std::uint64_t timeStamp, const XCSRParams *pParams, const std::unordered_set<int> & availableActions, Random & random);
 
         // Destructor
         virtual ~MatchSet() = default;
 
         // GENERATE MATCH SET
-        void generateSet(Population & population, const std::vector<int> & situation, std::uint64_t timeStamp, Random & random);
+        void generateSet(Population & population, const std::vector<double> & situation, std::uint64_t timeStamp, Random & random);
 
         // Get if covering is performed in the previous match set generation
         // (Call this function after constructor or generateSet())

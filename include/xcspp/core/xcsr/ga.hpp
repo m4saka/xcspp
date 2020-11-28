@@ -17,7 +17,7 @@ namespace xcspp::xcsr
         // RUN GA (refer to ActionSet::runGA() for the former part)
         void Run(
             ClassifierPtrSet & actionSet,
-            const std::vector<int> & situation,
+            const std::vector<double> & situation,
             Population & population,
             const std::unordered_set<int> & availableActions,
             const XCSRParams *pParams,

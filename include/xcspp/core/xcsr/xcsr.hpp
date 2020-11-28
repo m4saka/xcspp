@@ -65,14 +65,14 @@ namespace xcspp::xcsr
         ~XCSR() = default;
 
         // Run with exploration
-        int explore(const std::vector<int> & situation);
+        int explore(const std::vector<double> & situation);
 
         // Feedback reward to system
         void reward(double value, bool isEndOfProblem = true);
 
         // Run without exploration
         // (Set update to true when testing multi-step problems. If update is true, make sure to call reward() after this.)
-        int exploit(const std::vector<int> & situation, bool update = false);
+        int exploit(const std::vector<double> & situation, bool update = false);
 
         // Get prediction value of the previous action decision
         // (Call this function after explore() or exploit())
@@ -87,7 +87,7 @@ namespace xcspp::xcsr
         bool isCoveringPerformed() const;
 
         // Get all classifiers that match the given situation
-        std::vector<Classifier> getMatchingClassifiers(const std::vector<int> & situation) const;
+        std::vector<Classifier> getMatchingClassifiers(const std::vector<double> & situation) const;
 
         // Get const reference to population
         const Population & population() const;

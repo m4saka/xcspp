@@ -35,7 +35,7 @@ namespace xcspp::xcsr
     {
     }
 
-    int XCSR::explore(const std::vector<int> & situation)
+    int XCSR::explore(const std::vector<double> & situation)
     {
         if (m_expectsReward)
         {
@@ -104,7 +104,7 @@ namespace xcspp::xcsr
         m_expectsReward = false;
     }
 
-    int XCSR::exploit(const std::vector<int> & situation, bool update)
+    int XCSR::exploit(const std::vector<double> & situation, bool update)
     {
         if (update)
         {
@@ -193,7 +193,7 @@ namespace xcspp::xcsr
         return m_isCoveringPerformed;
     }
 
-    std::vector<Classifier> XCSR::getMatchingClassifiers(const std::vector<int> & situation) const
+    std::vector<Classifier> XCSR::getMatchingClassifiers(const std::vector<double> & situation) const
     {
         std::vector<Classifier> classifiers;
         for (const auto & cl : m_population)

@@ -37,7 +37,7 @@ namespace xcspp::xcsr
         void copyTo(ActionSet & dest);
 
         // RUN GA (refer to GA::Run() for the latter part)
-        void runGA(const std::vector<int> & situation, Population & population, std::uint64_t timeStamp, Random & random);
+        void runGA(const std::vector<double> & situation, Population & population, std::uint64_t timeStamp, Random & random);
 
         // UPDATE SET
         void update(double p, Population & population);
