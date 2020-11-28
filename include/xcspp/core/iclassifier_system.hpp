@@ -53,5 +53,6 @@ namespace xcspp
     };
 
     using IClassifierSystem = IBasicClassifierSystem<int>;
+    using IRealClassifierSystem = IBasicClassifierSystem<double>;
 
 }

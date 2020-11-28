@@ -13,7 +13,7 @@
 namespace xcspp::xcsr
 {
 
-    class XCSR : public IClassifierSystem
+    class XCSR : public IRealClassifierSystem
     {
     private:
         // Random utility instance
