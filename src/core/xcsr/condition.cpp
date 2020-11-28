@@ -8,8 +8,6 @@ namespace xcspp::xcsr
 
     Condition::Condition(const std::vector<Symbol> & symbols) : m_symbols(symbols) {}
 
-    Condition::Condition(const std::vector<double> & symbols) : m_symbols(symbols.begin(), symbols.end()) {}
-
     Condition::Condition(const std::string & symbols)
     {
         std::istringstream iss(symbols);

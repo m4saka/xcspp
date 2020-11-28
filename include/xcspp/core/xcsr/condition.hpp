@@ -20,8 +20,6 @@ namespace xcspp::xcsr
 
         Condition(const std::vector<Symbol> & symbols);
 
-        Condition(const std::vector<double> & symbols);
-
         explicit Condition(const std::string & symbols);
 
         // Destructor

@@ -59,11 +59,6 @@ namespace xcspp::xcsr
     {
     }
 
-    Classifier::Classifier(const std::vector<double> & situation, int action, double prediction, double epsilon, double fitness, std::uint64_t timeStamp)
-        : Classifier(Condition(situation), action, prediction, epsilon, fitness, timeStamp)
-    {
-    }
-
     Classifier::Classifier(const std::string & condition, int action, double prediction, double epsilon, double fitness, std::uint64_t timeStamp)
         : Classifier(Condition(condition), action, prediction, epsilon, fitness, timeStamp)
     {
@@ -101,12 +96,6 @@ namespace xcspp::xcsr
 
     StoredClassifier::StoredClassifier(ConditionActionPair && conditionActionPair, std::uint64_t timeStamp, const XCSRParams *pParams)
         : Classifier(std::move(conditionActionPair), pParams->initialPrediction, pParams->initialEpsilon, pParams->initialFitness, timeStamp)
-        , m_pParams(pParams)
-    {
-    }
-
-    StoredClassifier::StoredClassifier(const std::vector<double> & situation, int action, std::uint64_t timeStamp, const XCSRParams *pParams)
-        : Classifier(situation, action, pParams->initialPrediction, pParams->initialEpsilon, pParams->initialFitness, timeStamp)
         , m_pParams(pParams)
     {
     }
