@@ -45,7 +45,7 @@ namespace xcspp::xcsr
         double m_prevReward;
         bool m_isPrevModeExplore;
 
-        std::vector<int> m_prevSituation;
+        std::vector<double> m_prevSituation;
 
         // Prediction value of the previous action decision (just for logging)
         double m_prediction;
