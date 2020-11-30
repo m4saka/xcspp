@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.8)
 project(xcspp LANGUAGES CXX)
 
-file(GLOB_RECURSE sources src/*.cpp)
+file(GLOB_RECURSE sources ${PROJECT_SOURCE_DIR}/src/*.cpp)
 add_library(xcspp STATIC ${sources})
 
 if(MSVC)
@@ -39,7 +39,8 @@ if(XCSPP_BUILD_TEST)
 endif()
 
 if(XCSPP_BUILD_TOOL)
-    add_executable(xcs tool/xcs.cpp)
+    file(GLOB tool_sources ${PROJECT_SOURCE_DIR}/tool/*.cpp)
+    add_executable(xcs ${tool_sources})
     target_compile_features(xcs PRIVATE cxx_std_17)
     if (MSVC)
         target_compile_options(xcs PRIVATE /W4)
