@@ -14,28 +14,9 @@
 
 using namespace xcspp;
 
-void AddOptions(cxxopts::Options & options)
+void AddEnvironmentOptions(cxxopts::Options & options)
 {
-    const XCSParams defaultParams;
-    options
-        .add_options()
-        ("summary-interval", "The iteration interval of summary log output", cxxopts::value<uint64_t>()->default_value("5000"), "COUNT")
-        ("p,prefix", "The filename prefix for log file output", cxxopts::value<std::string>()->default_value(""), "PREFIX")
-        ("S,soutput", "The filename of summary log csv output", cxxopts::value<std::string>()->default_value("summary.csv"), "FILENAME")
-        ("o,coutput", "The filename of classifier csv output", cxxopts::value<std::string>()->default_value("classifier.csv"), "FILENAME")
-        ("r,routput", "The filename of reward log csv output", cxxopts::value<std::string>()->default_value(""), "FILENAME")
-        ("E,seoutput", "The filename of system error log csv output", cxxopts::value<std::string>()->default_value(""), "FILENAME")
-        ("n,noutput", "The filename of macro-classifier count log csv output", cxxopts::value<std::string>()->default_value(""), "FILENAME")
-        ("nsoutput", "The filename of number-of-step log csv output in the multi-step problem", cxxopts::value<std::string>()->default_value(""), "FILENAME")
-        ("cinput", "The classifier csv filename for initial population", cxxopts::value<std::string>()->default_value(""), "FILENAME")
-        ("cinput-init", "Whether to initialize p/epsilon/F/exp/ts/as to defaults", cxxopts::value<bool>()->default_value("false"), "true/false")
-        ("i,iter", "The number of iterations", cxxopts::value<uint64_t>()->default_value("100000"), "COUNT")
-        ("condense-iter", "The number of iterations for the Wilson's rule condensation method (chi=0, mu=0) after normal iterations", cxxopts::value<uint64_t>()->default_value("0"), "COUNT")
-        //("avg-seeds", "The number of different random seeds for averaging the reward and the macro-classifier count", cxxopts::value<uint64_t>()->default_value("1"), "COUNT")
-        ("explore", "The number of exploration performed in each train iteration", cxxopts::value<uint64_t>()->default_value("1"), "COUNT")
-        ("exploit", "The number of exploitation (= test mode) performed in each test iteration (set \"0\" if you don't need evaluation)", cxxopts::value<uint64_t>()->default_value("1"), "COUNT")
-        ("exploit-upd", "Whether to update classifier parameters in test mode (\"auto\": false for single-step & true for multi-step)", cxxopts::value<std::string>()->default_value("auto"), "auto/true/false")
-        ("sma", "The width of the simple moving average for the reward log", cxxopts::value<uint64_t>()->default_value("1"), "COUNT")
+    options.add_options("Environment")
         ("m,mux", "Use the multiplexer problem", cxxopts::value<int>(), "LENGTH")
         ("mux-i", "Class imbalance level i of the multiplexer problem (used only in train iterations)", cxxopts::value<unsigned int>()->default_value("0"), "LEVEL")
         ("parity", "Use the even-parity problem", cxxopts::value<int>(), "LENGTH")
@@ -44,15 +25,22 @@ void AddOptions(cxxopts::Options & options)
         ("blc-3bit", "Use 3-bit representation for each block in a situation", cxxopts::value<bool>()->default_value("false"), "true/false")
         ("blc-diag", "Allow diagonal actions in the block world problem", cxxopts::value<bool>()->default_value("true"), "true/false")
         ("blc-output-best", "Output the parsedOptions of the desired action for blocks in the block world problem", cxxopts::value<std::string>()->default_value(""), "FILENAME")
-        ("blc-output-best-uni", "Use UTF-8 square & arrow characters for --blc-output", cxxopts::value<bool>()->default_value("false"), "true/false")
+        ("blc-output-best-uni", "Use UTF-8 square & arrow characters for --blc-output-best", cxxopts::value<bool>()->default_value("false"), "true/false")
         ("blc-output-trace", "Output the coordinate of the animat in the block world problem", cxxopts::value<std::string>()->default_value(""), "FILENAME")
-        ("max-step", "The maximum number of steps in the multi-step problem", cxxopts::value<uint64_t>()->default_value("50"))
         ("c,csv", "The csv file to train", cxxopts::value<std::string>(), "FILENAME")
         ("csv-test", "The csv file to test", cxxopts::value<std::string>(), "FILENAME")
         ("csv-random", "Whether to choose lines in random order from the csv file", cxxopts::value<bool>()->default_value("true"), "true/false")
         ("csv-estimate", "The csv file to estimate the outputs", cxxopts::value<std::string>(), "FILENAME")
         ("csv-output-best", "Output the parsedOptions of the desired action for the situations in the csv file specified by --csv-estimate", cxxopts::value<std::string>(), "FILENAME")
-        ("N,max-population", "The maximum size of the population", cxxopts::value<uint64_t>()->default_value(std::to_string(defaultParams.n)), "COUNT")
+        ("max-step", "The maximum number of steps (teletransportation) in multi-step problems", cxxopts::value<uint64_t>()->default_value("50"), "STEP");
+}
+
+void AddXCSOptions(cxxopts::Options & options)
+{
+    const XCSParams defaultParams;
+    options.add_options("XCS parameter")
+        ("N,max-population", "The maximum size of the population", cxxopts::value<uint64_t>()->default_value(std::to_string(defaultParams.n)), "SIZE")
+        ("p-sharp", "The probability of using a don't care symbol in an allele when covering", cxxopts::value<double>()->default_value(std::to_string(defaultParams.dontCareProbability)), "P_SHARP")
         ("alpha", "The fall of rate in the fitness evaluation", cxxopts::value<double>()->default_value(std::to_string(defaultParams.alpha)), "ALPHA")
         ("beta", "The learning rate for updating fitness, prediction, prediction error, and action set size estimate in XCS's classifiers", cxxopts::value<double>()->default_value(std::to_string(defaultParams.beta)), "BETA")
         ("epsilon-0", "The error threshold under which the accuracy of a classifier is set to one", cxxopts::value<double>()->default_value(std::to_string(defaultParams.alpha)), "EPSILON_0")
@@ -66,16 +54,23 @@ void AddOptions(cxxopts::Options & options)
         ("delta", "The fraction of the mean fitness of the population below which the fitness of a classifier may be considered in its vote for deletion", cxxopts::value<double>()->default_value(std::to_string(defaultParams.delta)), "DELTA")
         ("theta-sub", "The experience of a classifier required to be a subsumer", cxxopts::value<double>()->default_value(std::to_string(defaultParams.thetaSub)), "THETA_SUB")
         ("tau", "The tournament size for selection [Butz et al., 2003] (set \"0\" to use the roulette-wheel selection)", cxxopts::value<double>()->default_value(std::to_string(defaultParams.tau)), "TAU")
-        ("s,p-sharp", "The probability of using a don't care symbol in an allele when covering", cxxopts::value<double>()->default_value(std::to_string(defaultParams.dontCareProbability)), "P_SHARP")
-        ("initial-prediction", "The initial prediction value when generating a new classifier", cxxopts::value<double>()->default_value(std::to_string(defaultParams.initialPrediction)), "P_I")
-        ("initial-prediction-error", "The initial prediction error value when generating a new classifier", cxxopts::value<double>()->default_value(std::to_string(defaultParams.initialEpsilon)), "EPSILON_I")
-        ("initial-fitness", "The initial fitness value when generating a new classifier", cxxopts::value<double>()->default_value(std::to_string(defaultParams.initialFitness)), "F_I")
+        ("p-i", "The initial prediction value when generating a new classifier", cxxopts::value<double>()->default_value(std::to_string(defaultParams.initialPrediction)), "P_I")
+        ("epsilon-i", "The initial prediction error value when generating a new classifier", cxxopts::value<double>()->default_value(std::to_string(defaultParams.initialEpsilon)), "EPSILON_I")
+        ("f-i", "The initial fitness value when generating a new classifier", cxxopts::value<double>()->default_value(std::to_string(defaultParams.initialFitness)), "F_I")
         ("p-explr", "The probability during action selection of choosing the action uniform randomly", cxxopts::value<double>()->default_value(std::to_string(defaultParams.exploreProbability)), "P_EXPLR")
         ("theta-mna", "The minimal number of actions that must be present in a match set [M], or else covering will occur. Use \"0\" to set automatically.", cxxopts::value<uint64_t>()->default_value(std::to_string(defaultParams.thetaMna)), "THETA_MNA")
         ("do-ga-subsumption", "Whether offspring are to be tested for possible logical subsumption by parents", cxxopts::value<bool>()->default_value(defaultParams.doGASubsumption ? "true" : "false"), "true/false")
-        ("do-action-set-subsumption", "Whether action sets are to be tested for subsuming classifiers", cxxopts::value<bool>()->default_value(defaultParams.doActionSetSubsumption ? "true" : "false"), "true/false")
+        ("do-as-subsumption", "Whether action sets are to be tested for subsuming classifiers", cxxopts::value<bool>()->default_value(defaultParams.doActionSetSubsumption ? "true" : "false"), "true/false")
         ("do-action-mutation", "Whether to apply mutation to the action", cxxopts::value<bool>()->default_value(defaultParams.doActionMutation ? "true" : "false"), "true/false")
-        ("mam", "Whether to use the moyenne adaptive modifee (MAM) for updating the prediction and the prediction error of classifiers", cxxopts::value<bool>()->default_value(defaultParams.useMAM ? "true" : "false"), "true/false")
+        ("mam", "Whether to use the moyenne adaptive modifee (MAM) for updating the prediction and the prediction error of classifiers", cxxopts::value<bool>()->default_value(defaultParams.useMAM ? "true" : "false"), "true/false");
+}
+
+void AddOptions(cxxopts::Options & options)
+{
+    AddExperimentOptions(options);
+    AddEnvironmentOptions(options);
+    AddXCSOptions(options);
+    options.add_options()
         ("h,help", "Show this help");
 }
 
@@ -110,20 +105,20 @@ XCSParams ParseXCSParams(const cxxopts::ParseResult & parsedOptions)
         params.tau = parsedOptions["tau"].as<double>();
     if (parsedOptions.count("p-sharp"))
         params.dontCareProbability = parsedOptions["p-sharp"].as<double>();
-    if (parsedOptions.count("initial-prediction"))
-        params.initialPrediction = parsedOptions["initial-prediction"].as<double>();
-    if (parsedOptions.count("initial-prediction-error"))
-        params.initialEpsilon = parsedOptions["initial-prediction-error"].as<double>();
-    if (parsedOptions.count("initial-fitness"))
-        params.initialFitness = parsedOptions["initial-fitness"].as<double>();
+    if (parsedOptions.count("p-i"))
+        params.initialPrediction = parsedOptions["p-i"].as<double>();
+    if (parsedOptions.count("epsilon-i"))
+        params.initialEpsilon = parsedOptions["epsilon-i"].as<double>();
+    if (parsedOptions.count("f-i"))
+        params.initialFitness = parsedOptions["f-i"].as<double>();
     if (parsedOptions.count("p-explr"))
         params.exploreProbability = parsedOptions["p-explr"].as<double>();
     if (parsedOptions.count("theta-mna"))
         params.thetaMna = parsedOptions["theta-mna"].as<uint64_t>();
     if (parsedOptions.count("do-ga-subsumption"))
         params.doGASubsumption = parsedOptions["do-ga-subsumption"].as<bool>();
-    if (parsedOptions.count("do-action-set-subsumption"))
-        params.doActionSetSubsumption = parsedOptions["do-action-set-subsumption"].as<bool>();
+    if (parsedOptions.count("do-as-subsumption"))
+        params.doActionSetSubsumption = parsedOptions["do-as-subsumption"].as<bool>();
     if (parsedOptions.count("do-action-mutation"))
         params.doActionMutation = parsedOptions["do-action-mutation"].as<bool>();
     if (parsedOptions.count("mam"))
@@ -199,7 +194,7 @@ void OutputXCSParams(const XCSParams & params)
     if (!params.doActionMutation)
         ss << "doActionMutation = false\n";
     if (!params.useMAM)
-        ss << "          useMAM = false\n";
+        ss << "             MAM = false\n";
     std::string str = ss.str();
     if (!str.empty())
     {
@@ -218,6 +213,13 @@ int main(int argc, char *argv[])
 
     // Parse commandline options
     const auto parsedOptions = options.parse(argc, argv);
+
+    // Show help if no environment is specified
+    if (parsedOptions.count("help") || (!parsedOptions.count("mux") && !parsedOptions.count("parity") && !parsedOptions.count("majority") && !parsedOptions.count("blc") && !parsedOptions.count("csv")))
+    {
+        std::cout << options.help({"", "Experiment", "Environment", "XCS parameter"}) << std::endl;
+        return parsedOptions.count("help") ? 0 : 1;
+    }
 
     // XCS Hyperparameters
     const XCSParams params = ParseXCSParams(parsedOptions);
@@ -410,11 +412,6 @@ int main(int argc, char *argv[])
         experimentHelper.constructSystem<XCS>(env.availableActions(), params);
 
         RunExperiment(experimentHelper, parsedOptions["iter"].as<std::uint64_t>(), parsedOptions["condense-iter"].as<std::uint64_t>());
-    }
-    else
-    {
-        std::cout << options.help({"", "Group"}) << std::endl;
-        std::exit(parsedOptions.count("help") ? 0 : 1);
     }
 
     OutputPopulation(experimentHelper, settings.outputFilenamePrefix + parsedOptions["coutput"].as<std::string>());

@@ -6,6 +6,8 @@
 namespace xcspp
 {
 
+    void AddExperimentOptions(cxxopts::Options & options);
+
     ExperimentSettings ParseExperimentSettings(const cxxopts::ParseResult & parsedOptions);
 
     void OutputPopulation(const ExperimentHelper & experimentHelper, const std::string & filename);
