@@ -33,4 +33,7 @@ namespace xcspp
     // Environment interface for XCS
     using IEnvironment = IBasicEnvironment<int>;
 
+    // Environment interface for XCSR
+    using IRealEnvironment = IBasicEnvironment<double>;
+
 }
