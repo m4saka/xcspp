@@ -97,6 +97,11 @@ namespace xcspp::xcsr
                 }
             }
             break;
+        
+        default:
+            // Zero assignment for avoiding maybe-uninitialized warning
+            v1 = 0.0;
+            v2 = 0.0;
         };
 
         return Symbol(v1, v2);
