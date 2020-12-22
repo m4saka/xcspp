@@ -162,12 +162,12 @@ namespace xcspp::xcsr
                     if (random.nextDouble() < 0.5)
                     {
                         symbol.v1 += random.nextDouble(-pParams->m, pParams->m);
-                        symbol.v1 = ClampSymbolValue1(symbol.v1, pParams->repr, pParams->minValue, pParams->maxValue);
+                        symbol.v1 = ClampSymbolValue1(symbol.v1, pParams->repr, pParams->minValue, pParams->maxValue, pParams->doRangeRestriction);
                     }
                     else
                     {
                         symbol.v2 += random.nextDouble(-pParams->m, pParams->m);
-                        symbol.v2 = ClampSymbolValue2(symbol.v2, pParams->repr, pParams->minValue, pParams->maxValue);
+                        symbol.v2 = ClampSymbolValue2(symbol.v2, pParams->repr, pParams->minValue, pParams->maxValue, pParams->doRangeRestriction);
                     }
                 }
             }

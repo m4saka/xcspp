@@ -23,9 +23,9 @@ namespace xcspp::xcsr
 
     double GetUpperBound(const Symbol & s, XCSRRepr repr);
 
-    double ClampSymbolValue1(double v1, XCSRRepr repr, double minValue, double maxValue);
+    double ClampSymbolValue1(double v1, XCSRRepr repr, double minValue, double maxValue, bool doRangeRestriction);
 
-    double ClampSymbolValue2(double v2, XCSRRepr repr, double minValue, double maxValue);
+    double ClampSymbolValue2(double v2, XCSRRepr repr, double minValue, double maxValue, bool doRangeRestriction);
 
     Symbol MakeCoveringSymbol(double inputValue, const XCSRParams *pParams, Random & random);
 

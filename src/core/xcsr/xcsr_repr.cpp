@@ -41,22 +41,45 @@ namespace xcspp::xcsr
         return 0.0;
     }
 
-    double ClampSymbolValue1(double v1, XCSRRepr repr, double minValue, double maxValue)
-    {
-        (void)repr; // Not used
-
-        return std::clamp(v1, minValue, maxValue);
-    }
-
-    double ClampSymbolValue2(double v2, XCSRRepr repr, double minValue, double maxValue)
+    double ClampSymbolValue1(double v1, XCSRRepr repr, double minValue, double maxValue, bool doRangeRestriction)
     {
         if (repr == XCSRRepr::kCSR)
         {
+            // CSR
+            return std::clamp(v1, minValue, maxValue);
+        }
+        else
+        {
+            // OBR and UBR
+            if (doRangeRestriction)
+            {
+                return std::clamp(v1, minValue, maxValue);
+            }
+            else
+            {
+                return v1;
+            }
+        }
+    }
+
+    double ClampSymbolValue2(double v2, XCSRRepr repr, double minValue, double maxValue, bool doRangeRestriction)
+    {
+        if (repr == XCSRRepr::kCSR)
+        {
+            // CSR
             return std::max(v2, 0.0);
         }
         else
         {
-            return std::clamp(v2, minValue, maxValue);
+            // OBR and UBR
+            if (doRangeRestriction)
+            {
+                return std::clamp(v2, minValue, maxValue);
+            }
+            else
+            {
+                return v2;
+            }
         }
     }
 
@@ -85,16 +108,14 @@ namespace xcspp::xcsr
 
                 v1 = random.nextDouble(lowerMin, inputValue);
                 v2 = random.nextDouble(inputValue, upperMax);
-                if (pParams->doRangeRestriction)
-                {
-                    v1 = std::max(v1, pParams->minValue);
-                    v2 = std::min(v2, pParams->maxValue);
-                }
 
                 if (pParams->repr == XCSRRepr::kUBR && random.nextDouble() < 0.5)
                 {
                     std::swap(v1, v2);
                 }
+
+                v1 = ClampSymbolValue1(v1, pParams->repr, pParams->minValue, pParams->maxValue, pParams->doRangeRestriction);
+                v2 = ClampSymbolValue2(v2, pParams->repr, pParams->minValue, pParams->maxValue, pParams->doRangeRestriction);
             }
             break;
         
