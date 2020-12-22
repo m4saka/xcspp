@@ -39,6 +39,7 @@ namespace xcspp
 
 #include "environment/ienvironment.hpp"
 #include "environment/multiplexer_environment.hpp"
+#include "environment/real_multiplexer_environment.hpp"
 #include "environment/even_parity_environment.hpp"
 #include "environment/majority_on_environment.hpp"
 #include "environment/block_world_environment.hpp"
