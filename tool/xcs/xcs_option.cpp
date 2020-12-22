@@ -72,6 +72,7 @@ namespace xcspp::tool::xcs
     {
         XCSParams params;
         params.n = parsedOptions["max-population"].as<std::uint64_t>();
+        params.dontCareProbability = parsedOptions["p-sharp"].as<double>();
         params.alpha = parsedOptions["alpha"].as<double>();
         params.beta = parsedOptions["beta"].as<double>();
         params.epsilonZero = parsedOptions["epsilon-0"].as<double>();
@@ -84,7 +85,6 @@ namespace xcspp::tool::xcs
         params.delta = parsedOptions["delta"].as<double>();
         params.thetaSub = parsedOptions["theta-sub"].as<double>();
         params.tau = parsedOptions["tau"].as<double>();
-        params.dontCareProbability = parsedOptions["p-sharp"].as<double>();
         params.initialPrediction = parsedOptions["p-i"].as<double>();
         params.initialEpsilon = parsedOptions["epsilon-i"].as<double>();
         params.initialFitness = parsedOptions["f-i"].as<double>();
@@ -122,6 +122,7 @@ namespace xcspp::tool::xcs
         // Output parameters
         std::cout << "[ XCS General Parameters ]\n";
         std::cout << "               N = " << params.n << '\n';
+        std::cout << "             P_# = " << params.dontCareProbability << '\n';
         std::cout << "            beta = " << params.beta << '\n';
         std::cout << "           alpha = " << params.alpha << '\n';
         std::cout << "       epsilon_0 = " << params.epsilonZero << '\n';
@@ -133,7 +134,6 @@ namespace xcspp::tool::xcs
         std::cout << "       theta_del = " << params.thetaDel << '\n';
         std::cout << "           delta = " << params.delta << '\n';
         std::cout << "       theta_sub = " << params.thetaSub << '\n';
-        std::cout << "             P_# = " << params.dontCareProbability << '\n';
         std::cout << "             p_I = " << params.initialPrediction << '\n';
         std::cout << "       epsilon_I = " << params.initialEpsilon << '\n';
         std::cout << "             F_I = " << params.initialFitness << '\n';

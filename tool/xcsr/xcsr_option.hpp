@@ -2,17 +2,17 @@
 #include <cxxopts.hpp>
 #include <xcspp/xcspp.hpp>
 
-namespace xcspp::tool::xcs
+namespace xcspp::tool::xcsr
 {
 
     void AddEnvironmentOptions(cxxopts::Options & options);
 
-    void AddXCSOptions(cxxopts::Options & options);
+    void AddXCSROptions(cxxopts::Options & options);
 
     void AddOptions(cxxopts::Options & options);
 
-    XCSParams ParseXCSParams(const cxxopts::ParseResult & parsedOptions);
+    XCSRParams ParseXCSRParams(const cxxopts::ParseResult & parsedOptions);
 
-    void OutputXCSParams(const XCSParams & params);
+    void OutputXCSRParams(const XCSRParams & params);
 
 }

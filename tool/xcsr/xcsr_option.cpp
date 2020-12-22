@@ -5,36 +5,29 @@
 #include <cstdint> // std::uint64_t
 #include "common/common.hpp"
 
-namespace xcspp::tool::xcs
+namespace xcspp::tool::xcsr
 {
 
     void AddEnvironmentOptions(cxxopts::Options & options)
     {
         options.add_options("Environment")
-            ("m,mux", "Use the multiplexer problem", cxxopts::value<int>(), "LENGTH")
-            ("mux-i", "Class imbalance level i of the multiplexer problem (used only in train iterations)", cxxopts::value<unsigned int>()->default_value("0"), "LEVEL")
-            ("parity", "Use the even-parity problem", cxxopts::value<int>(), "LENGTH")
-            ("majority", "Use the majority-on problem", cxxopts::value<int>(), "LENGTH")
-            ("blc", "Use the block world problem", cxxopts::value<std::string>(), "FILENAME")
-            ("blc-3bit", "Use 3-bit representation for each block in a situation", cxxopts::value<bool>()->default_value("false"), "true/false")
-            ("blc-diag", "Allow diagonal actions in the block world problem", cxxopts::value<bool>()->default_value("true"), "true/false")
-            ("blc-output-best", "Output the parsedOptions of the desired action for blocks in the block world problem", cxxopts::value<std::string>()->default_value(""), "FILENAME")
-            ("blc-output-best-uni", "Use UTF-8 square & arrow characters for --blc-output-best", cxxopts::value<bool>()->default_value("false"), "true/false")
-            ("blc-output-trace", "Output the coordinate of the animat in the block world problem", cxxopts::value<std::string>()->default_value(""), "FILENAME")
-            ("c,csv", "The csv file to train", cxxopts::value<std::string>(), "FILENAME")
-            ("csv-test", "The csv file to test", cxxopts::value<std::string>(), "FILENAME")
-            ("csv-random", "Whether to choose lines in random order from the csv file", cxxopts::value<bool>()->default_value("true"), "true/false")
-            //("csv-estimate", "The csv file to estimate the outputs", cxxopts::value<std::string>(), "FILENAME")
-            //("csv-output-best", "Output the parsedOptions of the desired action for the situations in the csv file specified by --csv-estimate", cxxopts::value<std::string>(), "FILENAME")
-            ("max-step", "The maximum number of steps (teletransportation) in multi-step problems", cxxopts::value<std::uint64_t>()->default_value("50"), "STEP");
+            ("m,rmux", "Use the real multiplexer problem", cxxopts::value<int>(), "LENGTH")
+            ("rmux-i", "Class imbalance level i of the multiplexer problem (used only in train iterations)", cxxopts::value<unsigned int>()->default_value("0"), "LEVEL");
+            //("c,csv", "The csv file to train", cxxopts::value<std::string>(), "FILENAME")
+            //("csv-test", "The csv file to test", cxxopts::value<std::string>(), "FILENAME")
+            //("csv-random", "Whether to choose lines in random order from the csv file", cxxopts::value<bool>()->default_value("true"), "true/false")
+            ////("csv-estimate", "The csv file to estimate the outputs", cxxopts::value<std::string>(), "FILENAME")
+            ////("csv-output-best", "Output the parsedOptions of the desired action for the situations in the csv file specified by --csv-estimate", cxxopts::value<std::string>(), "FILENAME")
+            //("max-step", "The maximum number of steps (teletransportation) in multi-step problems", cxxopts::value<std::uint64_t>()->default_value("50"), "STEP")
     }
 
-    void AddXCSOptions(cxxopts::Options & options)
+    void AddXCSROptions(cxxopts::Options & options)
     {
-        const XCSParams defaultParams;
+        const XCSRParams defaultParams;
         options.add_options("XCS parameter")
             ("N,max-population", "The maximum size of the population", cxxopts::value<std::uint64_t>()->default_value(std::to_string(defaultParams.n)), "SIZE")
-            ("p-sharp", "The probability of using a don't care symbol in an allele when covering", cxxopts::value<double>()->default_value(std::to_string(defaultParams.dontCareProbability)), "P_SHARP")
+            ("s-0", "The maximum value of a spread in the covering operator", cxxopts::value<double>()->default_value(std::to_string(defaultParams.s0)), "S_0")
+            ("max-mutation", "The maximum change of a spread value or a center value in mutation", cxxopts::value<double>()->default_value(std::to_string(defaultParams.m)), "M")
             ("alpha", "The fall of rate in the fitness evaluation", cxxopts::value<double>()->default_value(std::to_string(defaultParams.alpha)), "ALPHA")
             ("beta", "The learning rate for updating fitness, prediction, prediction error, and action set size estimate in XCS's classifiers", cxxopts::value<double>()->default_value(std::to_string(defaultParams.beta)), "BETA")
             ("epsilon-0", "The error threshold under which the accuracy of a classifier is set to one", cxxopts::value<double>()->default_value(std::to_string(defaultParams.alpha)), "EPSILON_0")
@@ -63,15 +56,17 @@ namespace xcspp::tool::xcs
     {
         tool::AddExperimentOptions(options);
         AddEnvironmentOptions(options);
-        AddXCSOptions(options);
+        AddXCSROptions(options);
         options.add_options()
             ("h,help", "Show this help");
     }
 
-    XCSParams ParseXCSParams(const cxxopts::ParseResult & parsedOptions)
+    XCSRParams ParseXCSRParams(const cxxopts::ParseResult & parsedOptions)
     {
-        XCSParams params;
+        XCSRParams params;
         params.n = parsedOptions["max-population"].as<std::uint64_t>();
+        params.s0 = parsedOptions["s0"].as<std::uint64_t>();
+        params.m = parsedOptions["max-mutation"].as<std::uint64_t>();
         params.alpha = parsedOptions["alpha"].as<double>();
         params.beta = parsedOptions["beta"].as<double>();
         params.epsilonZero = parsedOptions["epsilon-0"].as<double>();
@@ -84,7 +79,6 @@ namespace xcspp::tool::xcs
         params.delta = parsedOptions["delta"].as<double>();
         params.thetaSub = parsedOptions["theta-sub"].as<double>();
         params.tau = parsedOptions["tau"].as<double>();
-        params.dontCareProbability = parsedOptions["p-sharp"].as<double>();
         params.initialPrediction = parsedOptions["p-i"].as<double>();
         params.initialEpsilon = parsedOptions["epsilon-i"].as<double>();
         params.initialFitness = parsedOptions["f-i"].as<double>();
@@ -98,15 +92,15 @@ namespace xcspp::tool::xcs
         // Determine crossover method
         if (parsedOptions["x-method"].as<std::string>() == "uniform")
         {
-            params.crossoverMethod = XCSParams::CrossoverMethod::kUniformCrossover;
+            params.crossoverMethod = XCSRParams::CrossoverMethod::kUniformCrossover;
         }
         else if (parsedOptions["x-method"].as<std::string>() == "one-point")
         {
-            params.crossoverMethod = XCSParams::CrossoverMethod::kOnePointCrossover;
+            params.crossoverMethod = XCSRParams::CrossoverMethod::kOnePointCrossover;
         }
         else if (parsedOptions["x-method"].as<std::string>() == "two-point")
         {
-            params.crossoverMethod = XCSParams::CrossoverMethod::kTwoPointCrossover;
+            params.crossoverMethod = XCSRParams::CrossoverMethod::kTwoPointCrossover;
         }
         else
         {
@@ -117,11 +111,13 @@ namespace xcspp::tool::xcs
         return params;
     }
 
-    void OutputXCSParams(const XCSParams & params)
+    void OutputXCSRParams(const XCSRParams & params)
     {
         // Output parameters
-        std::cout << "[ XCS General Parameters ]\n";
+        std::cout << "[ XCSR General Parameters ]\n";
         std::cout << "               N = " << params.n << '\n';
+        std::cout << "             s_0 = " << params.s0 << '\n';
+        std::cout << "               m = " << params.m << '\n';
         std::cout << "            beta = " << params.beta << '\n';
         std::cout << "           alpha = " << params.alpha << '\n';
         std::cout << "       epsilon_0 = " << params.epsilonZero << '\n';
@@ -133,7 +129,6 @@ namespace xcspp::tool::xcs
         std::cout << "       theta_del = " << params.thetaDel << '\n';
         std::cout << "           delta = " << params.delta << '\n';
         std::cout << "       theta_sub = " << params.thetaSub << '\n';
-        std::cout << "             P_# = " << params.dontCareProbability << '\n';
         std::cout << "             p_I = " << params.initialPrediction << '\n';
         std::cout << "       epsilon_I = " << params.initialEpsilon << '\n';
         std::cout << "             F_I = " << params.initialFitness << '\n';
@@ -144,13 +139,13 @@ namespace xcspp::tool::xcs
         std::cout << " crossoverMethod = ";
         switch (params.crossoverMethod)
         {
-        case XCSParams::CrossoverMethod::kUniformCrossover:
+        case XCSRParams::CrossoverMethod::kUniformCrossover:
             std::cout << "uniform\n";
             break;
-        case XCSParams::CrossoverMethod::kOnePointCrossover:
+        case XCSRParams::CrossoverMethod::kOnePointCrossover:
             std::cout << "one-point\n";
             break;
-        case XCSParams::CrossoverMethod::kTwoPointCrossover:
+        case XCSRParams::CrossoverMethod::kTwoPointCrossover:
             std::cout << "two-point\n";
             break;
         }
@@ -169,7 +164,7 @@ namespace xcspp::tool::xcs
         const std::string str = ss.str();
         if (!str.empty())
         {
-            std::cout << "[ XCS Optional Settings ]\n";
+            std::cout << "[ XCSR Optional Settings ]\n";
             std::cout << str << '\n';
         }
 
