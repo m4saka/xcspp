@@ -7,7 +7,7 @@
 #include <cxxopts.hpp>
 
 #include "common/common.hpp"
-#include "xcs_option.hpp"
+#include "xcsr_option.hpp"
 
 using namespace xcspp;
 
