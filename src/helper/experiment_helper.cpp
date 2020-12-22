@@ -8,53 +8,6 @@
 namespace xcspp
 {
 
-    void ExperimentHelper::outputSummaryLogLine()
-    {
-        if (!m_alreadyOutputSummaryHeader)
-        {
-            if (m_settings.outputSummaryToStdout)
-            {
-                std::cout
-                    << "  Iteration      Reward      SysErr     PopSize  CovOccRate   TotalStep\n"
-                    << " ========== =========== =========== =========== =========== ===========" << std::endl;
-            }
-            if (m_summaryLogStream)
-            {
-                m_summaryLogStream << "Iteration,Reward,SysErr,PopSize,CovOccRate,TotalStep" << std::endl;
-            }
-            m_alreadyOutputSummaryHeader = true;
-        }
-
-        if (m_settings.outputSummaryToStdout)
-        {
-            std::printf("%11u %11.3f %11.3f %11.3f  %1.8f %11.3f\n",
-                static_cast<unsigned int>(m_iterationCount + 1),
-                m_summaryRewardSum / m_settings.summaryInterval,
-                m_summarySystemErrorSum / m_settings.summaryInterval,
-                m_summaryPopulationSizeSum / m_settings.summaryInterval,
-                m_summaryCoveringOccurrenceRateSum / m_settings.summaryInterval,
-                m_summaryStepCountSum / m_settings.summaryInterval);
-            std::fflush(stdout);
-        }
-
-        if (m_summaryLogStream)
-        {
-            m_summaryLogStream
-                << (m_iterationCount + 1) << ','
-                << m_summaryRewardSum / m_settings.summaryInterval << ','
-                << m_summarySystemErrorSum / m_settings.summaryInterval << ','
-                << m_summaryPopulationSizeSum / m_settings.summaryInterval << ','
-                << m_summaryCoveringOccurrenceRateSum / m_settings.summaryInterval << ','
-                << m_summaryStepCountSum / m_settings.summaryInterval << std::endl;
-        }
-
-        m_summaryRewardSum = 0.0;
-        m_summarySystemErrorSum = 0.0;
-        m_summaryPopulationSizeSum = 0.0;
-        m_summaryCoveringOccurrenceRateSum = 0.0;
-        m_summaryStepCountSum = 0.0;
-    }
-
     void ExperimentHelper::runTrainIteration()
     {
         for (std::size_t i = 0; i < m_settings.explorationRepeat; ++i)
@@ -90,20 +43,18 @@ namespace xcspp
                 do
                 {
                     // Choose action
-                    auto action = m_system->exploit(m_testEnvironment->situation(), m_settings.updateInExploitation);
+                    const auto action = m_system->exploit(m_testEnvironment->situation(), m_settings.updateInExploitation);
 
                     // Get reward
-                    double reward = m_testEnvironment->executeAction(action);
-
-                    m_summaryRewardSum += reward / m_settings.exploitationRepeat;
-                    m_summarySystemErrorSum += std::abs(reward - m_system->prediction()) / m_settings.exploitationRepeat;
-                    m_summaryCoveringOccurrenceRateSum += static_cast<double>(m_system->isCoveringPerformed()) / m_settings.exploitationRepeat;
+                    const double reward = m_testEnvironment->executeAction(action);
 
                     // Update for multistep problems
                     if (m_settings.updateInExploitation)
                     {
                         m_system->reward(reward, m_testEnvironment->isEndOfProblem());
                     }
+
+                    m_summaryLogger.oneStep(reward, m_system->prediction(), m_system->isCoveringPerformed());
 
                     rewardSum += reward;
                     systemErrorSum += std::abs(reward - m_system->prediction());
@@ -119,13 +70,7 @@ namespace xcspp
                 populationSizeSum += m_system->populationSize();
             }
 
-            m_summaryPopulationSizeSum += static_cast<double>(m_system->populationSize());
-            m_summaryStepCountSum += static_cast<double>(totalStepCount) / m_settings.exploitationRepeat;
-
-            if (m_settings.summaryInterval > 0 && (m_iterationCount + 1) % m_settings.summaryInterval == 0)
-            {
-                outputSummaryLogLine();
-            }
+            m_summaryLogger.oneIteration(m_system->populationSize());
 
             m_rewardLogStream.writeLine(rewardSum / m_settings.exploitationRepeat);
             m_systemErrorLogStream.writeLine(systemErrorSum / m_settings.exploitationRepeat);
@@ -138,17 +83,11 @@ namespace xcspp
         : m_settings(settings)
         , m_trainCallback(nullptr)
         , m_testCallback(nullptr)
-        , m_summaryLogStream(settings.outputSummaryFilename.empty() ? "" : (settings.outputFilenamePrefix + settings.outputSummaryFilename))
         , m_rewardLogStream(settings.outputRewardFilename.empty() ? "" : (settings.outputFilenamePrefix + settings.outputRewardFilename), settings.smaWidth, false)
         , m_systemErrorLogStream(settings.outputSystemErrorFilename.empty() ? "" : (settings.outputFilenamePrefix + settings.outputSystemErrorFilename), settings.smaWidth, false)
         , m_stepCountLogStream(settings.outputStepCountFilename.empty() ? "" : (settings.outputFilenamePrefix + settings.outputStepCountFilename), settings.smaWidth, false)
         , m_populationSizeLogStream(settings.outputPopulationSizeFilename.empty() ? "" : (settings.outputFilenamePrefix + settings.outputPopulationSizeFilename), false)
-        , m_alreadyOutputSummaryHeader(false)
-        , m_summaryRewardSum(0.0)
-        , m_summarySystemErrorSum(0.0)
-        , m_summaryPopulationSizeSum(0.0)
-        , m_summaryCoveringOccurrenceRateSum(0.0)
-        , m_summaryStepCountSum(0.0)
+        , m_summaryLogger(settings)
         , m_iterationCount(0)
     {
         if (!settings.inputClassifierFilename.empty())

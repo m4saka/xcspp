@@ -9,6 +9,7 @@
 #include "xcspp/environment/ienvironment.hpp"
 #include "experiment_settings.hpp"
 #include "experiment_log_stream.hpp"
+#include "experiment_summary_logger.hpp"
 
 namespace xcspp
 {
@@ -22,18 +23,11 @@ namespace xcspp
         std::unique_ptr<IEnvironment> m_testEnvironment;
         std::function<void()> m_trainCallback;
         std::function<void()> m_testCallback;
-        std::ofstream m_summaryLogStream;
-        bool m_outputSummaryLogFile;
         SMAExperimentLogStream m_rewardLogStream;
         SMAExperimentLogStream m_systemErrorLogStream;
         SMAExperimentLogStream m_stepCountLogStream;
         ExperimentLogStream m_populationSizeLogStream;
-        bool m_alreadyOutputSummaryHeader;
-        double m_summaryRewardSum;
-        double m_summarySystemErrorSum;
-        double m_summaryPopulationSizeSum;
-        double m_summaryCoveringOccurrenceRateSum;
-        double m_summaryStepCountSum;
+        ExperimentSummaryLogger m_summaryLogger;
         std::size_t m_iterationCount;
 
         void outputSummaryLogLine();
