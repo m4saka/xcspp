@@ -10,7 +10,7 @@
 #include <xcspp/xcspp.hpp>
 #include <cxxopts.hpp>
 
-#include "common.hpp"
+#include "tool_common.hpp"
 
 using namespace xcspp;
 
@@ -67,7 +67,7 @@ void AddXCSOptions(cxxopts::Options & options)
 
 void AddOptions(cxxopts::Options & options)
 {
-    AddExperimentOptions(options);
+    tool_common::AddExperimentOptions(options);
     AddEnvironmentOptions(options);
     AddXCSOptions(options);
     options.add_options()
@@ -203,7 +203,7 @@ int main(int argc, char *argv[])
     OutputXCSParams(params);
 
     // Initialize experiment helper
-    const ExperimentSettings settings = ParseExperimentSettings(parsedOptions);
+    const ExperimentSettings settings = tool_common::ParseExperimentSettings(parsedOptions);
     ExperimentHelper experimentHelper(settings);
 
     if (parsedOptions.count("mux"))
@@ -214,7 +214,7 @@ int main(int argc, char *argv[])
 
         experimentHelper.constructSystem<XCS>(env.availableActions(), params);
 
-        RunExperiment(experimentHelper, parsedOptions["iter"].as<std::uint64_t>(), parsedOptions["condense-iter"].as<std::uint64_t>());
+        tool_common::RunExperiment(experimentHelper, parsedOptions["iter"].as<std::uint64_t>(), parsedOptions["condense-iter"].as<std::uint64_t>());
     }
     else if (parsedOptions.count("parity"))
     {
@@ -224,7 +224,7 @@ int main(int argc, char *argv[])
 
         experimentHelper.constructSystem<XCS>(env.availableActions(), params);
 
-        RunExperiment(experimentHelper, parsedOptions["iter"].as<std::uint64_t>(), parsedOptions["condense-iter"].as<std::uint64_t>());
+        tool_common::RunExperiment(experimentHelper, parsedOptions["iter"].as<std::uint64_t>(), parsedOptions["condense-iter"].as<std::uint64_t>());
     }
     else if (parsedOptions.count("majority"))
     {
@@ -234,7 +234,7 @@ int main(int argc, char *argv[])
 
         experimentHelper.constructSystem<XCS>(env.availableActions(), params);
 
-        RunExperiment(experimentHelper, parsedOptions["iter"].as<std::uint64_t>(), parsedOptions["condense-iter"].as<std::uint64_t>());
+        tool_common::RunExperiment(experimentHelper, parsedOptions["iter"].as<std::uint64_t>(), parsedOptions["condense-iter"].as<std::uint64_t>());
     }
     else if (parsedOptions.count("blc"))
     {
@@ -280,7 +280,7 @@ int main(int argc, char *argv[])
             }
         });
 
-        RunExperiment(experimentHelper, parsedOptions["iter"].as<std::uint64_t>(), parsedOptions["condense-iter"].as<std::uint64_t>());
+        tool_common::RunExperiment(experimentHelper, parsedOptions["iter"].as<std::uint64_t>(), parsedOptions["condense-iter"].as<std::uint64_t>());
 
         // Output best action map
         if (!parsedOptions["blc-output-best"].as<std::string>().empty())
@@ -388,10 +388,10 @@ int main(int argc, char *argv[])
 
         experimentHelper.constructSystem<XCS>(env.availableActions(), params);
 
-        RunExperiment(experimentHelper, parsedOptions["iter"].as<std::uint64_t>(), parsedOptions["condense-iter"].as<std::uint64_t>());
+        tool_common::RunExperiment(experimentHelper, parsedOptions["iter"].as<std::uint64_t>(), parsedOptions["condense-iter"].as<std::uint64_t>());
     }
 
-    OutputPopulation(experimentHelper, settings.outputFilenamePrefix + parsedOptions["coutput"].as<std::string>());
+    tool_common::OutputPopulation(experimentHelper, settings.outputFilenamePrefix + parsedOptions["coutput"].as<std::string>());
 
     return 0;
 }

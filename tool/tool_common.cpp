@@ -1,9 +1,9 @@
-#include "common.hpp"
+#include "tool_common.hpp"
 #include <iostream>
 #include <fstream>
 #include <cstdlib> // std::exit
 
-namespace xcspp
+namespace xcspp::tool_common
 {
 
     void AddExperimentOptions(cxxopts::Options & options)
