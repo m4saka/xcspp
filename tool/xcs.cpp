@@ -195,7 +195,7 @@ void OutputXCSParams(const XCSParams & params)
         ss << "doActionMutation = false\n";
     if (!params.useMAM)
         ss << "             MAM = false\n";
-    std::string str = ss.str();
+    const std::string str = ss.str();
     if (!str.empty())
     {
         std::cout << "[ XCS Optional Settings ]\n";
@@ -269,7 +269,7 @@ int main(int argc, char *argv[])
 
         // Prepare trace output
         std::ofstream traceLogStream;
-        bool outputTraceLog = !parsedOptions["blc-output-trace"].as<std::string>().empty();
+        const bool outputTraceLog = !parsedOptions["blc-output-trace"].as<std::string>().empty();
         if (outputTraceLog)
         {
             traceLogStream.open(parsedOptions["blc-output-trace"].as<std::string>());
@@ -310,7 +310,7 @@ int main(int argc, char *argv[])
         {
             std::ofstream ofs(parsedOptions["blc-output-best"].as<std::string>());
 
-            bool useUnicode = parsedOptions["blc-output-best-uni"].as<bool>();
+            const bool useUnicode = parsedOptions["blc-output-best-uni"].as<bool>();
 
             for (int y = 0; y < testEnv.worldHeight(); ++y)
             {
@@ -319,8 +319,8 @@ int main(int argc, char *argv[])
                     if (testEnv.isEmpty(x, y))
                     {
                         // Output the selected action
-                        auto situation = testEnv.situation(x, y);
-                        int action = xcs.exploit(situation);
+                        const auto situation = testEnv.situation(x, y);
+                        const int action = xcs.exploit(situation);
                         if (useUnicode)
                         {
                             switch (action)
