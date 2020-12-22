@@ -3,7 +3,89 @@
 
 using namespace xcspp;
 
-TEST(XCSR_ConditionTest, ConstructWithVector)
+TEST(XCSR_ConditionTest, Comparison)
+{
+    const xcsr::Symbol zero(0.25, 0.25);
+    const xcsr::Symbol one(0.75, 0.25);
+    const xcsr::Symbol dontCare(0.5, 0.5);
+
+    // "01##"
+    const xcsr::Condition cond1({ zero, one, dontCare, dontCare });
+
+    // "01#1"
+    const xcsr::Condition cond2({ zero, one, dontCare, one });
+
+    // ==
+    EXPECT_EQ(cond1, cond1);
+    EXPECT_EQ(cond2, cond2);
+
+    // !=
+    EXPECT_NE(cond1, cond2);
+}
+
+TEST(XCSR_ConditionTest, ConstructWithVector_CSR)
+{
+    const xcsr::Symbol zero(0.25, 0.25);
+    const xcsr::Symbol one(0.75, 0.25);
+    const xcsr::Symbol dontCare(0.5, 0.5);
+
+    // "01##"
+    const xcsr::Condition cond({ zero, one, dontCare, dontCare });
+    EXPECT_TRUE(cond.matches({ 0.25, 0.75, 0.25, 0.25 }, xcsr::XCSRRepr::kCSR));
+    EXPECT_TRUE(cond.matches({ 0.25, 0.75, 0.25, 0.75 }, xcsr::XCSRRepr::kCSR));
+    EXPECT_TRUE(cond.matches({ 0.25, 0.75, 0.75, 0.25 }, xcsr::XCSRRepr::kCSR));
+    EXPECT_TRUE(cond.matches({ 0.25, 0.75, 0.75, 0.75 }, xcsr::XCSRRepr::kCSR));
+    EXPECT_FALSE(cond.matches({ 0.25, 0.25, 0.75, 0.75 }, xcsr::XCSRRepr::kCSR));
+    EXPECT_FALSE(cond.matches({ 0.75, 0.75, 0.75, 0.75 }, xcsr::XCSRRepr::kCSR));
+    EXPECT_FALSE(cond.matches({ 0.75, 0.25, 0.75, 0.75 }, xcsr::XCSRRepr::kCSR));
+}
+
+TEST(XCSR_ConditionTest, ConstructWithString_CSR)
+{
+    // "01##"
+    const xcsr::Condition cond("0.25;0.25 0.75;0.25 0.5;0.5 0.5;0.5");
+    EXPECT_TRUE(cond.matches({ 0.25, 0.75, 0.25, 0.25 }, xcsr::XCSRRepr::kCSR));
+    EXPECT_TRUE(cond.matches({ 0.25, 0.75, 0.25, 0.75 }, xcsr::XCSRRepr::kCSR));
+    EXPECT_TRUE(cond.matches({ 0.25, 0.75, 0.75, 0.25 }, xcsr::XCSRRepr::kCSR));
+    EXPECT_TRUE(cond.matches({ 0.25, 0.75, 0.75, 0.75 }, xcsr::XCSRRepr::kCSR));
+    EXPECT_FALSE(cond.matches({ 0.25, 0.25, 0.75, 0.75 }, xcsr::XCSRRepr::kCSR));
+    EXPECT_FALSE(cond.matches({ 0.75, 0.75, 0.75, 0.75 }, xcsr::XCSRRepr::kCSR));
+    EXPECT_FALSE(cond.matches({ 0.75, 0.25, 0.75, 0.75 }, xcsr::XCSRRepr::kCSR));
+}
+
+TEST(XCSR_ConditionTest, IsMoreGeneral_CSR)
+{
+    const xcsr::Condition cond1("0.25;0.25 0.75;0.25 0.5;0.5 0.5;0.5");
+    const xcsr::Condition cond2("0.25;0.25 0.75;0.25 0.5;0.5 0.75;0.25");
+    const xcsr::Condition cond3("0.75;0.25 0.75;0.25 0.5;0.5 0.5;0.5");
+
+    EXPECT_FALSE(cond1.isMoreGeneral(cond1, xcsr::XCSRRepr::kCSR));
+    EXPECT_FALSE(cond2.isMoreGeneral(cond2, xcsr::XCSRRepr::kCSR));
+    EXPECT_FALSE(cond3.isMoreGeneral(cond3, xcsr::XCSRRepr::kCSR));
+
+    // "01##" vs. "01#1"
+    EXPECT_TRUE(cond1.isMoreGeneral(cond2, xcsr::XCSRRepr::kCSR));
+    EXPECT_FALSE(cond2.isMoreGeneral(cond1, xcsr::XCSRRepr::kCSR));
+
+    // "01##" vs. "11##"
+    EXPECT_FALSE(cond1.isMoreGeneral(cond3, xcsr::XCSRRepr::kCSR));
+    EXPECT_FALSE(cond3.isMoreGeneral(cond1, xcsr::XCSRRepr::kCSR));
+
+    // "01#1" vs. "11##"
+    EXPECT_FALSE(cond2.isMoreGeneral(cond3, xcsr::XCSRRepr::kCSR));
+    EXPECT_FALSE(cond3.isMoreGeneral(cond2, xcsr::XCSRRepr::kCSR));
+
+    // vs. "####"
+    const xcsr::Condition allDontCare("0.5;0.5 0.6;0.6 0.3;0.7 0.8;0.8");
+    EXPECT_TRUE(allDontCare.isMoreGeneral(cond1, xcsr::XCSRRepr::kCSR));
+    EXPECT_TRUE(allDontCare.isMoreGeneral(cond2, xcsr::XCSRRepr::kCSR));
+    EXPECT_TRUE(allDontCare.isMoreGeneral(cond3, xcsr::XCSRRepr::kCSR));
+    EXPECT_FALSE(cond1.isMoreGeneral(allDontCare, xcsr::XCSRRepr::kCSR));
+    EXPECT_FALSE(cond2.isMoreGeneral(allDontCare, xcsr::XCSRRepr::kCSR));
+    EXPECT_FALSE(cond3.isMoreGeneral(allDontCare, xcsr::XCSRRepr::kCSR));
+}
+
+TEST(XCSR_ConditionTest, ConstructWithVector_OBR)
 {
     const xcsr::Symbol zero(0.0, 0.5);
     const xcsr::Symbol one(0.5, 1.0);
@@ -20,7 +102,7 @@ TEST(XCSR_ConditionTest, ConstructWithVector)
     EXPECT_FALSE(cond.matches({ 0.75, 0.25, 0.75, 0.75 }, xcsr::XCSRRepr::kOBR));
 }
 
-TEST(XCSR_ConditionTest, ConstructWithString)
+TEST(XCSR_ConditionTest, ConstructWithString_OBR)
 {
     // "01##"
     const xcsr::Condition cond("0.0;0.5 0.5;1.0 0.0;1.0 0.0;1.0");
@@ -33,32 +115,8 @@ TEST(XCSR_ConditionTest, ConstructWithString)
     EXPECT_FALSE(cond.matches({ 0.75, 0.25, 0.75, 0.75 }, xcsr::XCSRRepr::kOBR));
 }
 
-TEST(XCSR_ConditionTest, Comparison)
-{
-    const xcsr::Symbol zero(0.0, 0.5);
-    const xcsr::Symbol one(0.5, 1.0);
-    const xcsr::Symbol dontCare(0.0, 1.0);
 
-    // "01##"
-    const xcsr::Condition cond1_1({ zero, one, dontCare, dontCare });
-    const xcsr::Condition cond1_2("0.0;0.5 0.5;1.0 0.0;1.0 0.0;1.0");
-
-    // "01#1"
-    const xcsr::Condition cond2_1({ zero, one, dontCare, one });
-    const xcsr::Condition cond2_2("0.0;0.5 0.5;1.0 0.0;1.0 0.5;1.0");
-
-    // ==
-    EXPECT_EQ(cond1_1, cond1_2);
-    EXPECT_EQ(cond2_1, cond2_2);
-
-    // !=
-    EXPECT_NE(cond1_1, cond2_1);
-    EXPECT_NE(cond1_1, cond2_2);
-    EXPECT_NE(cond1_2, cond2_1);
-    EXPECT_NE(cond1_2, cond2_2);
-}
-
-TEST(XCSR_ConditionTest, IsMoreGeneral)
+TEST(XCSR_ConditionTest, IsMoreGeneral_OBR)
 {
     const xcsr::Condition cond1("0.0;0.5 0.5;1.0 0.0;1.0 0.0;1.0");
     const xcsr::Condition cond2("0.0;0.5 0.5;1.0 0.0;1.0 0.5;1.0");
@@ -88,4 +146,66 @@ TEST(XCSR_ConditionTest, IsMoreGeneral)
     EXPECT_FALSE(cond1.isMoreGeneral(allDontCare, xcsr::XCSRRepr::kOBR));
     EXPECT_FALSE(cond2.isMoreGeneral(allDontCare, xcsr::XCSRRepr::kOBR));
     EXPECT_FALSE(cond3.isMoreGeneral(allDontCare, xcsr::XCSRRepr::kOBR));
+}
+
+TEST(XCSR_ConditionTest, ConstructWithVector_UBR)
+{
+    const xcsr::Symbol zero(0.0, 0.5);
+    const xcsr::Symbol one(1.0, 0.5);
+    const xcsr::Symbol dontCare(0.0, 1.0);
+
+    // "01##"
+    const xcsr::Condition cond({ zero, one, dontCare, dontCare });
+    EXPECT_TRUE(cond.matches({ 0.25, 0.75, 0.25, 0.25 }, xcsr::XCSRRepr::kUBR));
+    EXPECT_TRUE(cond.matches({ 0.25, 0.75, 0.25, 0.75 }, xcsr::XCSRRepr::kUBR));
+    EXPECT_TRUE(cond.matches({ 0.25, 0.75, 0.75, 0.25 }, xcsr::XCSRRepr::kUBR));
+    EXPECT_TRUE(cond.matches({ 0.25, 0.75, 0.75, 0.75 }, xcsr::XCSRRepr::kUBR));
+    EXPECT_FALSE(cond.matches({ 0.25, 0.25, 0.75, 0.75 }, xcsr::XCSRRepr::kUBR));
+    EXPECT_FALSE(cond.matches({ 0.75, 0.75, 0.75, 0.75 }, xcsr::XCSRRepr::kUBR));
+    EXPECT_FALSE(cond.matches({ 0.75, 0.25, 0.75, 0.75 }, xcsr::XCSRRepr::kUBR));
+}
+
+TEST(XCSR_ConditionTest, ConstructWithString_UBR)
+{
+    // "01##"
+    const xcsr::Condition cond("0.5;0.0 0.5;1.0 1.0;0.0 0.0;1.0");
+    EXPECT_TRUE(cond.matches({ 0.25, 0.75, 0.25, 0.25 }, xcsr::XCSRRepr::kUBR));
+    EXPECT_TRUE(cond.matches({ 0.25, 0.75, 0.25, 0.75 }, xcsr::XCSRRepr::kUBR));
+    EXPECT_TRUE(cond.matches({ 0.25, 0.75, 0.75, 0.25 }, xcsr::XCSRRepr::kUBR));
+    EXPECT_TRUE(cond.matches({ 0.25, 0.75, 0.75, 0.75 }, xcsr::XCSRRepr::kUBR));
+    EXPECT_FALSE(cond.matches({ 0.25, 0.25, 0.75, 0.75 }, xcsr::XCSRRepr::kUBR));
+    EXPECT_FALSE(cond.matches({ 0.75, 0.75, 0.75, 0.75 }, xcsr::XCSRRepr::kUBR));
+    EXPECT_FALSE(cond.matches({ 0.75, 0.25, 0.75, 0.75 }, xcsr::XCSRRepr::kUBR));
+}
+
+TEST(XCSR_ConditionTest, IsMoreGeneral_UBR)
+{
+    const xcsr::Condition cond1("0.0;0.5 0.5;1.0 0.0;1.0 0.0;1.0");
+    const xcsr::Condition cond2("0.0;0.5 0.5;1.0 0.0;1.0 0.5;1.0");
+    const xcsr::Condition cond3("0.5;1.0 0.5;1.0 0.0;1.0 0.0;1.0");
+
+    EXPECT_FALSE(cond1.isMoreGeneral(cond1, xcsr::XCSRRepr::kUBR));
+    EXPECT_FALSE(cond2.isMoreGeneral(cond2, xcsr::XCSRRepr::kUBR));
+    EXPECT_FALSE(cond3.isMoreGeneral(cond3, xcsr::XCSRRepr::kUBR));
+
+    // "01##" vs. "01#1"
+    EXPECT_TRUE(cond1.isMoreGeneral(cond2, xcsr::XCSRRepr::kUBR));
+    EXPECT_FALSE(cond2.isMoreGeneral(cond1, xcsr::XCSRRepr::kUBR));
+
+    // "01##" vs. "11##"
+    EXPECT_FALSE(cond1.isMoreGeneral(cond3, xcsr::XCSRRepr::kUBR));
+    EXPECT_FALSE(cond3.isMoreGeneral(cond1, xcsr::XCSRRepr::kUBR));
+
+    // "01#1" vs. "11##"
+    EXPECT_FALSE(cond2.isMoreGeneral(cond3, xcsr::XCSRRepr::kUBR));
+    EXPECT_FALSE(cond3.isMoreGeneral(cond2, xcsr::XCSRRepr::kUBR));
+
+    // vs. "####"
+    const xcsr::Condition allDontCare("1.0;0.0 0.0;1.0 1.0;0.0 0.0;1.0");
+    EXPECT_TRUE(allDontCare.isMoreGeneral(cond1, xcsr::XCSRRepr::kUBR));
+    EXPECT_TRUE(allDontCare.isMoreGeneral(cond2, xcsr::XCSRRepr::kUBR));
+    EXPECT_TRUE(allDontCare.isMoreGeneral(cond3, xcsr::XCSRRepr::kUBR));
+    EXPECT_FALSE(cond1.isMoreGeneral(allDontCare, xcsr::XCSRRepr::kUBR));
+    EXPECT_FALSE(cond2.isMoreGeneral(allDontCare, xcsr::XCSRRepr::kUBR));
+    EXPECT_FALSE(cond3.isMoreGeneral(allDontCare, xcsr::XCSRRepr::kUBR));
 }
