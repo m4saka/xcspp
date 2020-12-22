@@ -30,8 +30,8 @@ void AddEnvironmentOptions(cxxopts::Options & options)
         ("c,csv", "The csv file to train", cxxopts::value<std::string>(), "FILENAME")
         ("csv-test", "The csv file to test", cxxopts::value<std::string>(), "FILENAME")
         ("csv-random", "Whether to choose lines in random order from the csv file", cxxopts::value<bool>()->default_value("true"), "true/false")
-        ("csv-estimate", "The csv file to estimate the outputs", cxxopts::value<std::string>(), "FILENAME")
-        ("csv-output-best", "Output the parsedOptions of the desired action for the situations in the csv file specified by --csv-estimate", cxxopts::value<std::string>(), "FILENAME")
+        //("csv-estimate", "The csv file to estimate the outputs", cxxopts::value<std::string>(), "FILENAME")
+        //("csv-output-best", "Output the parsedOptions of the desired action for the situations in the csv file specified by --csv-estimate", cxxopts::value<std::string>(), "FILENAME")
         ("max-step", "The maximum number of steps (teletransportation) in multi-step problems", cxxopts::value<uint64_t>()->default_value("50"), "STEP");
 }
 
