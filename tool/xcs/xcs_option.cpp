@@ -1,9 +1,9 @@
-#include "tool_xcs.hpp"
+#include "xcs_option.hpp"
 #include <iostream>
 #include <string>
 #include <sstream>
 #include <cstdint> // std::uint64_t
-#include "tool_common.hpp"
+#include "common/common.hpp"
 
 namespace xcspp::tool::xcs
 {

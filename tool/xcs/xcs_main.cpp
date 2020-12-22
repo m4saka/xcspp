@@ -6,8 +6,8 @@
 #include <xcspp/xcspp.hpp>
 #include <cxxopts.hpp>
 
-#include "tool_common.hpp"
-#include "tool_xcs.hpp"
+#include "common/common.hpp"
+#include "xcs_option.hpp"
 
 using namespace xcspp;
 

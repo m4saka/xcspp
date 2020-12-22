@@ -1,4 +1,4 @@
-#include "tool_common.hpp"
+#include "common.hpp"
 #include <iostream>
 #include <fstream>
 #include <cstdlib> // std::exit
