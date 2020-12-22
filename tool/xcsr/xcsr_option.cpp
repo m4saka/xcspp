@@ -65,8 +65,8 @@ namespace xcspp::tool::xcsr
     {
         XCSRParams params;
         params.n = parsedOptions["max-population"].as<std::uint64_t>();
-        params.s0 = parsedOptions["s-0"].as<std::uint64_t>();
-        params.m = parsedOptions["max-mutation"].as<std::uint64_t>();
+        params.s0 = parsedOptions["s-0"].as<double>();
+        params.m = parsedOptions["max-mutation"].as<double>();
         params.alpha = parsedOptions["alpha"].as<double>();
         params.beta = parsedOptions["beta"].as<double>();
         params.epsilonZero = parsedOptions["epsilon-0"].as<double>();
