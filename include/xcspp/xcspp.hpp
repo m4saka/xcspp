@@ -4,21 +4,37 @@
 #include "core/xcs/classifier.hpp"
 #include "core/xcs/classifier_ptr_set.hpp"
 #include "core/xcs/condition.hpp"
-#include "core/xcs/xcs_params.hpp"
 #include "core/xcs/ga.hpp"
 #include "core/xcs/match_set.hpp"
 #include "core/xcs/population.hpp"
 #include "core/xcs/prediction_array.hpp"
 #include "core/xcs/symbol.hpp"
 #include "core/xcs/xcs.hpp"
+#include "core/xcs/xcs_params.hpp"
 
 namespace xcspp
 {
-    // xcspp::XCS = xcspp::xcs::XCS
     using xcs::XCS;
-
-    // xcspp::XCSParams = xcspp::xcs::XCSParams
     using xcs::XCSParams;
+}
+
+#include "core/xcsr/action_set.hpp"
+#include "core/xcsr/classifier.hpp"
+#include "core/xcsr/classifier_ptr_set.hpp"
+#include "core/xcsr/condition.hpp"
+#include "core/xcsr/ga.hpp"
+#include "core/xcsr/match_set.hpp"
+#include "core/xcsr/population.hpp"
+#include "core/xcsr/prediction_array.hpp"
+#include "core/xcsr/symbol.hpp"
+#include "core/xcsr/xcsr.hpp"
+#include "core/xcsr/xcsr_params.hpp"
+#include "core/xcsr/xcsr_repr.hpp"
+
+namespace xcspp
+{
+    using xcsr::XCSR;
+    using xcsr::XCSRParams;
 }
 
 #include "environment/ienvironment.hpp"
