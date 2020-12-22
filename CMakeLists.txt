@@ -39,7 +39,24 @@ if(XCSPP_BUILD_TEST)
 endif()
 
 if(XCSPP_BUILD_TOOL)
-    add_subdirectory(tool)
+    file(GLOB tool_common_sources
+        ${PROJECT_SOURCE_DIR}/tool/common/*.cpp)
+
+    foreach(target IN ITEMS xcs xcsr)
+        file(GLOB tool_sources
+            ${PROJECT_SOURCE_DIR}/tool/${target}/*.cpp)
+        add_executable(${target} ${tool_common_sources} ${tool_sources})
+        target_compile_features(${target} PRIVATE cxx_std_17)
+        if (MSVC)
+            target_compile_options(${target} PRIVATE /W4)
+        else()
+            target_compile_options(${target} PRIVATE -O2 -Wall)
+        endif()
+        target_include_directories(${target} PRIVATE
+            ${PROJECT_SOURCE_DIR}/tool/cxxopts/include
+            ${PROJECT_SOURCE_DIR}/tool)
+        target_link_libraries(${target} xcspp)
+    endforeach()
 endif()
 
 export(TARGETS xcspp FILE ${CMAKE_CURRENT_BINARY_DIR}/xcsppConfig.cmake)
