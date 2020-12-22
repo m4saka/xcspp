@@ -24,7 +24,8 @@ namespace xcspp::tool::xcsr
     void AddXCSROptions(cxxopts::Options & options)
     {
         const XCSRParams defaultParams;
-        options.add_options("XCS parameter")
+        options.add_options("XCSR parameter")
+            ("repr", "The XCSR representation (Center-Spread: 'csr' / Lower-Upper [Ordered Bound]: 'obr' / Unordered Bound: 'ubr')", cxxopts::value<std::string>()->default_value("csr"), "csr/obr/ubr")
             ("N,max-population", "The maximum size of the population", cxxopts::value<std::uint64_t>()->default_value(std::to_string(defaultParams.n)), "SIZE")
             ("s-0", "The maximum value of a spread in the covering operator", cxxopts::value<double>()->default_value(std::to_string(defaultParams.s0)), "S_0")
             ("max-mutation", "The maximum change of a spread value or a center value in mutation", cxxopts::value<double>()->default_value(std::to_string(defaultParams.m)), "M")
@@ -89,6 +90,25 @@ namespace xcspp::tool::xcsr
         params.doActionMutation = parsedOptions["do-action-mutation"].as<bool>();
         params.useMAM = parsedOptions["mam"].as<bool>();
 
+        const std::string reprStr = parsedOptions["repr"].as<std::string>();
+        if (reprStr == "csr")
+        {
+            params.repr = XCSRRepr::kCSR;
+        }
+        else if (reprStr == "obr")
+        {
+            params.repr = XCSRRepr::kOBR;
+        }
+        else if (reprStr == "ubr")
+        {
+            params.repr = XCSRRepr::kUBR;
+        }
+        else
+        {
+            std::cerr << "Error: Unknown value for --repr (" << reprStr << ")" << std::endl;
+            std::exit(1);
+        }
+
         // Determine crossover method
         if (parsedOptions["x-method"].as<std::string>() == "uniform")
         {
@@ -114,10 +134,8 @@ namespace xcspp::tool::xcsr
     void OutputXCSRParams(const XCSRParams & params)
     {
         // Output parameters
-        std::cout << "[ XCSR General Parameters ]\n";
+        std::cout << "[ XCS General Parameters ]\n";
         std::cout << "               N = " << params.n << '\n';
-        std::cout << "             s_0 = " << params.s0 << '\n';
-        std::cout << "               m = " << params.m << '\n';
         std::cout << "            beta = " << params.beta << '\n';
         std::cout << "           alpha = " << params.alpha << '\n';
         std::cout << "       epsilon_0 = " << params.epsilonZero << '\n';
@@ -149,6 +167,24 @@ namespace xcspp::tool::xcsr
             std::cout << "two-point\n";
             break;
         }
+        std::cout << '\n';
+
+        std::cout << "[ XCSR Parameters ]\n";
+        std::cout << "  representation = ";
+        switch (params.repr)
+        {
+        case XCSRRepr::kCSR:
+            std::cout << "CSR (Center-Spread)\n";
+            break;
+        case XCSRRepr::kOBR:
+            std::cout << "OBR (Lower-Upper)\n";
+            break;
+        case XCSRRepr::kUBR:
+            std::cout << "UBR (Unordered Bound)\n";
+            break;
+        }
+        std::cout << "             s_0 = " << params.s0 << '\n';
+        std::cout << "               m = " << params.m << '\n';
         std::cout << '\n';
 
         // Output optional settings
