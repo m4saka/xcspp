@@ -35,6 +35,7 @@ namespace xcspp
 {
     using xcsr::XCSR;
     using xcsr::XCSRParams;
+    using xcsr::XCSRRepr;
 }
 
 #include "environment/ienvironment.hpp"
