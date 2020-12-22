@@ -6,12 +6,29 @@ using namespace xcspp;
 TEST(XCSR_SymbolTest, ConstructWithString)
 {
     const xcsr::Symbol symbol("0.25;0.5");
+
+    // CSR
+    EXPECT_TRUE(symbol.matches(0.0, xcsr::XCSRRepr::kCSR));
+    EXPECT_TRUE(symbol.matches(0.3, xcsr::XCSRRepr::kCSR));
+    EXPECT_FALSE(symbol.matches(-0.3, xcsr::XCSRRepr::kCSR));
+    EXPECT_FALSE(symbol.matches(0.8, xcsr::XCSRRepr::kCSR));
+    EXPECT_FALSE(symbol.matches(1.0, xcsr::XCSRRepr::kCSR));
+
+    // OBR
     EXPECT_TRUE(symbol.matches(0.3, xcsr::XCSRRepr::kOBR));
     EXPECT_TRUE(symbol.matches(0.4, xcsr::XCSRRepr::kOBR));
     EXPECT_FALSE(symbol.matches(0.0, xcsr::XCSRRepr::kOBR));
     EXPECT_FALSE(symbol.matches(0.2, xcsr::XCSRRepr::kOBR));
     EXPECT_FALSE(symbol.matches(0.6, xcsr::XCSRRepr::kOBR));
     EXPECT_FALSE(symbol.matches(1.0, xcsr::XCSRRepr::kOBR));
+
+    // UBR
+    EXPECT_TRUE(symbol.matches(0.3, xcsr::XCSRRepr::kUBR));
+    EXPECT_TRUE(symbol.matches(0.4, xcsr::XCSRRepr::kUBR));
+    EXPECT_FALSE(symbol.matches(0.0, xcsr::XCSRRepr::kUBR));
+    EXPECT_FALSE(symbol.matches(0.2, xcsr::XCSRRepr::kUBR));
+    EXPECT_FALSE(symbol.matches(0.6, xcsr::XCSRRepr::kUBR));
+    EXPECT_FALSE(symbol.matches(1.0, xcsr::XCSRRepr::kUBR));
 }
 
 TEST(XCSR_SymbolTest, CopyConstruct)
@@ -20,8 +37,12 @@ TEST(XCSR_SymbolTest, CopyConstruct)
     const xcsr::Symbol symbolClone(symbol);
     EXPECT_DOUBLE_EQ(symbolClone.v1, 0.25);
     EXPECT_DOUBLE_EQ(symbolClone.v2, 0.5);
+    EXPECT_TRUE(symbolClone.matches(0.5, xcsr::XCSRRepr::kCSR));
+    EXPECT_FALSE(symbolClone.matches(0.8, xcsr::XCSRRepr::kCSR));
     EXPECT_TRUE(symbolClone.matches(0.3, xcsr::XCSRRepr::kOBR));
     EXPECT_FALSE(symbolClone.matches(0.6, xcsr::XCSRRepr::kOBR));
+    EXPECT_TRUE(symbolClone.matches(0.3, xcsr::XCSRRepr::kUBR));
+    EXPECT_FALSE(symbolClone.matches(0.6, xcsr::XCSRRepr::kUBR));
     EXPECT_EQ(symbol, symbolClone);
 }
 
