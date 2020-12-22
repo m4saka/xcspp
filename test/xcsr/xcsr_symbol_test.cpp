@@ -25,18 +25,6 @@ TEST(XCSR_SymbolTest, CopyConstruct)
     EXPECT_EQ(symbol, symbolClone);
 }
 
-TEST(XCSR_SymbolTest, UpperBound)
-{
-    xcsr::Symbol symbol1(0.5, 0.25);
-    EXPECT_DOUBLE_EQ(xcsr::GetUpperBound(symbol1, xcsr::XCSRRepr::kCSR), 0.5 + 0.25);
-    EXPECT_DOUBLE_EQ(xcsr::GetUpperBound(symbol1, xcsr::XCSRRepr::kUBR), 0.5);
-
-    xcsr::Symbol symbol2(0.3, 0.6);
-    EXPECT_DOUBLE_EQ(xcsr::GetUpperBound(symbol2, xcsr::XCSRRepr::kCSR), 0.3 + 0.6);
-    EXPECT_DOUBLE_EQ(xcsr::GetUpperBound(symbol2, xcsr::XCSRRepr::kOBR), 0.6);
-    EXPECT_DOUBLE_EQ(xcsr::GetUpperBound(symbol2, xcsr::XCSRRepr::kUBR), 0.6);
-}
-
 TEST(XCSR_SymbolTest, LowerBound)
 {
     xcsr::Symbol symbol1(0.5, 0.25);
@@ -47,4 +35,16 @@ TEST(XCSR_SymbolTest, LowerBound)
     EXPECT_DOUBLE_EQ(xcsr::GetLowerBound(symbol2, xcsr::XCSRRepr::kCSR), 0.3 - 0.6);
     EXPECT_DOUBLE_EQ(xcsr::GetLowerBound(symbol2, xcsr::XCSRRepr::kOBR), 0.3);
     EXPECT_DOUBLE_EQ(xcsr::GetLowerBound(symbol2, xcsr::XCSRRepr::kUBR), 0.3);
+}
+
+TEST(XCSR_SymbolTest, UpperBound)
+{
+    xcsr::Symbol symbol1(0.5, 0.25);
+    EXPECT_DOUBLE_EQ(xcsr::GetUpperBound(symbol1, xcsr::XCSRRepr::kCSR), 0.5 + 0.25);
+    EXPECT_DOUBLE_EQ(xcsr::GetUpperBound(symbol1, xcsr::XCSRRepr::kUBR), 0.5);
+
+    xcsr::Symbol symbol2(0.3, 0.6);
+    EXPECT_DOUBLE_EQ(xcsr::GetUpperBound(symbol2, xcsr::XCSRRepr::kCSR), 0.3 + 0.6);
+    EXPECT_DOUBLE_EQ(xcsr::GetUpperBound(symbol2, xcsr::XCSRRepr::kOBR), 0.6);
+    EXPECT_DOUBLE_EQ(xcsr::GetUpperBound(symbol2, xcsr::XCSRRepr::kUBR), 0.6);
 }
