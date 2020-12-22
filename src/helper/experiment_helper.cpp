@@ -34,10 +34,6 @@ namespace xcspp
     {
         if (m_settings.exploitationRepeat > 0)
         {
-            std::size_t totalStepCount = 0;
-            double rewardSum = 0.0;
-            double systemErrorSum = 0.0;
-            double populationSizeSum = 0.0;
             for (std::size_t i = 0; i < m_settings.exploitationRepeat; ++i)
             {
                 do
@@ -54,11 +50,8 @@ namespace xcspp
                         m_system->reward(reward, m_testEnvironment->isEndOfProblem());
                     }
 
+                    m_iterationLogger.oneStep(reward, m_system->prediction());
                     m_summaryLogger.oneStep(reward, m_system->prediction(), m_system->isCoveringPerformed());
-
-                    rewardSum += reward;
-                    systemErrorSum += std::abs(reward - m_system->prediction());
-                    ++totalStepCount;
 
                     // Run callback if needed
                     if (m_testCallback != nullptr)
@@ -67,15 +60,11 @@ namespace xcspp
                     }
                 } while (!m_testEnvironment->isEndOfProblem());
 
-                populationSizeSum += m_system->populationSize();
+                m_iterationLogger.oneExploitation(m_system->populationSize());
             }
 
+            m_iterationLogger.oneIteration();
             m_summaryLogger.oneIteration(m_system->populationSize());
-
-            m_rewardLogStream.writeLine(rewardSum / m_settings.exploitationRepeat);
-            m_systemErrorLogStream.writeLine(systemErrorSum / m_settings.exploitationRepeat);
-            m_populationSizeLogStream.writeLine(populationSizeSum / m_settings.exploitationRepeat);
-            m_stepCountLogStream.writeLine(static_cast<double>(totalStepCount) / m_settings.exploitationRepeat);
         }
     }
 
@@ -83,10 +72,7 @@ namespace xcspp
         : m_settings(settings)
         , m_trainCallback(nullptr)
         , m_testCallback(nullptr)
-        , m_rewardLogStream(settings.outputRewardFilename.empty() ? "" : (settings.outputFilenamePrefix + settings.outputRewardFilename), settings.smaWidth, false)
-        , m_systemErrorLogStream(settings.outputSystemErrorFilename.empty() ? "" : (settings.outputFilenamePrefix + settings.outputSystemErrorFilename), settings.smaWidth, false)
-        , m_stepCountLogStream(settings.outputStepCountFilename.empty() ? "" : (settings.outputFilenamePrefix + settings.outputStepCountFilename), settings.smaWidth, false)
-        , m_populationSizeLogStream(settings.outputPopulationSizeFilename.empty() ? "" : (settings.outputFilenamePrefix + settings.outputPopulationSizeFilename), false)
+        , m_iterationLogger(settings)
         , m_summaryLogger(settings)
         , m_iterationCount(0)
     {
