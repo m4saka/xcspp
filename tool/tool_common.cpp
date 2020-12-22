@@ -3,7 +3,7 @@
 #include <fstream>
 #include <cstdlib> // std::exit
 
-namespace xcspp::tool_common
+namespace xcspp::tool
 {
 
     void AddExperimentOptions(cxxopts::Options & options)

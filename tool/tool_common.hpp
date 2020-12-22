@@ -3,7 +3,7 @@
 #include <cxxopts.hpp>
 #include <xcspp/xcspp.hpp>
 
-namespace xcspp::tool_common
+namespace xcspp::tool
 {
 
     void AddExperimentOptions(cxxopts::Options & options);
