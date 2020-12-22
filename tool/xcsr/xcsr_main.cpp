@@ -38,8 +38,8 @@ int main(int argc, char *argv[])
     if (parsedOptions.count("rmux"))
     {
         // Real multiplexer problem
-        const auto & env = experimentHelper.constructTrainEnv<RealMultiplexerEnvironment>(parsedOptions["mux"].as<int>(), parsedOptions["mux-i"].as<unsigned int>());
-        experimentHelper.constructTestEnv<RealMultiplexerEnvironment>(parsedOptions["mux"].as<int>());
+        const auto & env = experimentHelper.constructTrainEnv<RealMultiplexerEnvironment>(parsedOptions["rmux"].as<int>(), parsedOptions["rmux-i"].as<unsigned int>());
+        experimentHelper.constructTestEnv<RealMultiplexerEnvironment>(parsedOptions["rmux"].as<int>());
 
         experimentHelper.constructSystem<XCSR>(env.availableActions(), params);
 
