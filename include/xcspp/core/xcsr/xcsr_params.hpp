@@ -45,8 +45,8 @@ namespace xcspp::xcsr
 
         // theta_GA
         //   The threshold for the GA application in an action set
-        //   Recommended: 25-50
-        std::uint64_t thetaGA = 25;
+        //   Recommended: 12
+        std::uint64_t thetaGA = 12;
 
         // chi
         //   The probability of applying crossover
@@ -141,7 +141,7 @@ namespace xcspp::xcsr
 
         // s_0
         //   The maximum value of a spread in the covering operator
-        double s0 = 0.25;
+        double s0 = 0.5;
 
         // m
         //   The maximum change of a spread value or a center value in the mutation
