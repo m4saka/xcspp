@@ -10,8 +10,8 @@ namespace xcspp::tool
 
     ExperimentSettings ParseExperimentSettings(const cxxopts::ParseResult & parsedOptions);
 
-    void OutputPopulation(const ExperimentHelper & experimentHelper, const std::string & filename);
+    void OutputPopulation(const IExperimentHelper & experimentHelper, const std::string & filename);
 
-    void RunExperiment(ExperimentHelper & experimentHelper, std::uint64_t iterationCount, std::uint64_t condensationIterationCount);
+    void RunExperiment(IExperimentHelper & experimentHelper, std::uint64_t iterationCount, std::uint64_t condensationIterationCount);
 
 }

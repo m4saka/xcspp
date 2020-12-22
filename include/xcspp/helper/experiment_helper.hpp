@@ -16,8 +16,28 @@
 namespace xcspp
 {
 
+    class IExperimentHelper
+    {
+    public:
+        IExperimentHelper() = default;
+
+        virtual ~IExperimentHelper() = default;
+
+        virtual void setTrainCallback(std::function<void()> callback) = 0;
+
+        virtual void setTestCallback(std::function<void()> callback) = 0;
+
+        virtual void runIteration(std::size_t repeat = 1) = 0;
+
+        virtual void switchToCondensationMode() = 0;
+
+        virtual void outputPopulationCSV(std::ostream & os) const = 0;
+
+        virtual std::size_t iterationCount() const = 0;
+    };
+
     template <typename T>
-    class BasicExperimentHelper
+    class BasicExperimentHelper : public IExperimentHelper
     {
     private:
         const ExperimentSettings m_settings;
@@ -43,7 +63,7 @@ namespace xcspp
     public:
         explicit BasicExperimentHelper(const ExperimentSettings & settings);
 
-        ~BasicExperimentHelper() = default;
+        virtual ~BasicExperimentHelper() = default;
 
         template <class ClassifierSystem, class... Args>
         ClassifierSystem & constructSystem(Args && ... args);
@@ -54,13 +74,13 @@ namespace xcspp
         template <class Environment, class... Args>
         Environment & constructTestEnv(Args && ... args);
 
-        void setTrainCallback(std::function<void()> callback);
+        virtual void setTrainCallback(std::function<void()> callback) override;
 
-        void setTestCallback(std::function<void()> callback);
+        virtual void setTestCallback(std::function<void()> callback) override;
 
-        void runIteration(std::size_t repeat = 1);
+        virtual void runIteration(std::size_t repeat = 1) override;
 
-        void switchToCondensationMode();
+        virtual void switchToCondensationMode() override;
 
         IBasicClassifierSystem<T> & system();
 
@@ -74,7 +94,9 @@ namespace xcspp
 
         const IBasicEnvironment<T> & testEnv() const;
 
-        std::size_t iterationCount() const;
+        virtual void outputPopulationCSV(std::ostream & os) const override;
+
+        virtual std::size_t iterationCount() const override;
     };
 
     template <typename T>
@@ -145,9 +167,9 @@ namespace xcspp
         : m_settings(settings)
         , m_trainCallback(nullptr)
         , m_testCallback(nullptr)
+        , m_iterationCount(0)
         , m_iterationLogger(settings)
         , m_summaryLogger(settings)
-        , m_iterationCount(0)
     {
         if (!settings.inputClassifierFilename.empty())
         {
@@ -269,6 +291,12 @@ namespace xcspp
     const IBasicEnvironment<T> & BasicExperimentHelper<T>::testEnv() const
     {
         return *m_testEnvironment;
+    }
+
+    template <typename T>
+    void BasicExperimentHelper<T>::outputPopulationCSV(std::ostream & os) const
+    {
+        m_system->outputPopulationCSV(os);
     }
 
     template <typename T>

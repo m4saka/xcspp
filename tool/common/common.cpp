@@ -68,7 +68,7 @@ namespace xcspp::tool
         return settings;
     }
 
-    void OutputPopulation(const ExperimentHelper & experimentHelper, const std::string & filename)
+    void OutputPopulation(const IExperimentHelper & experimentHelper, const std::string & filename)
     {
         std::ofstream ofs;
         std::ostream & os = filename.empty() ? std::cout : ofs; // if filename is empty, output to stdout
@@ -78,11 +78,11 @@ namespace xcspp::tool
         }
         if (os)
         {
-            experimentHelper.system().outputPopulationCSV(os);
+            experimentHelper.outputPopulationCSV(os);
         }
     }
 
-    void RunExperiment(ExperimentHelper & experimentHelper, std::uint64_t iterationCount, std::uint64_t condensationIterationCount)
+    void RunExperiment(IExperimentHelper & experimentHelper, std::uint64_t iterationCount, std::uint64_t condensationIterationCount)
     {
         experimentHelper.runIteration(iterationCount);
         if (condensationIterationCount > 0)
