@@ -50,6 +50,8 @@ namespace xcspp::tool::xcsr
             ("do-ga-subsumption", "Whether offspring are to be tested for possible logical subsumption by parents", cxxopts::value<bool>()->default_value(defaultParams.doGASubsumption ? "true" : "false"), "true/false")
             ("do-as-subsumption", "Whether action sets are to be tested for subsuming classifiers", cxxopts::value<bool>()->default_value(defaultParams.doActionSetSubsumption ? "true" : "false"), "true/false")
             ("do-action-mutation", "Whether to apply mutation to the action", cxxopts::value<bool>()->default_value(defaultParams.doActionMutation ? "true" : "false"), "true/false")
+            ("do-range-restriction", "Whether to restrict the range of the condition to the interval [min-value, max-value) in the covering and mutation operator (ignored when --repr=csr)", cxxopts::value<bool>()->default_value(defaultParams.doRangeRestriction ? "true" : "false"), "true/false")
+            ("do-covering-random-range-truncation", "Whether to truncate the covering random range before generating random intervals if the interval [x-s_0, x+s_0) is not contained in [min-value, max-value).  \"false\" is common for this option, but the covering operator can generate too many maximum-range intervals if s_0 is larger than (max-value - min-value) / 2.  Choose \"true\" to avoid the random bias in this situation.  (ignored when --repr=csr)", cxxopts::value<bool>()->default_value(defaultParams.doCoveringRandomRangeTruncation ? "true" : "false"), "true/false")
             ("mam", "Whether to use the moyenne adaptive modifee (MAM) for updating the prediction and the prediction error of classifiers", cxxopts::value<bool>()->default_value(defaultParams.useMAM ? "true" : "false"), "true/false");
     }
 
@@ -88,6 +90,8 @@ namespace xcspp::tool::xcsr
         params.doGASubsumption = parsedOptions["do-ga-subsumption"].as<bool>();
         params.doActionSetSubsumption = parsedOptions["do-as-subsumption"].as<bool>();
         params.doActionMutation = parsedOptions["do-action-mutation"].as<bool>();
+        params.doRangeRestriction = parsedOptions["do-range-restriction"].as<bool>();
+        params.doCoveringRandomRangeTruncation = parsedOptions["do-covering-random-range-truncation"].as<bool>();
         params.useMAM = parsedOptions["mam"].as<bool>();
 
         const std::string reprStr = parsedOptions["repr"].as<std::string>();
