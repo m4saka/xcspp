@@ -148,7 +148,7 @@ namespace xcspp::xcsr
         double m = 0.1;
 
         // XCSR representation
-        XCSRRepr repr = XCSRRepr::kCSR;
+        XCSRRepr repr = XCSRRepr::kOBR;
 
         // The maximum/minimum value of a classifier symbol value
         double minValue = 0.0;

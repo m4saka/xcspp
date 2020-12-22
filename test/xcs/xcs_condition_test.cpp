@@ -3,7 +3,7 @@
 
 using namespace xcspp;
 
-TEST(ConditionTest, ConstructWithVector)
+TEST(XCS_ConditionTest, ConstructWithVector)
 {
     const xcs::Symbol zero(0);
     const xcs::Symbol one(1);
@@ -21,7 +21,7 @@ TEST(ConditionTest, ConstructWithVector)
     EXPECT_EQ(cond.dontCareCount(), 2);
 }
 
-TEST(ConditionTest, ConstructWithString)
+TEST(XCS_ConditionTest, ConstructWithString)
 {
     const xcs::Condition cond("0 1 # #");
     EXPECT_TRUE(cond.matches({ 0, 1, 0, 0 }));
@@ -34,7 +34,7 @@ TEST(ConditionTest, ConstructWithString)
     EXPECT_EQ(cond.dontCareCount(), 2);
 }
 
-TEST(ConditionTest, Comparison)
+TEST(XCS_ConditionTest, Comparison)
 {
     const xcs::Symbol zero(0);
     const xcs::Symbol one(1);
@@ -59,7 +59,7 @@ TEST(ConditionTest, Comparison)
     EXPECT_NE(cond1_2, cond2_2);
 }
 
-TEST(ConditionTest, IsMoreGeneral)
+TEST(XCS_ConditionTest, IsMoreGeneral)
 {
     const xcs::Condition cond1("0 1 # #");
     const xcs::Condition cond2("0 1 # 1");
@@ -91,7 +91,7 @@ TEST(ConditionTest, IsMoreGeneral)
     EXPECT_FALSE(cond3.isMoreGeneral(allDontCare));
 }
 
-TEST(ConditionTest, ToStringAndConstructor)
+TEST(XCS_ConditionTest, ToStringAndConstructor)
 {
     // Original strings
     const std::string condStr1 = "0 1 # #";

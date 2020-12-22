@@ -1,0 +1,9 @@
+add_executable(XCS_SymbolTest xcs_symbol_test.cpp)
+target_compile_features(XCS_SymbolTest PRIVATE cxx_std_17)
+target_link_libraries(XCS_SymbolTest gtest gtest_main xcspp)
+add_test(XCS_SymbolTest XCS_SymbolTest)
+
+add_executable(XCS_ConditionTest xcs_condition_test.cpp)
+target_compile_features(XCS_ConditionTest PRIVATE cxx_std_17)
+target_link_libraries(XCS_ConditionTest gtest gtest_main xcspp)
+add_test(XCS_ConditionTest XCS_ConditionTest)

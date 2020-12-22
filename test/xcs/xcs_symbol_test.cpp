@@ -3,7 +3,7 @@
 
 using namespace xcspp;
 
-TEST(SymbolTest, ConstructWithNumberChar)
+TEST(XCS_SymbolTest, ConstructWithNumberChar)
 {
     // Numbers
     for (int i = 0; i < 10; ++i)
@@ -19,7 +19,7 @@ TEST(SymbolTest, ConstructWithNumberChar)
     }
 }
 
-TEST(SymbolTest, ConstructWithDontCareChar)
+TEST(XCS_SymbolTest, ConstructWithDontCareChar)
 {
     // Don't Care
     const xcs::Symbol dontCare('#');
@@ -28,7 +28,7 @@ TEST(SymbolTest, ConstructWithDontCareChar)
     EXPECT_TRUE(dontCare.matches(1));
 }
 
-TEST(SymbolTest, ConstructWithInt)
+TEST(XCS_SymbolTest, ConstructWithInt)
 {
     for (int i = 0; i < 10; ++i)
     {
@@ -40,7 +40,7 @@ TEST(SymbolTest, ConstructWithInt)
     }
 }
 
-TEST(SymbolTest, CopyConstruct)
+TEST(XCS_SymbolTest, CopyConstruct)
 {
     const xcs::Symbol one(1);
     const xcs::Symbol oneClone(one);
@@ -58,7 +58,7 @@ TEST(SymbolTest, CopyConstruct)
     EXPECT_EQ(dontCare, dontCareClone);
 }
 
-TEST(SymbolTest, SetValue)
+TEST(XCS_SymbolTest, SetValue)
 {
     xcs::Symbol symbol(1);
     EXPECT_FALSE(symbol.isDontCare());
@@ -84,7 +84,7 @@ TEST(SymbolTest, SetValue)
     EXPECT_FALSE(symbol.matches(0));
 }
 
-TEST(SymbolTest, AssignmentAndComparison)
+TEST(XCS_SymbolTest, AssignmentAndComparison)
 {
     xcs::Symbol symbol(0);
     xcs::Symbol zero = symbol;
