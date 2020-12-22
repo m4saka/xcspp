@@ -14,8 +14,16 @@ namespace xcspp::xcsr
 
     Symbol::Symbol(const std::string & str)
     {
-        // FIXME: Not implemented yet
-        exit(1);
+        const std::size_t semicolonIdx = str.find(';');
+
+        // Make sure the string has at least one semicolon
+        if (semicolonIdx == std::string::npos)
+        {
+            throw std::invalid_argument("Could not construct XCSR Symbol from string because it does not contain ';' separator.");
+        }
+
+        v1 = std::stod(str.substr(0, semicolonIdx));
+        v2 = std::stod(str.substr(semicolonIdx + 1));
     }
 
     std::string Symbol::toString() const
