@@ -71,7 +71,7 @@ namespace xcspp
 
     double MultiplexerEnvironment::executeAction(int action)
     {
-        double reward = (action == getAnswer()) ? 1000.0 : 0.0;
+        const double reward = (action == getAnswer()) ? 1000.0 : 0.0;
 
         // Update situation
         SetRandomSituation(m_situation, m_random, m_minorityAcceptanceProbability);
