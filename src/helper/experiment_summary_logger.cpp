@@ -76,12 +76,15 @@ namespace xcspp
         ++m_currentStepCount;
     }
 
-    void ExperimentSummaryLogger::oneIteration(std::size_t populationSize)
+    void ExperimentSummaryLogger::oneExploitation(std::size_t populationSize)
     {
-        m_populationSizeSum += static_cast<double>(populationSize);
+        m_populationSizeSum += static_cast<double>(populationSize) / m_exploitationRepeat;
         m_stepCountSum += static_cast<double>(m_currentStepCount) / m_exploitationRepeat;
         m_currentStepCount = 0;
-    
+    }
+
+    void ExperimentSummaryLogger::oneIteration()
+    {
         // Periodic log output
         if (m_intervalIteration > 0 && (m_currentIterationCount + 1) % m_intervalIteration == 0)
         {

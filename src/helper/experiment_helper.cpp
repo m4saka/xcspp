@@ -61,10 +61,11 @@ namespace xcspp
                 } while (!m_testEnvironment->isEndOfProblem());
 
                 m_iterationLogger.oneExploitation(m_system->populationSize());
+                m_summaryLogger.oneExploitation(m_system->populationSize());
             }
 
             m_iterationLogger.oneIteration();
-            m_summaryLogger.oneIteration(m_system->populationSize());
+            m_summaryLogger.oneIteration();
         }
     }
 

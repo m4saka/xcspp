@@ -25,14 +25,14 @@ namespace xcspp
         std::function<void()> m_trainCallback;
         std::function<void()> m_testCallback;
 
+        std::size_t m_iterationCount;
+
         // Logger for every iteration
         // (reward, system error, population size, step count)
         ExperimentIterationLogger m_iterationLogger;
 
         // Logger for summary log
         ExperimentSummaryLogger m_summaryLogger;
-
-        std::size_t m_iterationCount;
 
         void runTrainIteration();
 

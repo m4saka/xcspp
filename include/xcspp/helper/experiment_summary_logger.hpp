@@ -31,7 +31,9 @@ namespace xcspp
 
         void oneStep(double reward, double prediction, bool coveringOccurred);
 
-        void oneIteration(std::size_t populationSize);
+        void oneExploitation(std::size_t populationSize);
+
+        void oneIteration();
     };
 
 }
