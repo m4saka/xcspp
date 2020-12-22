@@ -29,6 +29,8 @@ namespace xcspp::tool::xcsr
             ("N,max-population", "The maximum size of the population", cxxopts::value<std::uint64_t>()->default_value(std::to_string(defaultParams.n)), "SIZE")
             ("s-0", "The maximum value of a spread in the covering operator", cxxopts::value<double>()->default_value(std::to_string(defaultParams.s0)), "S_0")
             ("max-mutation", "The maximum change of a spread value or a center value in mutation", cxxopts::value<double>()->default_value(std::to_string(defaultParams.m)), "M")
+            ("min-value", "The minimum value of each symbol in a situation", cxxopts::value<double>()->default_value(std::to_string(defaultParams.minValue)), "VALUE")
+            ("max-value", "The maximum value of each symbol in a situation", cxxopts::value<double>()->default_value(std::to_string(defaultParams.maxValue)), "VALUE")
             ("alpha", "The fall of rate in the fitness evaluation", cxxopts::value<double>()->default_value(std::to_string(defaultParams.alpha)), "ALPHA")
             ("beta", "The learning rate for updating fitness, prediction, prediction error, and action set size estimate in XCS's classifiers", cxxopts::value<double>()->default_value(std::to_string(defaultParams.beta)), "BETA")
             ("epsilon-0", "The error threshold under which the accuracy of a classifier is set to one", cxxopts::value<double>()->default_value(std::to_string(defaultParams.alpha)), "EPSILON_0")
@@ -70,6 +72,8 @@ namespace xcspp::tool::xcsr
         params.n = parsedOptions["max-population"].as<std::uint64_t>();
         params.s0 = parsedOptions["s-0"].as<double>();
         params.m = parsedOptions["max-mutation"].as<double>();
+        params.minValue = parsedOptions["min-value"].as<double>();
+        params.maxValue = parsedOptions["max-value"].as<double>();
         params.alpha = parsedOptions["alpha"].as<double>();
         params.beta = parsedOptions["beta"].as<double>();
         params.epsilonZero = parsedOptions["epsilon-0"].as<double>();
