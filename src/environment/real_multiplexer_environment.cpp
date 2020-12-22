@@ -49,9 +49,9 @@ namespace xcspp
         }
     }
 
-    RealMultiplexerEnvironment::RealMultiplexerEnvironment(std::size_t length, double binaryThreshold, unsigned int imbalanceLevel)
-        : m_binaryThreshold(binaryThreshold)
-        , m_minorityAcceptanceProbability(1.0 / std::pow(2, imbalanceLevel))
+    RealMultiplexerEnvironment::RealMultiplexerEnvironment(std::size_t length, unsigned int imbalanceLevel, double binaryThreshold)
+        : m_minorityAcceptanceProbability(1.0 / std::pow(2, imbalanceLevel))
+        , m_binaryThreshold(binaryThreshold)
         , m_situation(length)
         , m_isEndOfProblem(false)
     {

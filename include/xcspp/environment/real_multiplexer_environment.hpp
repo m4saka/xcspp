@@ -11,8 +11,8 @@ namespace xcspp
     class RealMultiplexerEnvironment : public IRealEnvironment
     {
     private:
-        const double m_binaryThreshold;
         const double m_minorityAcceptanceProbability;
+        const double m_binaryThreshold;
         std::vector<double> m_situation;
         bool m_isEndOfProblem;
         Random m_random;
@@ -20,7 +20,7 @@ namespace xcspp
     public:
         // Constructor
         // (Set imbalanceLevel to higher than 0 for imbalanced multiplexer problems)
-        explicit RealMultiplexerEnvironment(std::size_t length, double binaryThreshold = 0.5, unsigned int imbalanceLevel = 0);
+        explicit RealMultiplexerEnvironment(std::size_t length, unsigned int imbalanceLevel = 0, double binaryThreshold = 0.5);
 
         // Destructor
         virtual ~RealMultiplexerEnvironment() = default;
