@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 
     // Initialize experiment helper
     const ExperimentSettings settings = tool::ParseExperimentSettings(parsedOptions);
-    ExperimentHelper experimentHelper(settings);
+    RealExperimentHelper experimentHelper(settings);
 
     if (parsedOptions.count("rmux"))
     {
