@@ -77,52 +77,29 @@ void AddOptions(cxxopts::Options & options)
 XCSParams ParseXCSParams(const cxxopts::ParseResult & parsedOptions)
 {
     XCSParams params;
-    if (parsedOptions.count("max-population"))
-        params.n = parsedOptions["max-population"].as<uint64_t>();
-    if (parsedOptions.count("alpha"))
-        params.alpha = parsedOptions["alpha"].as<double>();
-    if (parsedOptions.count("beta"))
-        params.beta = parsedOptions["beta"].as<double>();
-    if (parsedOptions.count("epsilon-0"))
-        params.epsilonZero = parsedOptions["epsilon-0"].as<double>();
-    if (parsedOptions.count("nu"))
-        params.nu = parsedOptions["nu"].as<double>();
-    if (parsedOptions.count("gamma"))
-        params.gamma = parsedOptions["gamma"].as<double>();
-    if (parsedOptions.count("theta-ga"))
-        params.thetaGA = parsedOptions["theta-ga"].as<uint64_t>();
-    if (parsedOptions.count("chi"))
-        params.chi = parsedOptions["chi"].as<double>();
-    if (parsedOptions.count("mu"))
-        params.mu = parsedOptions["mu"].as<double>();
-    if (parsedOptions.count("theta-del"))
-        params.thetaDel = parsedOptions["theta-del"].as<double>();
-    if (parsedOptions.count("delta"))
-        params.delta = parsedOptions["delta"].as<double>();
-    if (parsedOptions.count("theta-sub"))
-        params.thetaSub = parsedOptions["theta-sub"].as<double>();
-    if (parsedOptions.count("tau"))
-        params.tau = parsedOptions["tau"].as<double>();
-    if (parsedOptions.count("p-sharp"))
-        params.dontCareProbability = parsedOptions["p-sharp"].as<double>();
-    if (parsedOptions.count("p-i"))
-        params.initialPrediction = parsedOptions["p-i"].as<double>();
-    if (parsedOptions.count("epsilon-i"))
-        params.initialEpsilon = parsedOptions["epsilon-i"].as<double>();
-    if (parsedOptions.count("f-i"))
-        params.initialFitness = parsedOptions["f-i"].as<double>();
-    if (parsedOptions.count("p-explr"))
-        params.exploreProbability = parsedOptions["p-explr"].as<double>();
-    if (parsedOptions.count("theta-mna"))
-        params.thetaMna = parsedOptions["theta-mna"].as<uint64_t>();
-    if (parsedOptions.count("do-ga-subsumption"))
-        params.doGASubsumption = parsedOptions["do-ga-subsumption"].as<bool>();
-    if (parsedOptions.count("do-as-subsumption"))
-        params.doActionSetSubsumption = parsedOptions["do-as-subsumption"].as<bool>();
-    if (parsedOptions.count("do-action-mutation"))
-        params.doActionMutation = parsedOptions["do-action-mutation"].as<bool>();
-    if (parsedOptions.count("mam"))
-        params.useMAM = parsedOptions["mam"].as<bool>();
+    params.n = parsedOptions["max-population"].as<uint64_t>();
+    params.alpha = parsedOptions["alpha"].as<double>();
+    params.beta = parsedOptions["beta"].as<double>();
+    params.epsilonZero = parsedOptions["epsilon-0"].as<double>();
+    params.nu = parsedOptions["nu"].as<double>();
+    params.gamma = parsedOptions["gamma"].as<double>();
+    params.thetaGA = parsedOptions["theta-ga"].as<uint64_t>();
+    params.chi = parsedOptions["chi"].as<double>();
+    params.mu = parsedOptions["mu"].as<double>();
+    params.thetaDel = parsedOptions["theta-del"].as<double>();
+    params.delta = parsedOptions["delta"].as<double>();
+    params.thetaSub = parsedOptions["theta-sub"].as<double>();
+    params.tau = parsedOptions["tau"].as<double>();
+    params.dontCareProbability = parsedOptions["p-sharp"].as<double>();
+    params.initialPrediction = parsedOptions["p-i"].as<double>();
+    params.initialEpsilon = parsedOptions["epsilon-i"].as<double>();
+    params.initialFitness = parsedOptions["f-i"].as<double>();
+    params.exploreProbability = parsedOptions["p-explr"].as<double>();
+    params.thetaMna = parsedOptions["theta-mna"].as<uint64_t>();
+    params.doGASubsumption = parsedOptions["do-ga-subsumption"].as<bool>();
+    params.doActionSetSubsumption = parsedOptions["do-as-subsumption"].as<bool>();
+    params.doActionMutation = parsedOptions["do-action-mutation"].as<bool>();
+    params.useMAM = parsedOptions["mam"].as<bool>();
 
     // Determine crossover method
     if (parsedOptions["x-method"].as<std::string>() == "uniform")
