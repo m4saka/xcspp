@@ -12,6 +12,8 @@ namespace xcspp
     class IBasicEnvironment
     {
     public:
+        using type = T;
+
         IBasicEnvironment() = default;
 
         virtual ~IBasicEnvironment() = default;

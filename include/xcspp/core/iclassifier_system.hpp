@@ -11,6 +11,8 @@ namespace xcspp
     class IBasicClassifierSystem
     {
     public:
+        using type = T;
+
         // Constructor
         IBasicClassifierSystem() = default;
 

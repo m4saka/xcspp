@@ -39,6 +39,9 @@ namespace xcspp
     template <typename T>
     class BasicExperimentHelper : public IExperimentHelper
     {
+    public:
+        using type = T;
+
     private:
         const ExperimentSettings m_settings;
         std::unique_ptr<IBasicClassifierSystem<T>> m_system;
@@ -181,6 +184,23 @@ namespace xcspp
     template <class ClassifierSystem, class... Args>
     ClassifierSystem & BasicExperimentHelper<T>::constructSystem(Args && ... args)
     {
+        // Type assertion
+        if constexpr (std::is_same_v<T, int> && std::is_same_v<typename ClassifierSystem::type, double>)
+        {
+            static_assert(std::is_same_v<T, typename ClassifierSystem::type>,
+                "XCSR cannot be used for XCS helper!");
+        }
+        else if constexpr (std::is_same_v<T, double> && std::is_same_v<typename ClassifierSystem::type, int>)
+        {
+            static_assert(std::is_same_v<T, typename ClassifierSystem::type>,
+                "XCS cannot be used for XCSR helper!");
+        }
+        else
+        {
+            static_assert(std::is_same_v<T, typename ClassifierSystem::type>,
+                "An unsupported type of ClassifierSystem is specified!");
+        }
+
         m_system = std::make_unique<ClassifierSystem>(args...);
         if (!m_system)
         {
