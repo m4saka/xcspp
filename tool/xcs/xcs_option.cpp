@@ -81,9 +81,9 @@ namespace xcspp::tool::xcs
         params.thetaGA = parsedOptions["theta-ga"].as<std::uint64_t>();
         params.chi = parsedOptions["chi"].as<double>();
         params.mu = parsedOptions["mu"].as<double>();
-        params.thetaDel = parsedOptions["theta-del"].as<double>();
+        params.thetaDel = parsedOptions["theta-del"].as<std::uint64_t>();
         params.delta = parsedOptions["delta"].as<double>();
-        params.thetaSub = parsedOptions["theta-sub"].as<double>();
+        params.thetaSub = parsedOptions["theta-sub"].as<std::uint64_t>();
         params.tau = parsedOptions["tau"].as<double>();
         params.initialPrediction = parsedOptions["p-i"].as<double>();
         params.initialEpsilon = parsedOptions["epsilon-i"].as<double>();
