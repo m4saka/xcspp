@@ -27,9 +27,11 @@ namespace xcspp
         template <typename T>
         void SaveCSVFile(const std::string & filename, const std::vector<std::vector<T>> & data);
 
-        Dataset ReadDataset(std::istream & is, bool rounds = false);
+        template <typename T>
+        BasicDataset<T> ReadDataset(std::istream & is, bool rounds = false);
 
-        Dataset ReadDatasetFromFile(const std::string & filename, bool rounds = false);
+        template <typename T>
+        BasicDataset<T> ReadDatasetFromFile(const std::string & filename, bool rounds = false);
 
         template <class Classifier>
         std::vector<Classifier> ReadClassifiers(std::istream & is, bool skipFirstLine = true, bool skipFirstColumn = false);
@@ -110,6 +112,56 @@ namespace xcspp
                 throw std::runtime_error("CSV::SaveCSVFile: Failed to open the file '" + filename + "'.");
             }
             return SaveCSV(ofs, data);
+        }
+
+        template <typename T>
+        BasicDataset<T> ReadDataset(std::istream & is, bool rounds)
+        {
+            static_assert(std::is_arithmetic_v<T>, "T of ReadDataset<T> must be an integer type or a floating-point type.");
+
+            std::vector<std::vector<int>> situations;
+            std::vector<int> actions;
+
+            // Read all lines in csv
+            std::string line;
+            while (std::getline(is, line) && !line.empty())
+            {
+                // Split comma-separated string
+                std::istringstream iss(line);
+                std::string field;
+                double fieldValue = 0.0;
+                std::vector<int> situation;
+                while (std::getline(iss, field, ','))
+                {
+                    fieldValue = std::stof(field);
+                    situation.push_back(static_cast<T>(rounds ? std::round(fieldValue) : fieldValue));
+                }
+
+                // Skip line with no values
+                if (situation.empty())
+                {
+                    continue;
+                }
+
+                // Last field is action
+                actions.push_back(static_cast<int>(fieldValue));
+                situation.pop_back();
+
+                situations.push_back(situation);
+            }
+
+            return { situations, actions };
+        }
+
+        template <typename T>
+        BasicDataset<T> ReadDatasetFromFile(const std::string & filename, bool rounds)
+        {
+            std::ifstream ifs(filename);
+            if (!ifs.good())
+            {
+                throw std::runtime_error("CSV::ReadDatasetFromFile: Failed to open the file '" + filename + "'.");
+            }
+            return ReadDataset<T>(ifs, rounds);
         }
 
         template <class Classifier>

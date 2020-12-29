@@ -212,8 +212,8 @@ int main(int argc, char *argv[])
         const std::string trainFilename = parsedOptions["csv"].as<std::string>();
         const std::string testFilename = parsedOptions.count("csv-test") ? parsedOptions["csv-test"].as<std::string>() : trainFilename;
 
-        const auto & env = experimentHelper.constructTrainEnv<DatasetEnvironment>(CSV::ReadDatasetFromFile(trainFilename), parsedOptions["csv-random"].as<bool>());
-        experimentHelper.constructTestEnv<DatasetEnvironment>(CSV::ReadDatasetFromFile(testFilename), parsedOptions["csv-random"].as<bool>());
+        const auto & env = experimentHelper.constructTrainEnv<DatasetEnvironment>(CSV::ReadDatasetFromFile<int>(trainFilename), parsedOptions["csv-random"].as<bool>());
+        experimentHelper.constructTestEnv<DatasetEnvironment>(CSV::ReadDatasetFromFile<int>(testFilename), parsedOptions["csv-random"].as<bool>());
 
         experimentHelper.constructSystem<XCS>(env.availableActions(), params);
 
