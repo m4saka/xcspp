@@ -12,12 +12,12 @@ namespace xcspp::tool::xcsr
     {
         options.add_options("Environment")
             ("m,rmux", "Use the real multiplexer problem", cxxopts::value<int>(), "LENGTH")
-            ("rmux-i", "Class imbalance level i of the multiplexer problem (used only in train iterations)", cxxopts::value<unsigned int>()->default_value("0"), "LEVEL");
-            //("c,csv", "The csv file to train", cxxopts::value<std::string>(), "FILENAME")
-            //("csv-test", "The csv file to test", cxxopts::value<std::string>(), "FILENAME")
-            //("csv-random", "Whether to choose lines in random order from the csv file", cxxopts::value<bool>()->default_value("true"), "true/false")
-            ////("csv-estimate", "The csv file to estimate the outputs", cxxopts::value<std::string>(), "FILENAME")
-            ////("csv-output-best", "Output the parsedOptions of the desired action for the situations in the csv file specified by --csv-estimate", cxxopts::value<std::string>(), "FILENAME")
+            ("rmux-i", "Class imbalance level i of the multiplexer problem (used only in train iterations)", cxxopts::value<unsigned int>()->default_value("0"), "LEVEL")
+            ("c,csv", "The csv file to train", cxxopts::value<std::string>(), "FILENAME")
+            ("csv-test", "The csv file to test", cxxopts::value<std::string>(), "FILENAME")
+            ("csv-random", "Whether to choose lines in random order from the csv file", cxxopts::value<bool>()->default_value("true"), "true/false");
+            //("csv-estimate", "The csv file to estimate the outputs", cxxopts::value<std::string>(), "FILENAME")
+            //("csv-output-best", "Output the parsedOptions of the desired action for the situations in the csv file specified by --csv-estimate", cxxopts::value<std::string>(), "FILENAME")
             //("max-step", "The maximum number of steps (teletransportation) in multi-step problems", cxxopts::value<std::uint64_t>()->default_value("50"), "STEP")
     }
 

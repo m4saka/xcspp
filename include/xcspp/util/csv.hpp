@@ -119,7 +119,7 @@ namespace xcspp
         {
             static_assert(std::is_arithmetic_v<T>, "T of ReadDataset<T> must be an integer type or a floating-point type.");
 
-            std::vector<std::vector<int>> situations;
+            std::vector<std::vector<T>> situations;
             std::vector<int> actions;
 
             // Read all lines in csv
@@ -130,7 +130,7 @@ namespace xcspp
                 std::istringstream iss(line);
                 std::string field;
                 double fieldValue = 0.0;
-                std::vector<int> situation;
+                std::vector<T> situation;
                 while (std::getline(iss, field, ','))
                 {
                     fieldValue = std::stof(field);

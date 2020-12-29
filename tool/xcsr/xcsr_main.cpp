@@ -45,6 +45,19 @@ int main(int argc, char *argv[])
 
         tool::RunExperiment(experimentHelper, parsedOptions["iter"].as<std::uint64_t>(), parsedOptions["condense-iter"].as<std::uint64_t>());
     }
+    else if (parsedOptions.count("csv"))
+    {
+        // CSV file
+        const std::string trainFilename = parsedOptions["csv"].as<std::string>();
+        const std::string testFilename = parsedOptions.count("csv-test") ? parsedOptions["csv-test"].as<std::string>() : trainFilename;
+
+        const auto & env = experimentHelper.constructTrainEnv<RealDatasetEnvironment>(CSV::ReadDatasetFromFile<double>(trainFilename), parsedOptions["csv-random"].as<bool>());
+        experimentHelper.constructTestEnv<RealDatasetEnvironment>(CSV::ReadDatasetFromFile<double>(testFilename), parsedOptions["csv-random"].as<bool>());
+
+        experimentHelper.constructSystem<XCSR>(env.availableActions(), params);
+
+        tool::RunExperiment(experimentHelper, parsedOptions["iter"].as<std::uint64_t>(), parsedOptions["condense-iter"].as<std::uint64_t>());
+    }
 
     tool::OutputPopulation(experimentHelper, settings.outputFilenamePrefix + parsedOptions["coutput"].as<std::string>());
 
