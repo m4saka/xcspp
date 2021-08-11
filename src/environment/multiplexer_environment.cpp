@@ -2,8 +2,6 @@
 #include <stdexcept>
 #include <cmath> // std::pow
 
-#include "xcspp/util/random.hpp"
-
 namespace xcspp
 {
 
@@ -29,7 +27,6 @@ namespace xcspp
 
             return situation.at(l + address);
         }
-
     }
 
     std::vector<int> MultiplexerEnvironment::randomSituation(std::size_t totalLength, double minorityAcceptanceProbability)
